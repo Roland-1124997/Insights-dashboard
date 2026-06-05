@@ -3,7 +3,9 @@ export const useFormatDuration = (value: number, format: boolean = false) => {
 		return new Intl.NumberFormat("nl-NL", {
 			notation: "compact",
 			maximumFractionDigits: 2,
-		}).format(value);
+		})
+		.format(value)
+		.replace("NaN", "0");
 	}
 
 	const hours = Math.floor(value / 3600);
@@ -11,9 +13,11 @@ export const useFormatDuration = (value: number, format: boolean = false) => {
 	const seconds = Math.floor(value % 60)
 		.toString()
 		.padStart(2, "0")
-		.replace("-", "");
+		.replace("-", "")
+		.replace("NaN", "00");
 
 	if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+
 	return `${minutes}m ${seconds}s`;
 };
 
