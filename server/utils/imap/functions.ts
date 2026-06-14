@@ -113,10 +113,16 @@ export const useFetchImapMessages = async (client: ImapFlow, criteria: any, fetc
 	const messages = [];
 	const threadmap = new Map<string, string>();
 
-	for await (let message of client.fetch(criteria, fetchOptions)) {
-		const response = await buildResponse(message, threadmap);
-		if (response) {
-			messages.push(response);
+	try {
+		for await (let message of client.fetch(criteria, fetchOptions)) {
+			const response = await buildResponse(message, threadmap);
+			if (response) {
+				messages.push(response);
+			}
+		}
+	} catch (error: any) {
+		if (error?.responseStatus !== "NO" || !String(error?.responseText || "").includes("No matching messages")) {
+			throw error;
 		}
 	}
 
