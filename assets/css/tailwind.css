@@ -241,7 +241,7 @@ li::marker {
 }
 
 .connection-view {
-	@apply my-4 font-mono select-none hover:bg-neutral-800;
+	@apply my-4 font-mono select-none hover:bg-neutral-800 bg-neutral-900;
 }
 
 .connection-view a {
