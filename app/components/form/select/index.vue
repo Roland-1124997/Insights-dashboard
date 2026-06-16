@@ -28,7 +28,7 @@
 
 			<div v-if="!filteredContent.length" class="flex flex-col items-center justify-center w-full h-[46vh] mt-3 text-sm text-gray-500 border border-gray-200 rounded-xl">
 				<p class="mb-1 text-base font-semibold text-gray-900">Geen repositories gevonden</p>
-				<p class="mb-3 text-sm text-gray-700 text-balance">Er zijn geen repositories die overeenkomen met je zoekopdracht:</p>
+				<p class="mb-3 text-sm text-center text-gray-700 text-balance">Er zijn geen repositories die overeenkomen met je zoekopdracht:</p>
 				<div class="flex items-center justify-center w-full">
 					<div class="flex items-center gap-2 px-3 py-1 text-sm font-medium text-blue-800 bg-blue-100 rounded-md">
 						<icon name="akar-icons:search" class="w-3 h-3" />
