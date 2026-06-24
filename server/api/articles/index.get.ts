@@ -3,8 +3,7 @@ export default defineBaseEventHandler(async (event, { server, user }) => {
 	let query;
 
 	if (!user) query = server.from("artikelen").select("*").eq("published", true).order("updated_at", { ascending: false });
-
-	if (search) query = server.rpc("search_artikelen", { search: search }).order("updated_at", { ascending: false });
+	else if (search) query = server.rpc("search_artikelen", { search: search }).order("updated_at", { ascending: false });
 	else query = server.from("artikelen").select("*").order("updated_at", { ascending: false });
 
 	const { data: articles, error } = await query;
