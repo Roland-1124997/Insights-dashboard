@@ -1,8 +1,8 @@
 const { UMAMI } = useRuntimeConfig();
 
-const headers: HeadersInit  = { 
+const headers: HeadersInit = {
 	"x-umami-share-token": UMAMI.SHARE_TOKEN,
-	"x-umami-share-context": "1"
+	"x-umami-share-context": "1",
 };
 
 const baseUrl = `${UMAMI.HOST}`;
