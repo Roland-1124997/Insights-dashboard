@@ -71,6 +71,12 @@ const subscriptionField = {
 	}),
 };
 
+const profileField = {
+	title: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).max(100, { message: "Mag niet langer zijn dan 100 tekens" }),
+	locatie: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).max(250, { message: "Mag niet langer zijn dan 250 tekens" }),
+	subtitle: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).max(250, { message: "Mag niet langer zijn dan 250 tekens" }),
+};
+
 export const schema = {
 	login: {
 		backend: zod.object(loginFields),
@@ -112,6 +118,11 @@ export const schema = {
 	subscription: {
 		backend: zod.object(subscriptionField),
 		frontend: toTypedSchema(zod.object(subscriptionField)),
+	},
+
+	profile: {
+		backend: zod.object(profileField),
+		frontend: toTypedSchema(zod.object(profileField)),
 	},
 };
 
