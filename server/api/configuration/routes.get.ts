@@ -156,6 +156,10 @@ const routes = defineCachedFunction(
 			"/portfolio": {
 				label: "Portfolio",
 				iconName: "akar-icons:telescope",
+				refetchOnEnter: true,
+				toolbar: {
+					store: "useProfile",
+				},
 			},
 
 			"/statistieken/pagina's": {

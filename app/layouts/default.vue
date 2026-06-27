@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 	const account = useAccount();
+	const profile = useProfile();
 	const store = useAnalytics();
 	const monitor = useMonitor();
 	const session = useSessions();
@@ -38,6 +39,7 @@
 
 	store.initialPayload();
 	account.initialPayload();
+	profile.initialPayload();
 	monitor.initialPayload();
 	articles.initialPayload();
 	storageStore.initialPayload();
@@ -60,6 +62,7 @@
 
 		if (store.error) store.refresh();
 		if (account.error) account.refresh();
+		if (profile.error) profile.refresh();
 		if (articles.error) articles.refresh();
 		if (monitor.error) monitor.refresh();
 		if (storageStore.error) storageStore.refresh();
