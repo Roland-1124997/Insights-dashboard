@@ -82,7 +82,15 @@ export default defineBaseEventHandler(async (event) => {
 						instelling: "Grafisch Lyceum Rotterdam",
 						periode: "(2022 Sep) - (2025 Jun)",
 						graad: "MBO (4) Software Developer",
-						vaardigheden: ["JavaScript", "Webontwikkeling (HTML, CSS)", "Frameworks (React, Vue)", "Versiebeheer (Git)", "Backend ontwikkeling (Node.js, Php, C#)", "MVC-architectuur", "Probleemoplossing"],
+						vaardigheden: [
+							"JavaScript",
+							"Webontwikkeling (HTML, CSS)",
+							"Frameworks (React, Vue)",
+							"Versiebeheer (Git)",
+							"Backend ontwikkeling (Node.js, Php, C#)",
+							"MVC-architectuur",
+							"Probleemoplossing",
+						],
 					},
 					{
 						instelling: "Da Vinci College Dordrecht",
