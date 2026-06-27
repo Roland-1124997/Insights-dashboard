@@ -7,7 +7,7 @@ export default defineBaseEventHandler(async (event) => {
 		},
 		data: {
 			algemeen: {
-				tile: "Ik bouw digitale producten die gewoon werken",
+				title: "Ik bouw digitale producten die gewoon werken",
 				subtitle: "Ik ben Roland Meijer, software developer met een focus op duidelijke en praktische oplossingen. In deze portfolio laat ik zien hoe ik ideeën uitwerk tot concrete resultaten.",
 				locatie: "Vlaardingen, Nederland",
 
@@ -82,15 +82,7 @@ export default defineBaseEventHandler(async (event) => {
 						instelling: "Grafisch Lyceum Rotterdam",
 						periode: "(2022 Sep) - (2025 Jun)",
 						graad: "MBO (4) Software Developer",
-						vaardigheden: [
-							"JavaScript",
-							"Webontwikkeling (HTML, CSS)",
-							"Frameworks (React, Vue)",
-							"Versiebeheer (Git)",
-							"Backend ontwikkeling (Node.js, Php, C#)",
-							"MVC-architectuur",
-							"Probleemoplossing",
-						],
+						vaardigheden: ["JavaScript", "Webontwikkeling (HTML, CSS)", "Frameworks (React, Vue)", "Versiebeheer (Git)", "Backend ontwikkeling (Node.js, Php, C#)", "MVC-architectuur", "Probleemoplossing"],
 					},
 					{
 						instelling: "Da Vinci College Dordrecht",
