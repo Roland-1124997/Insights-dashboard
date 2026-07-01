@@ -1,6 +1,6 @@
 <template>
 	<field :name="name" v-slot="{ field, meta }">
-		<div class="group">
+		<div class="w-full group">
 			<label :class="hideLabel ? ' sr-only' : ''" class="flex items-center justify-between mb-2 text-sm font-medium text-gray-700 select-none" :for="name">
 				<div>
 					{{ label }}
