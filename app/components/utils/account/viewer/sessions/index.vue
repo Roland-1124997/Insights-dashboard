@@ -1,5 +1,5 @@
 <template>
-	<section class="grid w-full grid-cols-1 mt-3 gap-y-3 md:gap-3 md:grid-cols-2 h-fit pb-[5.5rem] md:pb-0">
+	<section class="grid w-full grid-cols-1 mt-3 gap-y-3 md:gap-3 md:grid-cols-2 h-fit">
 		<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-2">
 			<div class="flex items-center justify-between mb-4">
 				<div>
@@ -8,6 +8,10 @@
 						{{ sessions?.length || 0 }} actieve
 						{{ sessions?.length === 1 ? "sessie" : "sessies" }}
 					</p>
+				</div>
+
+				<div class="flex items-center gap-2">
+					<UtilsButtonImportant description="ververs de lijst" icon-name="akar-icons:arrow-cycle" @click="account.refresh()" :loading="account.loading" :isButton="true" />
 				</div>
 			</div>
 
@@ -35,4 +39,6 @@
 			required: true,
 		},
 	});
+
+	const account = useAccount();
 </script>
