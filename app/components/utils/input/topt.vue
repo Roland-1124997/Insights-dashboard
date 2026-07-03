@@ -20,7 +20,7 @@
 						:aria-describedby="meta.validated && !meta.valid ? 'code-error' : undefined"
 						class="w-full p-3 text-2xl font-medium text-center transition border select-none rounded-xl bg-white/80 placeholder:text-gray-400 focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed"
 						:class="
-							(meta.validated && !meta.valid) && meta.touched
+							meta.validated && !meta.valid && meta.touched
 								? 'border-red-500 focus:ring-2 focus:ring-red-500/60 focus:border-red-500 text-red-800'
 								: 'border-gray-400 focus:ring-2 focus:ring-indigo-500/60 focus:border-indigo-500 text-gray-900'
 						"
