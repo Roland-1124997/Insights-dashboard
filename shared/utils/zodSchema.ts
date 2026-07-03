@@ -78,14 +78,17 @@ const profileField = {
 
 const tokenField = {
 	name: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).max(100, { message: "Mag niet langer zijn dan 100 tekens" }),
-	expires_at: zod.string().refine((date) => {
-		if (!date) return true;
+	expires_at: zod.string().refine(
+		(date) => {
+			if (!date) return true;
 
-		const parsedDate = new Date(date);
-		const now = new Date();
+			const parsedDate = new Date(date);
+			const now = new Date();
 
-		return parsedDate > now;
-	}, { message: "De vervaldatum moet in de toekomst liggen" }),
+			return parsedDate > now;
+		},
+		{ message: "De vervaldatum moet in de toekomst liggen" },
+	),
 };
 
 export const schema = {
@@ -138,20 +141,21 @@ export const schema = {
 
 	token: {
 		backend: zod.object(tokenField),
-		frontend: toTypedSchema(zod.object({
-			...tokenField, ...mulfiFactorField
-		})),
+		frontend: toTypedSchema(
+			zod.object({
+				...tokenField,
+				...mulfiFactorField,
+			}),
+		),
 		optional: {
 			frontend: toTypedSchema(
 				zod.object({
 					code: optionalString,
-					...tokenField
+					...tokenField,
 				}),
 			),
 		},
 	},
-
-
 };
 
 export type SchemaType = (typeof schema)[keyof typeof schema]["frontend"];

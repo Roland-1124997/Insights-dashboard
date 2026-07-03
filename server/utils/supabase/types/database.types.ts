@@ -38,16 +38,16 @@ export type Database = {
 					created_at: string;
 					expires_at: string | null;
 					id: string;
-					name: string ;
-					token: string ;
-					user_id: string ;
+					name: string;
+					token: string;
+					user_id: string;
 				};
 				Insert: {
 					created_at?: string;
 					expires_at?: string | null;
 					id?: string;
-					name: string ;
-					token: string ;
+					name: string;
+					token: string;
 					user_id: string;
 				};
 				Update: {

@@ -5,7 +5,7 @@
 				<h2 class="mb-1 font-semibold text-gray-700 text">Nieuwe toegangssleutel</h2>
 				<p class="mb-3 text-sm text-gray-600">Vul hier de naam van de sleutel en een optionele vervaldatum in voordat je de sleutel aanmaakt.</p>
 
-				<div class="space-y-4 ">
+				<div class="space-y-4">
 					<UtilsInput name="name" label="Sleutel naam" required placeholder="Naam van de sleutel" />
 
 					<UtilsInput name="expires_at" type="date" label="Vervaldatum" icon-name="akar-icons:alarm" />
@@ -62,8 +62,8 @@
 	const session = useSessions();
 	const verified = ref();
 
-	const name = ref('');
-	const date = ref('');
+	const name = ref("");
+	const date = ref("");
 
 	const { data } = await session.getSession();
 
@@ -92,11 +92,10 @@
 			actions.setErrors(details);
 
 			await new Promise((resolve) => setTimeout(resolve, 3000));
-			
+
 			for (const key in details) {
 				actions.resetField(key);
 			}
-			
 		},
 	};
 </script>
