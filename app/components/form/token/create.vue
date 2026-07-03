@@ -62,9 +62,6 @@
 	const session = useSessions();
 	const verified = ref();
 
-	const name = ref("");
-	const date = ref("");
-
 	const { data } = await session.getSession();
 
 	verified.value = data.data.factors.verified;
@@ -94,7 +91,7 @@
 			await new Promise((resolve) => setTimeout(resolve, 3000));
 
 			for (const key in details) {
-				actions.resetField(key);
+				actions.resetField(key, { value: null, touched: false, errors: [] });
 			}
 		},
 	};
