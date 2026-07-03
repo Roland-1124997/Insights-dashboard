@@ -15,7 +15,7 @@ export default defineMultiFactorVerificationEventHandler(async (event, { server,
 		data: {
 			id: data.id,
 			label: data.name ? data.name.charAt(0).toUpperCase() + data.name.slice(1) : "",
-			sleutel: data.token,
+			sleutel: useDecryptValue(data.token, true),
 			vervaldatum: data.expires_at,
 		},
 	});

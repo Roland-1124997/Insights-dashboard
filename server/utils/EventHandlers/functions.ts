@@ -28,7 +28,7 @@ export const defineBaseEventHandler = (
 			const client = await serverSupabaseClient(event);
 			const server = serverSupabaseServiceRole(event);
 
-			const { data: user, error } = await useFetchUserByAccessToken(server, headerToken);
+			const { data: user, error } = await useFetchUserByAccessToken(server, useEncryptValue(headerToken, true));
 
 			if (error || !user) return useReturnResponse(event, unauthorizedError);
 

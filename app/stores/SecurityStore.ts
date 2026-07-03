@@ -85,7 +85,7 @@ export const useSecurity = defineStore("useSecurity", () => {
 					secure: true,
 				},
 				message: {
-					success: "toegangssleutel opgehaald",
+					success: "Toegangssleutel opgehaald",
 					confirm: "Ja, bekijk sleutel",
 					cancel: "Nee, sluit venster",
 				},
@@ -94,11 +94,48 @@ export const useSecurity = defineStore("useSecurity", () => {
 	};
 
 	const Create = () => {
+		const onComplete = async (data: ApiResponse<TableRowKeys>) => {
+			close();
+			await refresh();
+
+			void new Promise((resolve) => setTimeout(resolve, 400)).then(() => {
+				create({
+					name: data?.data?.label || "Nieuwe toegangssleutel",
+					description: "Hieronder staat de toegangssleutel die je kunt gebruiken om in te loggen op je account via de API. ",
+					component: "showToken",
+					props: {
+						content: {
+							label: data?.data?.label,
+							sleutel: data?.data?.sleutel,
+							vervaldatum: data?.data?.vervaldatum,
+						},
+					},
+				});
+			});
+		};
+
+		const onCancel = () => close();
+
 		create({
 			name: "Sleutel aanmaken",
 			description: "Maak een nieuwe sleutel aan voor je account. Deze sleutel kan gebruikt worden om in te loggen op je account via de API.",
 			component: "CreateTokenForm",
-			props: {},
+			props: {
+				onCancel,
+				onComplete,
+				request: {
+					url: `/api/auth/account/tokens/`,
+					method: "POST",
+					destructive: false,
+					secure: true,
+				},
+
+				message: {
+					success: "Toegangssleutel aangemaakt",
+					confirm: "Ja maak sleutel aan",
+					cancel: "Nee, sluit venster ",
+				},
+			},
 		});
 	};
 

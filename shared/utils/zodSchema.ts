@@ -8,7 +8,6 @@ const length8Field = "Moet minimaal 8 tekens lang zijn";
 
 const loginFields = {
 	email: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).email({ message: defaultEmailMessage }),
-
 	password: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).min(8, { message: length8Field }),
 };
 
@@ -77,6 +76,18 @@ const profileField = {
 	subtitle: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).max(250, { message: "Mag niet langer zijn dan 250 tekens" }),
 };
 
+const tokenField = {
+	name: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).max(100, { message: "Mag niet langer zijn dan 100 tekens" }),
+	expires_at: zod.string().refine((date) => {
+		if (!date) return true;
+
+		const parsedDate = new Date(date);
+		const now = new Date();
+
+		return parsedDate > now;
+	}, { message: "De vervaldatum moet in de toekomst liggen" }),
+};
+
 export const schema = {
 	login: {
 		backend: zod.object(loginFields),
@@ -124,6 +135,23 @@ export const schema = {
 		backend: zod.object(profileField),
 		frontend: toTypedSchema(zod.object(profileField)),
 	},
+
+	token: {
+		backend: zod.object(tokenField),
+		frontend: toTypedSchema(zod.object({
+			...tokenField, ...mulfiFactorField
+		})),
+		optional: {
+			frontend: toTypedSchema(
+				zod.object({
+					code: optionalString,
+					...tokenField
+				}),
+			),
+		},
+	},
+
+
 };
 
 export type SchemaType = (typeof schema)[keyof typeof schema]["frontend"];
