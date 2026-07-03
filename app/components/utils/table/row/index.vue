@@ -102,7 +102,7 @@
 
 			<span v-else-if="category.value == 'vervaldatum'">
 				<span v-if="formatCategoryValue(data, category.value, name)">
-					<NuxtTime relative :datetime="formatCategoryValue(data, category.value, name)" />
+					<NuxtTime :datetime="formatCategoryValue(data, category.value, name)" />
 				</span>
 
 				<span v-else> Geen </span>
@@ -154,7 +154,7 @@
 
 							<span v-else-if="category.value == 'vervaldatum'">
 								<span v-if="formatCategoryValue(data, category.value, name)">
-									<NuxtTime relative :datetime="formatCategoryValue(data, category.value, name)" />
+									<NuxtTime :datetime="formatCategoryValue(data, category.value, name)" />
 								</span>
 
 								<span v-else> Geen </span>
