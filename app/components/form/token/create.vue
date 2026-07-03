@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full h-full">
-		<FormBase :schema="validationSchema" :request v-slot="{ loading, errors }">
+		<FormBase :schema="validationSchema" :request v-slot="{ loading, errors }" class="max-h-[65vh] overflow-scroll">
 			<div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
 				<h2 class="mb-1 font-semibold text-gray-700 text">Nieuwe toegangssleutel</h2>
 				<p class="mb-3 text-sm text-gray-600">Vul hier de naam van de sleutel en een optionele vervaldatum in voordat je de sleutel aanmaakt.</p>
