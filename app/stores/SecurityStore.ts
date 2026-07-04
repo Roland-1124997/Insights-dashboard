@@ -93,6 +93,32 @@ export const useSecurity = defineStore("useSecurity", () => {
 		});
 	};
 
+	const verify = async (props: any, prevValues: any) => {
+		close();
+
+		const appendToBody = async (values: any) => {
+			return {
+				...values,
+				...prevValues,
+			};
+		};
+
+		void new Promise((resolve) => setTimeout(resolve, 400)).then(() => {
+			create({
+				name: props.name || "Nieuwe toegangssleutel",
+				description: "Weet je het zeker dat je deze sleutel wilt aanmaken? Hierdoor wordt er een nieuwe sleutel aangemaakt.",
+				component: "Confirm",
+				props: {
+					...props,
+					request: {
+						...props.request,
+						appendToBody: appendToBody,
+					},
+				},
+			});
+		});
+	};
+
 	const Create = () => {
 		const onComplete = async (data: ApiResponse<TableRowKeys>) => {
 			close();
@@ -123,6 +149,7 @@ export const useSecurity = defineStore("useSecurity", () => {
 			props: {
 				onCancel,
 				onComplete,
+				onVerify: verify,
 				request: {
 					url: `/api/auth/account/tokens/`,
 					method: "POST",

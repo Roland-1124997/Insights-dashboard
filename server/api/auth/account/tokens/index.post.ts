@@ -26,7 +26,7 @@ export default defineMultiFactorVerificationEventHandler(async (event, { server,
 			error: {
 				type: "fields",
 				details: {
-					name: "Er is iets misgegaan bij het aanmaken van de toegangssleutel. Probeer het later opnieuw.",
+					code: "Er is iets misgegaan bij het aanmaken van de toegangssleutel. Probeer het later opnieuw.",
 				},
 			},
 		});

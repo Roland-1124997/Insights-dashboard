@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full">
-		<FormBase :schema="validationSchema" :request v-slot="{ loading, errors }">
+		<FormBase :appendToBody="props.request.appendToBody" :schema="validationSchema" :request v-slot="{ loading, errors }">
 			<div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
 				<h2 class="mb-1 font-semibold text-gray-700 text">Bevestig deze actie</h2>
 				<p class="mb-3 text-sm text-gray-600">

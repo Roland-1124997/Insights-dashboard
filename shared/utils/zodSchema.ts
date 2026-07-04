@@ -141,20 +141,7 @@ export const schema = {
 
 	token: {
 		backend: zod.object(tokenField),
-		frontend: toTypedSchema(
-			zod.object({
-				...tokenField,
-				...mulfiFactorField,
-			}),
-		),
-		optional: {
-			frontend: toTypedSchema(
-				zod.object({
-					code: optionalString,
-					...tokenField,
-				}),
-			),
-		},
+		frontend: toTypedSchema(zod.object(tokenField)),
 	},
 };
 
