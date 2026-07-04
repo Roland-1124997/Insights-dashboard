@@ -11,7 +11,7 @@ export const useSessions = defineStore("useSessions", () => {
 		error: true,
 	});
 
-	const user = computed<UserDisplay>(() => session.value.data?.data || null);
+	const user = computed<UserDisplay | null>(() => session.value.data?.data || null);
 
 	const setCloseFunction = (callback: Function) => {
 		closeSession = callback;
@@ -48,7 +48,7 @@ export const useSessions = defineStore("useSessions", () => {
 		return navigateTo(redirect);
 	};
 
-	const isCurrentSession = (sessionId: string) => sessionId === user.value.session;
+	const isCurrentSession = (sessionId?: string | null) => !!sessionId && sessionId === user.value?.session;
 
 	return {
 		user,

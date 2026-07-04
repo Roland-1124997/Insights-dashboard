@@ -9,7 +9,7 @@
 					<h2 class="text-xs font-semibold text-gray-600 truncate md:text-sm">Gebruikersnaam</h2>
 					<div class="flex items-center justify-between gap-2">
 						<h3 class="text-base font-extrabold text-gray-900 truncate md:text-xl">
-							{{ store.user.email }}
+							{{ store?.user?.email }}
 						</h3>
 					</div>
 				</div>
@@ -23,14 +23,14 @@
 					<h2 class="text-xs font-semibold text-gray-600 truncate md:text-sm">Tweefactorauthenticatie</h2>
 
 					<div class="flex items-center justify-between gap-2">
-						<button @click="account.disableProtection" v-if="store.user.factors?.enabled" class="text-base font-extrabold text-gray-900 truncate md:text-xl">Ingeschakeld</button>
+						<button @click="account.disableProtection" v-if="store?.user?.factors?.enabled" class="text-base font-extrabold text-gray-900 truncate md:text-xl">Ingeschakeld</button>
 						<button @click="account.enableProtection" v-else class="text-base font-extrabold text-gray-900 truncate md:text-xl">Uitgeschakeld</button>
 					</div>
 				</div>
 			</article>
 		</section>
 
-		<UtilsAccountViewerSessions :sessions="account.sessions || []" />
+		<UtilsAccountViewerSessions :sessions="account?.sessions || []" />
 
 		<UtilsAccountViewerTokens :data="tokenData" />
 	</div>
