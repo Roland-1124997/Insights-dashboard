@@ -36,7 +36,7 @@ const pages = [
 	"/auth/verify",
 ];
 
-const routes = ["/api/integrations/umami", "/api/auth/account/sessions", "/api/articles", "/api/integrations/betterstack", "/api/integrations/strato/mail/inbox", "/api/storage"];
+const routes = ["/api/integrations/umami", "/api/auth/account/sessions", "/api/articles", "/api/integrations/betterstack", "/api/integrations/strato/mail/inbox", "/api/storage", "/ping.txt"];
 
 const images = ["/github.jpg"];
 
