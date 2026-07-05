@@ -204,7 +204,6 @@
 	});
 
 	const calculateRange = (len: number) => {
-
 		if (len == 6) return 2;
 		if (len == 5) return 1;
 		if (len == 4) return 0;
