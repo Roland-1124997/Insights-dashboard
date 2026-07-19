@@ -9,7 +9,7 @@
 		</div>
 
 		<ClientOnly>
-			<UtilsToast />
+			<UtilsToast v-if="!disableToast" />
 		</ClientOnly>
 
 		<div class="fixed z-[100] w-screen h-screen pointer-events-none">
@@ -25,6 +25,10 @@
 <script setup lang="ts">
 	defineProps({
 		disablePwaPrompt: {
+			type: Boolean,
+			default: false,
+		},
+		disableToast: {
 			type: Boolean,
 			default: false,
 		},

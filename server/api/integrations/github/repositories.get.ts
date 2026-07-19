@@ -2,7 +2,15 @@ export default defineSupabaseEventHandler(async (event, { user, server }) => {
 	const { data: connection, error } = await usefetchGithubConnections(server, user);
 	const per_page = 50;
 
-	if (error || !connection) return useReturnResponse(event, notFoundError);
+	if (error || !connection)
+		return useReturnResponse(event, {
+			status: {
+				success: false,
+				message: "Geen verbinding met GitHub gevonden",
+				redirect: "https://github.com/apps/insights-dashboard/installations/new",
+				code: 404,
+			},
+		});
 
 	const currentPage = Number(getQuery(event).page ?? 1);
 
@@ -45,18 +53,3 @@ export default defineSupabaseEventHandler(async (event, { user, server }) => {
 		}
 	}
 });
-
-const useRefreshGithubConnections = async (server: SupabaseClient<Database>, user: User, install_id: string) => {
-	const octokitData = await useOctokit(install_id);
-	await useSaveInstall(server, "Update", user, octokitData);
-
-	return await usefetchGithubConnections(server, user);
-};
-
-const usefetchGithubConnections = async (server: SupabaseClient<Database>, user: User) => {
-	const { data, error } = await server.from("github_connections").select("*").eq("user_id", user.id).single();
-
-	if (data && data.token) data.token = useDecryptValue(data.token);
-
-	return { data, error };
-};

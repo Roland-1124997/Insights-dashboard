@@ -12,13 +12,14 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	const isDashboard = group && group.includes("dashboard");
 	const isAuth = group && group.includes("auth");
 	const isVerify = isAuth && group.includes("verify");
+	const isIntegration = group && group.includes("integration");
 
 	if (isDashboard) {
 		if (!data.value) return navigateTo("/auth/login");
 		if (data.value?.data?.mfa_needs_to_verified) return navigateTo("/auth/verify");
 	}
 
-	if (isAuth && !isVerify && !error.value) {
+	if (isAuth && !isVerify && !isIntegration && !error.value) {
 		if (to.path == from.path) return navigateTo("/");
 		return navigateTo(from.path || "/");
 	}

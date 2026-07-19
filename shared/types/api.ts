@@ -42,10 +42,15 @@ export type ApiResponse<T> = {
 	error?: ErrorResponse;
 };
 
+export type ApiError = {
+	status: Status;
+	error: ErrorResponse;
+};
+
 export type requestOptions<T = unknown> = {
 	url: FetchUrl;
 	method: SendOptions["method"];
 	successMessage?: string;
 	onsuccess?: (response: ApiResponse<T>) => Promise<void> | void;
-	onfailure?: (error: ErrorResponse, actions: FormActions<any>) => void;
+	onfailure?: (error: ApiError["error"], actions: FormActions<any>) => void;
 };

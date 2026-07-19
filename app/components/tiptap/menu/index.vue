@@ -10,17 +10,23 @@
 <script lang="ts" setup>
 	import type { Editor } from "@tiptap/vue-3";
 
+	const { open } = useWindow();
+
 	const fetchRepositories = async () => {
 		const uri = "/api/integrations/github/repositories";
 		const request = useApiHandler<ApiResponse<GithubRepository[]>>(uri);
 
-		const { data: repositories, error } = await request.Get();
+		// type override for the request.Get() method to specify the expected return type for error and data. This is necessary because the request.Get() method returns a generic type that may not match the expected structure of the response.
+		const { data: repositories, error } = (await request.Get()) as { data: ApiResponse<GithubRepository[]> | null; error: ApiError | null };
 
-		if (error || !repositories?.data)
+		if (error || !repositories?.data) {
+			if (error?.status.redirect) return open(error.status.redirect, "popup=yes,width=600,height=800");
+
 			return addToast({
 				type: "error",
 				message: "Er is een fout opgetreden bij het ophalen van repositories",
 			});
+		}
 
 		return repositories.data;
 	};
@@ -339,6 +345,7 @@
 	.divider {
 		@apply bg-black h-5 ml-2 mr-2 md:mr-3 w-px;
 	}
+
 	.toolbar {
 		display: flex;
 		gap: 10px;

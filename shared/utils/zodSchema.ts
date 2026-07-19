@@ -91,6 +91,11 @@ const tokenField = {
 	),
 };
 
+const githubInstallationField = {
+	installation_id: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).length(9, { message: "De installatie ID moet uit 9 cijfers bestaan" }),
+	code: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).length(20, { message: "De code moet uit 20 tekens bestaan" }),
+};
+
 export const schema = {
 	login: {
 		backend: zod.object(loginFields),
@@ -142,6 +147,11 @@ export const schema = {
 	token: {
 		backend: zod.object(tokenField),
 		frontend: toTypedSchema(zod.object(tokenField)),
+	},
+
+	installation: {
+		backend: zod.object(githubInstallationField),
+		frontend: toTypedSchema(zod.object(githubInstallationField)),
 	},
 };
 

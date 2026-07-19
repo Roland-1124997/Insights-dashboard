@@ -3,6 +3,13 @@ import { createAppAuth } from "@octokit/auth-app";
 import type { Endpoints } from "@octokit/types";
 import crypto from "crypto";
 
+type Installation = {
+	token: string;
+	instalId: number;
+	createdAt: string;
+	expiresAt: string;
+};
+
 const config = useRuntimeConfig();
 
 export const useOctokit = async (InstallID: string) => {
@@ -18,23 +25,33 @@ export const useOctokit = async (InstallID: string) => {
 		clientSecret: clientSecret,
 	});
 
-	const installationId = [InstallID];
-	const installationApp: any = await auth({
-		type: "installation",
-		installationId,
-	} as any);
+	let data: Installation | null = null;
+	let error: unknown = null;
 
-	const token = installationApp.token;
-	const instalId = installationApp.installationId;
-	const createdAt = installationApp.createdAt;
-	const expiresAt = installationApp.expiresAt;
+	const installationId = InstallID;
 
-	return {
-		token: token,
-		instalId: instalId,
-		createdAt: createdAt,
-		expiresAt: expiresAt,
-	};
+	try {
+		const installationApp = await auth({
+			type: "installation" as const,
+			installationId: installationId,
+		});
+
+		const token = installationApp.token;
+		const instalId = installationApp.installationId;
+		const createdAt = installationApp.createdAt;
+		const expiresAt = installationApp.expiresAt;
+
+		data = {
+			token: token,
+			instalId: instalId,
+			createdAt: createdAt,
+			expiresAt: expiresAt,
+		};
+	} catch (err) {
+		error = err;
+	}
+
+	return { data, error };
 };
 
 type Repositories = Endpoints["GET /installation/repositories"]["response"]["data"];
@@ -121,4 +138,20 @@ export const useSaveInstall = async (server: SupabaseClient<Database>, action: "
 			})
 			.eq("user_id", user.id);
 	}
+};
+
+export const useRefreshGithubConnections = async (server: SupabaseClient<Database>, user: User, install_id: string) => {
+	const { data } = await useOctokit(install_id);
+
+	await useSaveInstall(server, "Update", user, data);
+
+	return await usefetchGithubConnections(server, user);
+};
+
+export const usefetchGithubConnections = async (server: SupabaseClient<Database>, user: User) => {
+	const { data, error } = await server.from("github_connections").select("*").eq("user_id", user.id).single();
+
+	if (data && data.token) data.token = useDecryptValue(data.token);
+
+	return { data, error };
 };
