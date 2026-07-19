@@ -12,7 +12,7 @@ export default defineNuxtConfig({
 			enabled: true,
 		},
 	},
-	
+
 	experimental: {
 		typescriptPlugin: true,
 	},
