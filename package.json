@@ -17,7 +17,8 @@
 		"lint:suggestions": "oxlint --fix-suggestions",
 		"fmt": "oxfmt --no-error-on-unmatched-pattern",
 		"fmt:check": "oxfmt --check",
-		"prepare": "husky"
+		"prepare": "husky",
+		"analyze": "nuxt analyze"
 	},
 	"dependencies": {
 		"@nuxt/a11y": "^1.0.0-alpha.1",
@@ -61,7 +62,7 @@
 		"jsdom": "^27.1.0",
 		"lowlight": "^3.3.0",
 		"mailparser": "^3.7.5",
-		"nuxt": "^4.4.8",
+		"nuxt": "^4.5.0",
 		"nuxt-charts": "^2.1.2",
 		"pinia": "^3.0.3",
 		"resend": "^6.4.2",

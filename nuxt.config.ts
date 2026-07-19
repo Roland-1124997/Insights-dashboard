@@ -12,6 +12,11 @@ export default defineNuxtConfig({
 			enabled: true,
 		},
 	},
+	
+	experimental: {
+		typescriptPlugin: true,
+	},
+
 	modules: ["@nuxt/icon", "@nuxtjs/tailwindcss", "@vueuse/nuxt", "@nuxt/image", "@nuxtjs/supabase", "@pinia/nuxt", "@vite-pwa/nuxt", "nuxt-charts", "@vee-validate/nuxt", "@nuxt/a11y", "@nuxt/fonts"],
 	nitro: {
 		scheduledTasks: {
@@ -122,6 +127,8 @@ export default defineNuxtConfig({
 		"/statistieken/": { redirect: "/" },
 		"/auth/": { redirect: "/auth/login" },
 		"/auth/**": { appLayout: "auth" },
+		"/auth/integrations": { redirect: "/auth/" },
+		"/auth/integrations/**": { appLayout: "integration" },
 	},
 
 	app: {
