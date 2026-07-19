@@ -6,7 +6,7 @@
 					{{ crumb.label }}
 				</NuxtLink>
 
-				<span v-else :class="index >= 2 ? 'w-16 xl:w-fit' : ''" class="font-bold truncate text-gray-950">
+				<span v-else :class="index >= 2 ? 'w-[4.4rem] xl:w-fit' : ''" class="font-bold truncate text-gray-950">
 					{{ crumb.label.split(" ")[0] }}
 				</span>
 
