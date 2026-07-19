@@ -13,10 +13,6 @@ export default defineNuxtConfig({
 		},
 	},
 
-	experimental: {
-		typescriptPlugin: true,
-	},
-
 	modules: ["@nuxt/icon", "@nuxtjs/tailwindcss", "@vueuse/nuxt", "@nuxt/image", "@nuxtjs/supabase", "@pinia/nuxt", "@vite-pwa/nuxt", "nuxt-charts", "@vee-validate/nuxt", "@nuxt/a11y", "@nuxt/fonts"],
 	nitro: {
 		scheduledTasks: {
@@ -33,7 +29,7 @@ export default defineNuxtConfig({
 
 	vite: {
 		build: {
-			// Verhoog de waarschuwing limiet voor chunk grootte, aangezien sommige libraries (zoals elk.js, vue.pdf) een grote footprint hebben
+			// Increase the warning limit for chunk size, as some libraries (like elk.js, vue.pdf) have a large footprint
 			chunkSizeWarningLimit: 3000,
 			rollupOptions: {
 				output: {
