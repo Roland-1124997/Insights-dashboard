@@ -1,10 +1,25 @@
 export const useWindow = () => {
+	const isIOS = ref(false);
+
+	onMounted(() => {
+		isIOS.value = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+	});
+
+	const cookie = useCookie("github_redirect_url");
+
 	const open = (url: string, options: string) => {
-		window.open(url, "_blank", options);
+		const target = isIOS.value ? "_self" : "_blank";
+		if (isIOS.value) cookie.value = useRoute().fullPath;
+
+		window.open(url, target, options);
 	};
 
-	const close = () => {
-		window.close();
+	const close = async () => {
+		if (isIOS.value) {
+			const redirectUrl = cookie.value || "/artikelen/opstellen";
+			await navigateTo(redirectUrl);
+			cookie.value = null;
+		} else window.close();
 	};
 
 	return {

@@ -37,7 +37,7 @@ export const useGithub = defineStore("useGithub", () => {
 				message: "Er is iets mis gegaan bij het verbinden van Github.",
 			});
 
-		close();
+		await close();
 	};
 	const refresh = async () => await init();
 
