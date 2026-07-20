@@ -68,8 +68,6 @@ const appendImage = (currentEditor: Editor, file: File, pos?: number) => {
 
 //--------------------------------------------------------------------------------------------
 
-const lowlight = createLowlight(all);
-
 const fileHandler = FileHandler.configure({
 	allowedMimeTypes: ["image/png", "image/jpeg", "image/gif", "image/webp"],
 	onDrop: (currentEditor, files, pos) => {
@@ -103,11 +101,6 @@ const highlight = Highlight.configure({
 	HTMLAttributes: {
 		style: "background-color: #bfdbfe; border-radius: 0.375rem; padding: 0.2rem 0.25rem; text-align: center; font-size: 1rem; color: #1d4ed8;",
 	},
-});
-
-const codelowBlock = CodeBlockLowlight.configure({
-	lowlight,
-	languageClassPrefix: "language-",
 });
 
 const image = Image.configure({
@@ -252,7 +245,6 @@ export const articleExtensions = [
 	blockImages,
 	DetailsSummary,
 	DetailsContent,
-	codelowBlock,
 	articleStarterKit,
 	Selection,
 	image,

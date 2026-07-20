@@ -64,6 +64,8 @@
 
 <script setup lang="ts">
 	import { getHierarchicalIndexes, TableOfContents } from "@tiptap/extension-table-of-contents";
+	import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
+	import { all, createLowlight } from "lowlight";
 	import { DragHandle } from "@tiptap/extension-drag-handle-vue-3";
 	import { NodeRange } from "@tiptap/extension-node-range";
 
@@ -195,11 +197,17 @@
 	// Debounce for future syncing or autosaving features
 	const { wait } = useDebounce();
 
+	const lowlight = createLowlight(all);
+
 	const editor = useEditor({
 		content: content.value,
 		editable: editable.value,
 		extensions: [
 			...articleExtensions,
+			CodeBlockLowlight.configure({
+				lowlight,
+				languageClassPrefix: "language-",
+			}),
 			TableOfContents.configure({
 				getIndex: getHierarchicalIndexes,
 				onUpdate: (anchors) => populateAnchors(anchors),
