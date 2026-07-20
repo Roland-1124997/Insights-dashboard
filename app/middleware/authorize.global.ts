@@ -14,7 +14,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	const isVerify = isAuth && group.includes("verify");
 	const isIntegration = group && group.includes("integration");
 
-	if (isDashboard) {
+	if (isDashboard || isIntegration) {
+		if (isIntegration) {
+			if (to.query.setup_action != "install") return navigateTo("/");
+			else if (!data.value) return navigateTo("/auth/login");
+		}
+
 		if (!data.value) return navigateTo("/auth/login");
 		if (data.value?.data?.mfa_needs_to_verified) return navigateTo("/auth/verify");
 	}
