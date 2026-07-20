@@ -19,7 +19,13 @@ export const useWindow = () => {
 			const redirectUrl = cookie.value || "/artikelen/opstellen";
 			await navigateTo(redirectUrl);
 			cookie.value = null;
-		} else window.close();
+		} else {
+			window.close();
+
+			setTimeout(async () => {
+				if (!window.closed) await navigateTo("/");
+			}, 100);
+		}
 	};
 
 	return {
