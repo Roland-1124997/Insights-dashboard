@@ -54,7 +54,7 @@ export const nodeView = Node.create({
 
 				if (attrs.private) {
 					const span = document.createElement("span");
-					span.className = "text-xs text-gray-300 ";
+					span.className = "text-xs text-gray-300";
 					span.textContent = "Niet beschikbaar";
 					content.appendChild(span);
 				} else {
@@ -62,14 +62,14 @@ export const nodeView = Node.create({
 					a.href = attrs.html_url || "#";
 					a.target = "_blank";
 					a.rel = "noopener noreferrer";
-					a.className = "text-xs text-white text-gray-100 ";
+					a.className = "text-xs text-white";
 					a.textContent = "Bekijk op GitHub";
 					content.appendChild(a);
 				}
 
 				if (attrs.homepage && attrs.homepage !== "null") {
 					const sep = document.createElement("span");
-					sep.className = "px-1 text-gray-100";
+					sep.className = "px-1 text-gray-300";
 					sep.textContent = "|";
 					content.appendChild(sep);
 
@@ -77,7 +77,7 @@ export const nodeView = Node.create({
 					a2.href = attrs.homepage;
 					a2.target = "_blank";
 					a2.rel = "noopener noreferrer";
-					a2.className = "text-xs text-white text-gray-100";
+					a2.className = "text-xs text-white";
 					a2.textContent = "Website";
 					content.appendChild(a2);
 				}
