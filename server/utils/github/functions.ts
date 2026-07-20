@@ -115,10 +115,10 @@ export const useDecryptValue = (encryptedValue: string, parse: boolean = false) 
 	return parse ? JSON.parse(decrypted) : decrypted;
 };
 
-export const useSaveInstall = async (server: SupabaseClient<Database>, action: "Create" | "Update", user: User, OctoKitData: any) => {
+export const useSaveInstall = async (server: SupabaseClient<Database>, action: "install" | "update", user: User, OctoKitData: any) => {
 	const { token, instalId, createdAt, expiresAt } = OctoKitData;
 
-	if (action === "Create") {
+	if (action === "install") {
 		await server.from("github_connections").insert([
 			{
 				token: useEncryptValue(token),
@@ -128,7 +128,7 @@ export const useSaveInstall = async (server: SupabaseClient<Database>, action: "
 				expires_at: expiresAt,
 			},
 		]);
-	} else if (action === "Update") {
+	} else if (action === "update") {
 		await server
 			.from("github_connections")
 			.update({
@@ -143,7 +143,7 @@ export const useSaveInstall = async (server: SupabaseClient<Database>, action: "
 export const useRefreshGithubConnections = async (server: SupabaseClient<Database>, user: User, install_id: string) => {
 	const { data } = await useOctokit(install_id);
 
-	await useSaveInstall(server, "Update", user, data);
+	await useSaveInstall(server, "update", user, data);
 
 	return await usefetchGithubConnections(server, user);
 };
