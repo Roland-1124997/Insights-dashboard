@@ -21,6 +21,14 @@ export const useFormatDuration = (value: number, format: boolean = false) => {
 	return `${minutes}m ${seconds}s`;
 };
 
+export const useFormatDate = (date: string) => {
+	return new Intl.DateTimeFormat("nl-NL", {
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+	}).format(new Date(date));
+};
+
 export const formatWeeklyStatsMessage = (stats: any) => {
 	const { pageviews, visitors } = stats;
 

@@ -1,10 +1,10 @@
 <template>
 	<tr class="transition-all hover:bg-gray-50 group">
-		<th v-if="name == 'pages'" scope="row" class="flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap">
+		<th scope="row" class="flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap">
 			<div class="flex items-center gap-3">
-				<icon name="ri:global-line" aria-hidden="true" class="object-cover w-6 h-6 mr-2 text-blue-600 rounded-sm opacity-50 group-hover:opacity-100" />
+				<icon :name="iconName(name, data.label)" aria-hidden="true" class="object-cover w-6 h-6 mr-2 text-blue-600 rounded-sm opacity-50 group-hover:opacity-100" />
 				<span class="truncate w-fit max-w-48 md:max-w-fit">
-					{{ data.label }}
+					{{ displayName(name, data.label) }}
 				</span>
 			</div>
 
@@ -20,98 +20,7 @@
 			</button>
 		</th>
 
-		<th v-else-if="name == 'devices'" scope="row" class="flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap">
-			<div class="flex items-center gap-3">
-				<icon :name="`akar-icons:${data.label.toLowerCase()}-device`" aria-hidden="true" class="object-cover w-6 h-6 mr-2 text-blue-600 rounded-sm opacity-50 group-hover:opacity-100" />
-				<span class="truncate w-fit max-w-48 md:max-w-fit">
-					{{ data.label }}
-				</span>
-			</div>
-
-			<button
-				type="button"
-				@click="toggleExpanded"
-				:aria-expanded="expanded"
-				:aria-controls="getDetailsRowId(data.label)"
-				:aria-label="getToggleButtonLabel(data.label)"
-				:class="isSmall ? '' : 'md:hidden'"
-				class="flex items-center justify-center p-1 rounded-sm opacity-70 group-hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
-				<icon :name="expanded ? 'ri:arrow-up-s-fill' : 'ri:arrow-down-s-fill'" aria-hidden="true" class="object-cover w-6 h-6" />
-			</button>
-		</th>
-
-		<th v-else-if="name == 'tokens'" scope="row" class="flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap">
-			<div class="flex items-center gap-3">
-				<icon name="ri:key-fill" aria-hidden="true" class="object-cover w-6 h-6 mr-2 text-blue-600 rounded-sm opacity-50 group-hover:opacity-100" />
-				<span class="truncate w-fit max-w-48 md:max-w-fit">
-					{{ data.label }}
-				</span>
-			</div>
-
-			<button
-				type="button"
-				@click="toggleExpanded"
-				:aria-expanded="expanded"
-				:aria-controls="getDetailsRowId(data.label)"
-				:aria-label="getToggleButtonLabel(data.label)"
-				:class="isSmall ? '' : 'md:hidden'"
-				class="flex items-center justify-center p-1 rounded-sm opacity-70 group-hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
-				<icon :name="expanded ? 'ri:arrow-up-s-fill' : 'ri:arrow-down-s-fill'" aria-hidden="true" class="object-cover w-6 h-6" />
-			</button>
-		</th>
-
-		<th v-else-if="name == 'countries'" scope="row" class="flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap">
-			<div class="flex items-center gap-3">
-				<icon
-					:name="`twemoji:flag-${useCounryName(data.label, 'en').replace(' ', '-').toLowerCase()}`"
-					aria-hidden="true"
-					class="object-cover w-6 h-6 mr-2 rounded-sm opacity-70 group-hover:opacity-100" />
-
-				<span class="truncate w-fit max-w-48 md:max-w-fit">
-					{{ useCounryName(data.label) }}
-				</span>
-			</div>
-
-			<button
-				type="button"
-				@click="toggleExpanded"
-				:aria-expanded="expanded"
-				:aria-controls="getDetailsRowId(data.label)"
-				:aria-label="getToggleButtonLabel(data.label)"
-				:class="isSmall ? '' : 'md:hidden'"
-				class="flex items-center justify-center p-1 rounded-sm opacity-70 group-hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
-				<icon :name="expanded ? 'ri:arrow-up-s-fill' : 'ri:arrow-down-s-fill'" aria-hidden="true" class="object-cover w-6 h-6" />
-			</button>
-		</th>
-
-		<td
-			v-for="category in categories.slice(1, categories.length)"
-			:key="category.value"
-			class="py-3 text-sm text-center text-gray-700 border-t border-l first:border-l-0 whitespace-nowrap"
-			:class="decorator(category.value)">
-			<span v-if="category.value === 'acties'" class="flex items-center justify-center gap-2">
-				<button
-					v-for="action in actions"
-					:key="action.name"
-					@click="action.action(data)"
-					:aria-label="`${action.name} ${data.label}`"
-					:class="['flex items-center justify-center outline-none focus:opacity-100 p-1 text-sm font-medium rounded-sm opacity-70 hover:opacity-100 ', `text-${action.color}`]">
-					<icon :name="action.icon" aria-hidden="true" class="object-cover w-5 h-5" />
-				</button>
-			</span>
-
-			<span v-else-if="category.value == 'vervaldatum'">
-				<span v-if="formatCategoryValue(data, category.value, name)">
-					<NuxtTime :datetime="formatCategoryValue(data, category.value, name)" />
-				</span>
-
-				<span v-else> Geen </span>
-			</span>
-
-			<span v-else>
-				{{ formatCategoryValue(data, category.value, name) }}
-			</span>
-		</td>
+		<UtilsTableRowInner :data="data" :categories="categories.slice(1, categories.length)" :name :decorator="decorator" :isSmall :isOpen :actions />
 	</tr>
 
 	<tr v-if="expanded" :class="isSmall ? '' : 'md:hidden'">
@@ -123,8 +32,8 @@
 						data.label
 					}}
 				</caption>
-				<thead class="">
-					<tr>
+				<thead>
+					<tr scope="row">
 						<th
 							v-for="category in categories.slice(1, categories.length - calculateRange(categories.length))"
 							:key="category.value"
@@ -135,35 +44,9 @@
 					</tr>
 				</thead>
 
-				<tbody class="">
-					<tr class="">
-						<td
-							v-for="category in categories.slice(1, categories.length - calculateRange(categories.length))"
-							:key="category.value"
-							class="py-3 text-sm text-center text-gray-700 border-t border-l first:border-l-0 whitespace-nowrap">
-							<span v-if="category.value === 'acties'" class="flex items-center justify-center gap-2">
-								<button
-									v-for="action in actions"
-									:key="action.name"
-									@click="action.action(data)"
-									:aria-label="`${action.name} ${data.label}`"
-									:class="['flex items-center justify-center outline-none focus:opacity-100 p-1 text-sm font-medium rounded-sm opacity-70 hover:opacity-100 ', `text-${action.color}`]">
-									<icon :name="action.icon" aria-hidden="true" class="object-cover w-5 h-5" />
-								</button>
-							</span>
-
-							<span v-else-if="category.value == 'vervaldatum'">
-								<span v-if="formatCategoryValue(data, category.value, name)">
-									<NuxtTime :datetime="formatCategoryValue(data, category.value, name)" />
-								</span>
-
-								<span v-else> Geen </span>
-							</span>
-
-							<span v-else>
-								{{ formatCategoryValue(data, category.value, name) }}
-							</span>
-						</td>
+				<tbody>
+					<tr>
+						<UtilsTableRowInner :data="data" :categories="categories.slice(1, categories.length - calculateRange(categories.length))" :name :isSmall :isOpen :actions />
 					</tr>
 				</tbody>
 			</table>
@@ -194,7 +77,7 @@
 			default: () => [],
 		},
 		decorator: {
-			type: Function as PropType<(value: string) => string>,
+			type: Function as PropType<() => string>,
 			required: true,
 		},
 		actions: {
@@ -210,18 +93,22 @@
 		return 0;
 	};
 
+	const iconName = (name: string, label?: string) => {
+		if (name === "countries" && label) return `twemoji:flag-${useCounryName(label, "en").replace(" ", "-").toLowerCase()}`;
+		if (name === "devices") return "akar-icons:device-mobile";
+		if (name === "tokens") return "ri:key-fill";
+
+		return "ri:global-line";
+	};
+
+	const displayName = (name: string, label: string) => {
+		if (name === "countries") return useCounryName(label);
+		return label;
+	};
+
 	const expanded = ref<boolean>(isOpen || false);
 
 	const getDetailsRowId = (label: string) => `row-details-${label.toLowerCase()}`;
 	const getToggleButtonLabel = (label: string) => `${expanded.value ? "Verberg" : "Toon"} details voor ${label}`;
 	const toggleExpanded = () => (expanded.value = !expanded.value);
-
-	const formatCategoryValue = (data: any, category: string, name?: string) => {
-		if (name === "tokens") return data[category];
-
-		if (category === "bounces") return `${useFormatDuration(data[category])}%`;
-		if (category === "totaltime") return useFormatDuration(data[category], true);
-
-		return useFormatDuration(data[category]);
-	};
 </script>

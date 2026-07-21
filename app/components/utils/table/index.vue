@@ -6,11 +6,7 @@
 					<th class="px-4 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase">
 						{{ categories[0]?.label }}
 					</th>
-					<th
-						v-for="category in categories.slice(1, categories.length)"
-						:key="category.value"
-						class="py-3 text-sm font-medium tracking-wider text-center text-gray-700 uppercase"
-						:class="decorator(category.value)">
+					<th v-for="category in categories.slice(1, categories.length)" :key="category.value" :class="['py-3 text-sm font-medium tracking-wider text-center text-gray-700 uppercase', decorator()]">
 						{{ category.label }}
 					</th>
 				</tr>
@@ -32,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-	const props = defineProps({
+	const { isSmall } = defineProps({
 		loading: {
 			type: Boolean,
 			default: false,
@@ -67,19 +63,8 @@
 		},
 	});
 
-	const decorator = (value: string) => {
-		if (props.isSmall) return "hidden";
-
-		const classes: Record<string, string> = {
-			weergaven: "hidden md:table-cell",
-			bezoekers: "hidden sm:table-cell",
-			bezoeken: "hidden md:table-cell",
-			bounces: "hidden md:table-cell",
-			totaltime: "hidden md:table-cell",
-			sleutel: "hidden md:table-cell",
-			acties: "hidden md:table-cell",
-			vervaldatum: "hidden md:table-cell",
-		};
-		return classes[value] || "";
+	const decorator = () => {
+		if (isSmall) return "hidden";
+		return "hidden md:table-cell";
 	};
 </script>
