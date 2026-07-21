@@ -2,10 +2,12 @@ const catcher = async <T>(promise: Promise<T>) => {
 	try {
 		const data = await promise;
 		return { data, error: null };
-	} catch (error: any) {
+	} catch (error: unknown) {
+		const errorResponse = error as { data?: { error?: ErrorResponse } };
+
 		return {
 			data: null,
-			error: (error?.data?.error || error?.data || error) as ErrorResponse,
+			error: (errorResponse?.data?.error || errorResponse?.data || errorResponse) as ErrorResponse,
 		};
 	}
 };

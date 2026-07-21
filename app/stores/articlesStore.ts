@@ -13,7 +13,7 @@ export const useArticles = defineStore("useArticles", () => {
 	const loading = ref<boolean>(true);
 
 	const updateArticlesInList = (data: { id: string; published: boolean }) => {
-		const index = articles.value?.findIndex((article: any) => article.id === data.id);
+		const index = articles.value?.findIndex((article) => article.id === data.id);
 
 		if (index === -1 || !articles.value) return;
 
@@ -32,7 +32,7 @@ export const useArticles = defineStore("useArticles", () => {
 
 	const storedPayload = useSaveLocalStorage("articles:payload", null);
 
-	const savePayload = async (payload: any) => (storedPayload.value = JSON.stringify(payload));
+	const savePayload = async (payload: Record<string, unknown>) => (storedPayload.value = JSON.stringify(payload));
 	const clearSavedPayload = () => (storedPayload.value = null);
 
 	const getSavedPayload = () => {
@@ -96,13 +96,13 @@ export const useArticles = defineStore("useArticles", () => {
 
 		set("/artikelen", [params]);
 
-		const { data, error: Error } = await useFetch<ApiResponse<any>>(uri, {
+		const { data, error: Error } = await useFetch<ApiResponse<Article[]>>(uri, {
 			query: { ...params },
 		});
 
 		if (!Error.value && data.value) {
 			loading.value = false;
-			articles.value = data.value.data;
+			articles.value = data.value.data as Article[];
 		} else {
 			loading.value = false;
 			error.value = Error.value as unknown as ErrorResponse;
@@ -115,7 +115,7 @@ export const useArticles = defineStore("useArticles", () => {
 
 	const remove = (id: string) => {
 		// @ts-ignore it is guaranteed that articles.value is an array when this function is called, because the delete button is only rendered when articles.value is an array and contains the article
-		const content = articles.value.find((art: any) => art.id === id) as Article;
+		const content = articles.value.find((art) => art.id === id) as Article;
 
 		const onComplete = async () => {
 			close();
@@ -146,7 +146,7 @@ export const useArticles = defineStore("useArticles", () => {
 		});
 	};
 
-	const togglePublish = async (article: any) => {
+	const togglePublish = async (article: Article) => {
 		const id = article.id;
 		const title = article.title;
 		const published = !article.published;

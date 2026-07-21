@@ -80,16 +80,19 @@
 		locatie: algemeen.value.locatie,
 	});
 
-	const onTitleInput = (event: any) => {
-		updateded.title = event.target.innerText;
+	const onTitleInput = (event: InputEvent) => {
+		const target = event.target as HTMLElement;
+		updateded.title = target.innerText;
 	};
 
-	const onSubtitleInput = (event: any) => {
-		updateded.subtitle = event.target.innerText;
+	const onSubtitleInput = (event: InputEvent) => {
+		const target = event.target as HTMLElement;
+		updateded.subtitle = target.innerText;
 	};
 
-	const onLocatieInput = (event: any) => {
-		updateded.locatie = event.target.innerText;
+	const onLocatieInput = (event: InputEvent) => {
+		const target = event.target as HTMLElement;
+		updateded.locatie = target.innerText;
 	};
 
 	const request: requestOptions = {

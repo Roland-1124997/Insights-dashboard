@@ -18,7 +18,7 @@
 		Anchors: Anchor[];
 	}>();
 
-	const onItemClick = (node: any) => {
+	const onItemClick = (node: { id: string }) => {
 		const element = document.getElementById(node.id);
 
 		if (element) {

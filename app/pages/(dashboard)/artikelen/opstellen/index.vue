@@ -100,8 +100,12 @@
 	const store = useArticles();
 	const storage = useStorage();
 
-	const content = ref<Record<string, any>>();
-	const activeId: any = ref(null);
+	const content = ref<{
+		type: string;
+		content: any[];
+	} | null>(null);
+
+	const activeId = ref<null | string>(null);
 	const editable = ref(true);
 
 	const editId = computed(() => {
@@ -148,7 +152,7 @@
 
 	const title = ref("");
 	const description = ref("");
-	const Anchors: any = ref([]);
+	const Anchors = ref<Anchor[]>([]);
 	const words = ref(0);
 	const topics = ref<string[]>([]);
 
@@ -173,8 +177,9 @@
 		words.value = editor.storage.characterCount.words();
 		title.value = editor.$doc.firstChild?.textContent || "Ongetiteld Artikel";
 
-		const items = editor.getJSON().content?.[1]?.content ?? [];
-		topics.value = items.map((item: any) => item.text?.trim()).filter((text: string | undefined) => !!text);
+		const items = (editor.getJSON().content?.[1]?.content ?? []) as { text: string }[];
+
+		topics.value = items.map((item) => item.text?.trim()).filter((text: string) => !!text);
 
 		const { filtered } = useFilterParagraphs(content.value?.content, "paragraph");
 		description.value = filtered.value[0] ? filtered.value[0].content[0]?.text : "";
@@ -261,7 +266,7 @@
 			}),
 	};
 
-	const appendToBody = async (values: any) => {
+	const appendToBody = async (values: Record<string, unknown>) => {
 		addToast({
 			message: "Het artikel wordt opgeslagen...",
 			type: "info",

@@ -1,5 +1,5 @@
 <template>
-	<field name="code" v-model="value" v-slot="{ field, meta }: any">
+	<field name="code" v-model="value" v-slot="{ field, meta }">
 		<fieldset role="group" :aria-invalid="meta.validated && !meta.valid" :aria-describedby="meta.validated && !meta.valid ? 'code-error' : undefined">
 			<legend class="sr-only">Verificatiecode invoeren (6 cijfers)</legend>
 

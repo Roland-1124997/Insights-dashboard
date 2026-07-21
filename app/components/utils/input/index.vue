@@ -47,7 +47,7 @@
 		hideLabel: { type: Boolean, default: false },
 	});
 
-	const { value } = useField<string | Array<any> | number>(`${name}`);
+	const { value } = useField<string | Array<unknown> | number>(`${name}`);
 
 	watch(
 		() => initialValue,

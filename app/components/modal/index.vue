@@ -55,7 +55,13 @@
 		} else deactivate();
 	});
 
-	const onclose = (props: Record<string, any> | undefined) => {
+	const onclose = (
+		props:
+			| {
+					onClose?: () => void;
+			  }
+			| undefined,
+	) => {
 		if (content.value?.hideCloseButton) return;
 
 		if (props && props.onClose) props.onClose();

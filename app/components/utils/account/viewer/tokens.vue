@@ -26,7 +26,7 @@
 <script setup lang="ts">
 	defineProps({
 		data: {
-			type: Object as PropType<{ values: TableRowKeys[]; categories: { label: string; value: string }[] }>,
+			type: Object as PropType<{ values: TableMap["tokens"][]; categories: { label: string; value: TableRowValue }[] }>,
 			required: true,
 		},
 	});
@@ -38,7 +38,7 @@
 			name: "bekijken",
 			icon: "akar-icons:eye",
 			color: "gray-800",
-			action: (row: any) => {
+			action: (row: TableMap["tokens"]) => {
 				security.show(row);
 			},
 		},
@@ -46,7 +46,7 @@
 			name: "Verwijderen",
 			icon: "akar-icons:trash-can",
 			color: "red-600",
-			action: (row: any) => {
+			action: (row: TableMap["tokens"]) => {
 				security.Delete(row);
 			},
 		},

@@ -64,7 +64,14 @@ export const useSearch = (options?: { localSearch?: Ref<string | null>; callback
 			LastEntry: (path: string) => LastEntry(path),
 			clear: (path: string) => clear(path),
 			get: (path: string) => get(path),
-			set: (path: string, entries: any[]) => set(path, entries),
+			set: (
+				path: string,
+				entries: {
+					search: string;
+					filter: string;
+					page: number;
+				}[],
+			) => set(path, entries),
 		},
 		setSearch,
 	};

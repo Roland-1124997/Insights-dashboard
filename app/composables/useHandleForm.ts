@@ -5,7 +5,7 @@ const { addToast } = useToast();
 export const useHandleForm = (request: requestOptions, callback?: Function) => {
 	const loading = ref(false);
 
-	const handleSubmit = async (values: Record<string, unknown>, actions: FormActions<any>) => {
+	const handleSubmit = async (values: Record<string, unknown>, actions: FormActions<{}>) => {
 		loading.value = true;
 
 		const { data, error } = await useApiHandler<ApiResponse<unknown>>(request.url).Send({
@@ -23,7 +23,7 @@ export const useHandleForm = (request: requestOptions, callback?: Function) => {
 	return { loading, handleSubmit };
 };
 
-const errorHandler = async (error: ErrorResponse, request: requestOptions, actions: FormActions<any>) => {
+const errorHandler = async (error: ErrorResponse, request: requestOptions, actions: FormActions<{}>) => {
 	if (request.onfailure) request.onfailure(error, actions);
 	else {
 		const details = error.details as Record<string, string>;

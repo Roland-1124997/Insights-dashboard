@@ -20,9 +20,15 @@
 	defineOptions({ name: "TocItem" });
 
 	const { node, activeId } = defineProps<{
-		node: any;
+		node: {
+			id: string;
+			level: number;
+			textContent: string;
+			itemIndex: number;
+			children?: (typeof node)[];
+		};
 		activeId: string | null;
-		onItemClick: (node: any) => void;
+		onItemClick: (node: { id: string }) => void;
 	}>();
 
 	const paddingStyle = computed(() => {

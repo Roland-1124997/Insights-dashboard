@@ -75,9 +75,9 @@ export const usePush = async () => {
 			});
 
 			active.value = true;
-		} catch (error: any) {
+		} catch (error: unknown) {
 			addToast({
-				message: `An error occurred: ${error}`,
+				message: `An error occurred: ${String(error)}`,
 				type: "error",
 				duration: 5000,
 			});
@@ -118,7 +118,7 @@ export const usePush = async () => {
 
 			if (error)
 				return addToast({
-					message: `Failed to remove server subscription: ${error as any}`,
+					message: `Failed to remove server subscription: ${error as unknown as string}`,
 					type: "error",
 					duration: 5000,
 				});
@@ -129,9 +129,9 @@ export const usePush = async () => {
 				duration: 5000,
 			});
 			active.value = false;
-		} catch (error: any) {
+		} catch (error: unknown) {
 			addToast({
-				message: `Unsubscribe failed: ${error}`,
+				message: `Unsubscribe failed: ${String(error)}`,
 				type: "error",
 				duration: 5000,
 			});

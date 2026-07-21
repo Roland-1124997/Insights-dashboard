@@ -38,7 +38,7 @@
 
 <script lang="ts" setup>
 	const { props, component } = defineProps<{
-		props: Record<string, any>;
+		props: Record<string, unknown>;
 		component: string;
 	}>();
 </script>

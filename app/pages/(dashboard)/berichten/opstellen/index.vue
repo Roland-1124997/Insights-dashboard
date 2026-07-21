@@ -175,7 +175,7 @@
 		},
 	};
 
-	const appendToBody = async (values: any) => {
+	const appendToBody = async (values: Record<string, unknown>) => {
 		return {
 			...values,
 			content: editor.value ? editor.value.getJSON() : "",

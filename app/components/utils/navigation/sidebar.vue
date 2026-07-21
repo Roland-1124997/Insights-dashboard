@@ -64,7 +64,7 @@
 		if (route.refetchOnEnter) useRefreshCurrentStore(route.toolbar?.store);
 	};
 
-	const routerActiveRelatedClass: any = (config: RouteType, to: string) => {
+	const routerActiveRelatedClass = (config: RouteType, to: string) => {
 		const path = route.path.replace("/", "");
 		const target = to.replace("/", "");
 

@@ -14,7 +14,7 @@ export const useRefreshCurrentStore = async (storeName: string | undefined, para
 
 export const useCurrentStore = (storeName: string) => {
 	const pinia = useNuxtApp().$pinia;
-	const currentStore = (pinia as any)._s.get(storeName) as StoreType;
+	const currentStore = pinia._s.get(storeName) as StoreType;
 
 	return currentStore;
 };

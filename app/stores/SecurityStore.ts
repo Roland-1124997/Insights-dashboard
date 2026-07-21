@@ -3,9 +3,9 @@ export const useSecurity = defineStore("useSecurity", () => {
 	const { create, close } = useModal();
 
 	const uri: FetchUrl = "/api/auth/account/tokens";
-	const request = useApiHandler<ApiResponse<{ values: TableRowKeys[]; categories: { label: string; value: string }[] }>>(uri);
+	const request = useApiHandler<ApiResponse<{ values: TableMap["tokens"][]; categories: { label: string; value: string }[] }>>(uri);
 
-	const tokens = ref<{ values: TableRowKeys[]; categories: { label: string; value: string }[] } | null>(null);
+	const tokens = ref<{ values: TableMap["tokens"][]; categories: { label: string; value: string }[] } | null>(null);
 	const error = ref<ErrorResponse | null>(null);
 	const loading = ref<boolean>(true);
 
@@ -33,7 +33,7 @@ export const useSecurity = defineStore("useSecurity", () => {
 	const initialPayload = async () => {
 		loading.value = true;
 
-		const { data, error: Error } = await useFetch<ApiResponse<{ values: TableRowKeys[]; categories: { label: string; value: string }[] }>>(uri);
+		const { data, error: Error } = await useFetch<ApiResponse<{ values: TableMap["tokens"][]; categories: { label: string; value: string }[] }>>(uri);
 
 		if (!Error.value && data.value?.data) {
 			loading.value = false;
@@ -49,8 +49,8 @@ export const useSecurity = defineStore("useSecurity", () => {
 		}
 	};
 
-	const show = async (token: TableRowKeys) => {
-		const onComplete = async (data: ApiResponse<TableRowKeys>) => {
+	const show = async (token: TableMap["tokens"]) => {
+		const onComplete = async (data: ApiResponse<TableMap["tokens"]>) => {
 			close();
 
 			void new Promise((resolve) => setTimeout(resolve, 400)).then(() => {
@@ -120,7 +120,7 @@ export const useSecurity = defineStore("useSecurity", () => {
 	};
 
 	const Create = () => {
-		const onComplete = async (data: ApiResponse<TableRowKeys>) => {
+		const onComplete = async (data: ApiResponse<TableMap["tokens"]>) => {
 			close();
 			await refresh();
 
@@ -166,7 +166,7 @@ export const useSecurity = defineStore("useSecurity", () => {
 		});
 	};
 
-	const Delete = async (token: TableRowKeys) => {
+	const Delete = async (token: TableMap["tokens"]) => {
 		const onComplete = async () => {
 			close();
 			await refresh();
