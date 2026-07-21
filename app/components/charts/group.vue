@@ -18,13 +18,25 @@
 		},
 	});
 
+	const localData = computed((): Record<string, any>[] =>
+		data.map((item) => {
+			const entries = Object.entries(item);
+			const [, label] = entries.shift()!;
+
+			return {
+				label,
+				...Object.fromEntries(entries.map(([key, value]) => [key, value.value])),
+			};
+		}),
+	);
+
 	const xFormatter = (i: number): string => `${data[i]?.label}`;
 	const yFormatter = (tick: number) => tick.toString();
 </script>
 
 <template>
 	<BarChart
-		:data
+		:data="localData"
 		:height
 		:categories
 		:y-axis="y_axis"

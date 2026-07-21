@@ -35,7 +35,7 @@
 	});
 
 	const localData = computed(() => {
-		return data.map((item: any) => item[active]);
+		return data.map((item: any) => item[active].value);
 	});
 </script>
 

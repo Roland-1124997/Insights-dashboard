@@ -21,9 +21,9 @@
 	const ChoroplethMapData = computed(() => {
 		return data.map((d: any) => ({
 			id: d.label,
-			count: d.bezoekers,
-			views: d.weergaven,
-			visits: d.bezoeken,
+			count: d.bezoekers.value,
+			views: d.weergaven.value,
+			visits: d.bezoeken.value,
 		}));
 	});
 
