@@ -46,19 +46,19 @@
 			default: false,
 		},
 		name: {
-			type: String as PropType<"pages" | "countries" | "devices" | "tokens">,
+			type: String as PropType<TableName>,
 			required: true,
 		},
 		data: {
-			type: Array as PropType<TableRowAnalytics[] | TableRowKeys[]>,
+			type: Array as PropType<TableMap[TableName][]>,
 			required: true,
 		},
 		categories: {
-			type: Array<{ label: string; value: string }>,
+			type: Array as PropType<{ label: string; value: TableRowValue }[]>,
 			default: () => [],
 		},
 		actions: {
-			type: Array as PropType<{ color: string; name: string; icon: string; action: (row: TableRowAnalytics | TableRowKeys) => void }[]>,
+			type: Array as PropType<{ color: string; name: string; icon: string; action: (row: unknown) => void }[]>,
 			default: () => [],
 		},
 	});

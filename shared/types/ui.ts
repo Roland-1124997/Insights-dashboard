@@ -221,20 +221,75 @@ export type GithubRepository = {
 	};
 };
 
+export type TableRowValueType = "plain" | "date" | "duration" | "percentage" | "number" | "string" | "relative";
+export type TableName = "pages" | "countries" | "devices" | "tokens" | "events";
+export type TableRowValue = keyof TableRowAnalytics | keyof TableRowKeys | keyof TableRowEvents | "label" | "acties";
+
 type TableRowDefault = {
 	label: string;
 };
 
-export type TableRowAnalytics = {
-	weergaven: number;
-	bezoekers: number;
-	bezoeken: number;
-	bounces: number;
-	totaltime: number;
+type TableRowAnalytics = {
+	weergaven: {
+		value: number;
+		type: TableRowValueType;
+	};
+	bezoekers: {
+		value: number;
+		type: TableRowValueType;
+	};
+	bezoeken: {
+		value: number;
+		type: TableRowValueType;
+	};
+	bounces: {
+		value: number;
+		type: TableRowValueType;
+	};
+	totaltime: {
+		value: number;
+		type: TableRowValueType;
+	};
 } & TableRowDefault;
 
-export type TableRowKeys = {
+type TableRowKeys = {
 	id: string;
-	sleutel: string;
-	vervaldatum: string;
+	sleutel: {
+		value: number;
+		type: TableRowValueType;
+	};
+	vervaldatum: {
+		value: number;
+		type: TableRowValueType;
+	};
 } & TableRowDefault;
+
+type TableRowEvents = {
+	id: string;
+	label: string;
+	hasData: boolean;
+	device: {
+		value: string;
+		type: TableRowValueType;
+	};
+	browser: {
+		value: string;
+		type: TableRowValueType;
+	};
+	created: {
+		value: string;
+		type: TableRowValueType;
+	};
+} & TableRowDefault;
+
+export type TableMap = {
+	pages: TableRowAnalytics;
+	countries: TableRowAnalytics;
+	devices: TableRowAnalytics;
+	events: TableRowEvents;
+	tokens: TableRowKeys;
+};
+
+export type ObjectKeys<T> = {
+	[K in keyof T]: T[K] extends object ? K : never;
+}[keyof T];

@@ -65,23 +65,23 @@
 			default: false,
 		},
 		name: {
-			type: String as PropType<"pages" | "countries" | "devices" | "tokens">,
+			type: String as PropType<TableName>,
 			required: true,
 		},
 		data: {
-			type: Object as PropType<TableRowAnalytics | TableRowKeys>,
+			type: Object as PropType<TableMap[TableName]>,
 			required: true,
 		},
 		categories: {
-			type: Array<{ label: string; value: string }>,
+			type: Array as PropType<{ label: string; value: TableRowValue }[]>,
 			default: () => [],
 		},
 		decorator: {
 			type: Function as PropType<() => string>,
-			required: true,
+			required: false,
 		},
 		actions: {
-			type: Array as PropType<{ color: string; name: string; icon: string; action: (row: TableRowAnalytics | TableRowKeys) => void }[]>,
+			type: Array as PropType<{ color: string; name: string; icon: string; action: (row: TableMap[TableName]) => void }[]>,
 			default: () => [],
 		},
 	});
@@ -94,8 +94,9 @@
 	};
 
 	const iconName = (name: string, label?: string) => {
+		if (name === "events") return "akar-icons:bell";
 		if (name === "countries" && label) return `twemoji:flag-${useCounryName(label, "en").replace(" ", "-").toLowerCase()}`;
-		if (name === "devices") return "akar-icons:device-mobile";
+		if (name === "devices") return `akar-icons:${label?.toLowerCase()}-device`;
 		if (name === "tokens") return "ri:key-fill";
 
 		return "ri:global-line";
