@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	const { data, height, categories, active } = defineProps({
 		data: {
-			type: Array as () => Record<string, any>[],
+			type: Array as () => TableMap["devices"][],
 			required: true,
 		},
 		height: {
@@ -17,7 +17,7 @@
 			default: 40,
 		},
 		active: {
-			type: String,
+			type: String as PropType<ObjectKeys<TableMap["devices"]>>,
 			required: false,
 			default: "bezoekers",
 		},
@@ -26,7 +26,7 @@
 	const localCategories = computed(() => {
 		const availableCategories: Record<string, { name: string; color: string }> = {};
 
-		data.forEach((item: any) => {
+		data.forEach((item) => {
 			const key = item.label.toLowerCase();
 			if (categories[key]) availableCategories[key] = categories[key];
 		});
@@ -35,7 +35,7 @@
 	});
 
 	const localData = computed(() => {
-		return data.map((item: any) => item[active].value);
+		return data.map((item) => item[active].value);
 	});
 </script>
 

@@ -1,39 +1,44 @@
 <template>
 	<div class="w-64 p-1 rounded-xl">
 		<div class="flex items-center gap-1">
-			<div v-if="data.count > 0" class="w-3 h-3 rounded-full" :style="localStyle"></div>
+			<div v-if="values.count > 0" class="w-3 h-3 rounded-full" :style="localStyle"></div>
 			<p class="font-bold text-normal">
-				{{ useCounryName(data.id) }}
+				{{ useCounryName(values.id) }}
 			</p>
 		</div>
 
-		<p v-if="data.count > 0" class="text-sm">In deze periode zijn de volgende statistieken geregistreerd:</p>
+		<p v-if="values.count > 0" class="text-sm">In deze periode zijn de volgende statistieken geregistreerd:</p>
 		<p v-else class="mb-4 text-sm text-gray-500">Er zijn geen statistieken geregistreerd voor dit land in deze periode.</p>
 
-		<div v-if="data.count > 0" class="mt-4">
+		<div v-if="values.count > 0" class="mt-4">
 			<p class="text-sm text-gray-500">
-				<strong>{{ useFormatDuration(data.count || 0) }}</strong> unieke bezoeker{{ data.count !== 1 ? "s" : "" }}
+				<strong>{{ useFormatDuration(values.count || 0) }}</strong> unieke bezoeker{{ values.count !== 1 ? "s" : "" }}
 			</p>
 			<p class="text-sm text-gray-500">
-				<strong>{{ useFormatDuration(data.visits || 0) }}</strong> bezoek{{ data.visits !== 1 ? "en" : "" }}
+				<strong>{{ useFormatDuration(values.visits || 0) }}</strong> bezoek{{ values.visits !== 1 ? "en" : "" }}
 			</p>
 			<p class="text-sm text-gray-500">
-				<strong>{{ useFormatDuration(data.views || 0) }}</strong> weergave{{ data.views !== 1 ? "s" : "" }}
+				<strong>{{ useFormatDuration(values.views || 0) }}</strong> weergave{{ values.views !== 1 ? "s" : "" }}
 			</p>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-	const { data } = defineProps({
-		data: {
-			type: Object as () => Record<string, any>,
+	const { values, areaColor } = defineProps({
+		values: {
+			type: Object,
 			required: true,
+		},
+		areaColor: {
+			type: Function,
+			required: false,
+			default: null,
 		},
 	});
 
 	const localStyle = computed(() => {
-		const color = data.areaColor ? data.areaColor(data) : "#dbeafe";
+		const color = areaColor ? areaColor(values) : "#dbeafe";
 
 		return { background: color };
 	});

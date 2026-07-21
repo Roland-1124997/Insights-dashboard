@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 	const { data, height, categories, y_axis } = defineProps({
 		data: {
-			type: Object as () => Record<string, any>[],
+			type: Object as () => TableMap[TableName][],
 			required: true,
 		},
 		height: {
@@ -18,14 +18,15 @@
 		},
 	});
 
-	const localData = computed((): Record<string, any>[] =>
+	const localData = computed((): Record<string, string>[] =>
 		data.map((item) => {
 			const entries = Object.entries(item);
-			const [, label] = entries.shift()!;
+			const [, label] = entries.shift() as [unknown, string];
+			const values = Object.fromEntries((entries as [string, { value: number | string }][]).map(([key, value]) => [key, value.value]));
 
 			return {
 				label,
-				...Object.fromEntries(entries.map(([key, value]) => [key, value.value])),
+				...values,
 			};
 		}),
 	);

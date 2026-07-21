@@ -24,7 +24,9 @@
 			default: "bezoekers",
 		},
 		values: {
-			type: Object as () => { label: string; [key: string]: any } | null,
+			type: Object,
+			required: false,
+			default: null,
 		},
 	});
 

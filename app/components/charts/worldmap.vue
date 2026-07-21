@@ -5,7 +5,7 @@
 
 	const { data, height, zoomExtent } = defineProps({
 		data: {
-			type: Object,
+			type: Object as () => TableMap["countries"][],
 			default: () => ({}),
 		},
 		height: {
@@ -19,11 +19,11 @@
 	});
 
 	const ChoroplethMapData = computed(() => {
-		return data.map((d: any) => ({
-			id: d.label,
-			count: d.bezoekers.value,
-			views: d.weergaven.value,
-			visits: d.bezoeken.value,
+		return data.map((item) => ({
+			id: item.label,
+			count: item.bezoekers.value,
+			views: item.weergaven.value,
+			visits: item.bezoeken.value,
 		}));
 	});
 
@@ -31,16 +31,14 @@
 		areas: ChoroplethMapData.value,
 	}));
 
-	const maxCount = computed(() => Math.max(...worldData.value.areas.map((d: { count: number }) => d.count)));
+	const maxCount = computed(() => Math.max(...worldData.value.areas.map((item: { count: number }) => item.count)));
 
-	const areaColor = computed(() => {
-		return (d: any) => {
-			if (!d.count) return "#e5e7eb";
-			const t = d.count / maxCount.value;
-			const lightness = 70 - t * 40;
-			return `hsl(240, 70%, ${lightness}%)`;
-		};
-	});
+	const areaColor = (item: { id: string; count: number; views: number; visits: number }) => {
+		if (!item.count) return "#e5e7eb";
+		const t = item.count / maxCount.value;
+		const lightness = 70 - t * 40;
+		return `hsl(240, 70%, ${lightness}%)`;
+	};
 
 	const mapHeight = ref(height);
 
@@ -63,7 +61,7 @@
 	<div class="overflow-hidden bg-blue-200 border rounded-lg">
 		<TopoJSONMap map-feature-key="countries" :height="mapHeight" :zoom-extent="zoomExtent" :projection="customProjection" :data="worldData" :topo-json="WorldMapTopoJSON" :area-color="areaColor">
 			<template #tooltip="{ values }">
-				<ChartsTooltipsWorldmap :data="{ ...values, areaColor }" />
+				<ChartsTooltipsWorldmap :values="{ ...values }" :areaColor />
 			</template>
 		</TopoJSONMap>
 	</div>
