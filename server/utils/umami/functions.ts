@@ -113,11 +113,26 @@ export const calculateMetrics = (metrics: Record<string, any>) => {
 
 		return {
 			label: label.charAt(0).toUpperCase() + label.slice(1),
-			weergaven: item.pageviews,
-			bezoekers: item.visitors,
-			bezoeken: item.visits,
-			bounces: ((item.bounces / item.visits) * 100).toFixed(0),
-			totaltime: item.totaltime / item.visits,
+			weergaven: {
+				value: item.pageviews,
+				type: "number",
+			},
+			bezoekers: {
+				value: item.visitors,
+				type: "number",
+			},
+			bezoeken: {
+				value: item.visits,
+				type: "number",
+			},
+			bounces: {
+				value: Number(((item.bounces / item.visits) * 100).toFixed(0)),
+				type: "percentage",
+			},
+			totaltime: {
+				value: item.totaltime / item.visits,
+				type: "duration",
+			},
 		};
 	});
 

@@ -32,8 +32,14 @@ export default defineSupabaseEventHandler(async (event, { server, user }) => {
 				data?.map((token) => ({
 					id: token.id,
 					label: token.name ? token.name.charAt(0).toUpperCase() + token.name.slice(1) : "",
-					sleutel: "************",
-					vervaldatum: token.expires_at,
+					sleutel: {
+						value: "************",
+						type: "plain",
+					},
+					vervaldatum: {
+						value: token.expires_at || "Geen",
+						type: token.expires_at ? "date" : "plain",
+					},
 				})) || [],
 		},
 	});
