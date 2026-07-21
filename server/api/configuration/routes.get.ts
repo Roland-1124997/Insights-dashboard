@@ -19,7 +19,7 @@ const createSearch = (context: string) => ({
 	placeholder: `Zoek in ${context}...`,
 });
 
-const schared = ["/", "/statistieken/pagina's", "/statistieken/landen", "/statistieken/apparaten"];
+const schared = ["/", "/statistieken/pagina's", "/statistieken/landen", "/statistieken/apparaten", "/statistieken/evenementen"];
 
 const routes = defineCachedFunction(
 	(subscriptionActive: boolean): Record<string, RouteType> => {
@@ -201,6 +201,24 @@ const routes = defineCachedFunction(
 			"/statistieken/apparaten": {
 				hidden: true,
 				label: "Apparaten",
+				iconName: "akar-icons:statistic-up",
+				toolbar: {
+					groupWithFilters: true,
+					fallbackFilter: "vandaag",
+					filters: [
+						createFilter("vandaag", "akar-icons:clock", "Vandaag", "Toon statistieken van vandaag", "neutral", "Vandaag", false, false),
+						createFilter("week", "akar-icons:calendar", "Deze week", "Toon statistieken van deze week", "blue", "Week", true, true),
+						createFilter("maand", "akar-icons:calendar", "Deze maand", "Toon statistieken van deze maand", "blue", "Maand", true, true),
+						createFilter("jaar", "akar-icons:calendar", "Dit jaar", "Toon statistieken van dit jaar", "blue", "Jaar", true, true),
+					],
+					store: "useAnalytics",
+				},
+				related: schared,
+			},
+
+			"/statistieken/evenementen": {
+				hidden: true,
+				label: "Evenementen",
 				iconName: "akar-icons:statistic-up",
 				toolbar: {
 					groupWithFilters: true,

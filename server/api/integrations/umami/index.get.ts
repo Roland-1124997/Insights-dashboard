@@ -42,6 +42,16 @@ export default defineSupabaseEventHandler(async (event) => {
 
 	if (countryError || !country) return useReturnResponse(event, internalServerError);
 
+	const { data: events, error: eventsError } = await useFetchEvents(`events:${filter}`, {
+		startAt,
+		endAt,
+		unit: "day",
+		timezone: "Europe/Amsterdam",
+		pageSize: 1000,
+	});
+
+	if (eventsError || !events) return useReturnResponse(event, internalServerError);
+
 	return useReturnResponse(event, {
 		status: {
 			code: 200,
@@ -135,6 +145,26 @@ export default defineSupabaseEventHandler(async (event) => {
 					},
 					values: calculateMetrics(pages),
 				},
+
+				events: {
+					categories: {
+						created: {
+							name: "Aangemaakt",
+							color: "#6f97ed",
+						},
+						device: {
+							name: "Apparaat",
+							color: "#2563eb",
+						},
+						browser: {
+							name: "Browser",
+							color: "#1542a3",
+						},
+					},
+
+					values: calculateEvents(events),
+				},
+
 				countries: {
 					values: calculateMetrics(country),
 				},

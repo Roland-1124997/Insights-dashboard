@@ -50,6 +50,22 @@
 				<UtilsAnalyticsCardsViewer name="pages" :visable="6" :data="store.metrics?.pages.values || []" />
 			</article>
 
+			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-3">
+				<div class="flex flex-col justify-between w-full md:items-center md:flex-row">
+					<div class="mb-1 md:mb-6">
+						<h2 class="mb-1 text-xl font-bold">Breakdown per evenement</h2>
+						<p class="text-sm text-gray-600">Een overzicht van de evenementen die je bezoekers hebben getriggerd</p>
+					</div>
+
+					<NuxtLink to="/statistieken/evenementen" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline">
+						Meer details
+						<icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" />
+					</NuxtLink>
+				</div>
+
+				<UtilsAnalyticsCardsViewer name="events" :visable="6" :data="store.metrics?.events.values || []" />
+			</article>
+
 			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-2">
 				<h2 class="mb-1 text-xl font-bold">Bezoekers per land</h2>
 				<p class="mb-6 text-sm text-gray-600">Een visuele weergave van waar je bezoekers vandaan komen,</p>

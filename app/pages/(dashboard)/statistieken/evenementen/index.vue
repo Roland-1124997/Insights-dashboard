@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<h1 class="mb-1 text-2xl font-bold">Statistieken Pagina's</h1>
-		<p class="mb-6 text-sm text-gray-500">Hier kun je alle statistieken van de pagina's bekijken.</p>
+		<h1 class="mb-1 text-2xl font-bold">Statistieken Evenementen</h1>
+		<p class="mb-6 text-sm text-gray-500">Hier kun je alle statistieken van de evenementen die je bezoekers hebben getriggerd bekijken.</p>
 
-		<UtilsTable name="pages" :data="store.metrics?.pages.values || []" :categories />
+		<UtilsTable name="events" :data="store.metrics?.events.values || []" :categories />
 	</div>
 </template>
 
@@ -38,28 +38,20 @@
 
 	const categories = [
 		{
-			label: "Pagina",
+			label: "Evenement",
 			value: "label",
 		},
 		{
-			label: "Weergaven",
-			value: "weergaven",
+			label: "Apparaat",
+			value: "device",
 		},
 		{
-			label: "Bezoekers",
-			value: "bezoekers",
+			label: "Browser",
+			value: "browser",
 		},
 		{
-			label: "Bezoeken",
-			value: "bezoeken",
-		},
-		{
-			label: "Bounces",
-			value: "bounces",
-		},
-		{
-			label: "Sessie duur",
-			value: "totaltime",
+			label: "Aangemaakt",
+			value: "created",
 		},
 	] as { label: string; value: TableRowValue }[];
 </script>

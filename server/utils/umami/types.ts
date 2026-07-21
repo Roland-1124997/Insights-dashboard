@@ -24,6 +24,8 @@ export type AnalyticsQuery = {
 		| "hostname"
 		| "tag";
 	limit?: number;
+	maxResults?: number;
+	pageSize?: number;
 	filters?: {
 		path?: string;
 		referrer?: string;
@@ -41,3 +43,30 @@ export type AnalyticsQuery = {
 		cohort?: string;
 	};
 };
+
+type baseObject = {
+	pageviews: number;
+	visitors: number;
+	visits: number;
+	bounces: number;
+	totaltime: number;
+};
+
+export type AnalyticsResponse = {
+	label: string;
+	name: string;
+} & baseObject;
+
+export type AnalyticsEventResponse = {
+	id: string;
+	eventName: string;
+	hasData: boolean;
+	device: string;
+	browser: string;
+	createdAt: string;
+	eventType: number;
+};
+
+export type AnalyticsStatistics = {
+	comparison: baseObject;
+} & baseObject;

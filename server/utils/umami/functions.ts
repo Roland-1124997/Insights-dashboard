@@ -11,11 +11,11 @@ export const useFetchMetrics = defineCachedFunction(
 	async (key: string, query: AnalyticsQuery) => {
 		const url = `${baseUrl}/metrics/expanded`;
 
-		let data: Record<string, any> | null = null;
+		let data: AnalyticsResponse[] | null = null;
 		let error = null;
 
 		try {
-			data = await $fetch<Record<string, any>>(url, { headers, query });
+			data = await $fetch<AnalyticsResponse[]>(url, { headers, query });
 		} catch (err) {
 			error = err;
 		}
@@ -33,11 +33,34 @@ export const useFetchAnalytics = defineCachedFunction(
 	async (key: string, query: AnalyticsQuery) => {
 		const url = `${baseUrl}/stats`;
 
-		let data: Record<string, any> | null = null;
+		let data: AnalyticsStatistics | null = null;
 		let error = null;
 
 		try {
-			data = await $fetch<Record<string, any>>(url, { headers, query });
+			data = await $fetch<AnalyticsStatistics>(url, { headers, query });
+		} catch (err) {
+			error = err;
+		}
+
+		return { data, error };
+	},
+	{
+		maxAge: 60 * 10,
+		name: "analytics",
+		getKey: (key: string, query: AnalyticsQuery) => `${key}-${query.timezone.split("/").join("-")}`,
+	},
+);
+
+export const useFetchEvents = defineCachedFunction(
+	async (key: string, query: AnalyticsQuery) => {
+		const url = `${baseUrl}/events`;
+
+		let data: AnalyticsEventResponse[] | null = null;
+		let error = null;
+
+		try {
+			const { data: event } = await $fetch<{ data: AnalyticsEventResponse[] }>(url, { headers, query });
+			data = event;
 		} catch (err) {
 			error = err;
 		}
@@ -107,8 +130,8 @@ export const formulateDates = (filter: "vandaag" | "week" | "maand" | "jaar", pr
 	return calculateStartAndEndDates(filter, year, month, day);
 };
 
-export const calculateMetrics = (metrics: Record<string, any>) => {
-	const result: Record<string, any> = metrics.map((item: Record<string, any>) => {
+export const calculateMetrics = (metrics: AnalyticsResponse[]) => {
+	const result = metrics.map((item) => {
 		const label = item.name == "/" ? "/index" : item.name;
 
 		return {
@@ -136,7 +159,36 @@ export const calculateMetrics = (metrics: Record<string, any>) => {
 		};
 	});
 
-	result.sort((a: Record<string, any>, b: Record<string, any>) => b.weergaven - a.weergaven);
+	result.sort((a, b) => b.weergaven.value - a.weergaven.value);
+
+	return result;
+};
+
+export const calculateEvents = (events: AnalyticsEventResponse[]) => {
+	const result = events
+		.filter((event) => event.eventType != 1 && event.eventName != "#unknown-event")
+
+		.map((event) => {
+			return {
+				id: event.id,
+				label: event.eventName,
+				hasData: !!event.hasData,
+				device: {
+					value: event.device.charAt(0).toUpperCase() + event.device.slice(1),
+					type: "plain",
+				},
+				browser: {
+					value: event.browser == "ios" ? "Safari" : event.browser.charAt(0).toUpperCase() + event.browser.slice(1),
+					type: "plain",
+				},
+				created: {
+					value: event.createdAt,
+					type: "relative",
+				},
+			};
+		});
+
+	result.sort((a, b) => new Date(b.created.value).getTime() - new Date(a.created.value).getTime());
 
 	return result;
 };

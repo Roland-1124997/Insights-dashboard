@@ -61,5 +61,5 @@
 			label: "Sessie duur",
 			value: "totaltime",
 		},
-	];
+	] as { label: string; value: TableRowValue }[];
 </script>
