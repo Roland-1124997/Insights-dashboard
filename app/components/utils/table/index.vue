@@ -13,7 +13,7 @@
 			</thead>
 			<tbody v-if="data.length >= 1 && !loading" class="bg-white divide-y divide-gray-200">
 				<ClientOnly>
-					<UtilsTableRow v-for="meta in data" :key="meta.label" :data="meta" :categories :name :decorator="decorator" :isSmall :isOpen :actions />
+					<UtilsTableRow v-for="(meta, index) in data" :key="`${meta.label}-${useId}`" :data="meta" :categories :name :decorator="decorator" :isSmall :isOpen :actions />
 
 					<template #fallback>
 						<UtilsTableRowSkeleton v-for="i in visable" :key="i" :categories :decorator="decorator" :isSmall :isOpen />
