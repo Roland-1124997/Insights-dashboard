@@ -62,8 +62,8 @@ export const useArticles = defineStore("useArticles", () => {
 
 		const query = {
 			page: params?.page || useRoute().query.page || 1,
-			filter: params?.filter || useRoute().query.filter || "",
-			search: params?.search !== undefined ? params.search : useRoute().query.search || "",
+			filter: params?.filter || useRoute().query.filter || undefined,
+			search: params?.search || useRoute().query.search || undefined,
 		} as { filter: string; page: number; search: string };
 
 		const { data, error: Error } = await Request.Get({
@@ -90,8 +90,8 @@ export const useArticles = defineStore("useArticles", () => {
 
 		const params = {
 			page: activePage ? route.query.page || 1 : 1,
-			filter: activePage ? route.query.filter || "" : "",
-			search: activePage ? route.query.search || "" : "",
+			filter: activePage ? route.query.filter || undefined : undefined,
+			search: activePage ? route.query.search || undefined : undefined,
 		} as { filter: string; page: number; search: string };
 
 		set("/artikelen", [params]);

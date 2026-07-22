@@ -56,7 +56,7 @@ export const useStorage = defineStore("useStorage", () => {
 		const query = {
 			page: params?.page || route.query.page || 1,
 			filter: params?.filter || route.query.filter || "alles",
-			search: params?.search !== undefined ? params.search : route.query.search || "",
+			search: params?.search || route.query.search || undefined,
 		} as { filter: string; page: number; search: string };
 
 		const { data, error: Error } = await Request.Get({
@@ -86,7 +86,7 @@ export const useStorage = defineStore("useStorage", () => {
 		const params = {
 			page: activePage ? route.query.page || 1 : 1,
 			filter: activePage ? route.query.filter || "alles" : "alles",
-			search: activePage ? route.query.search || "" : "",
+			search: activePage ? route.query.search || undefined : undefined,
 		} as { filter: string; page: number; search: string };
 
 		set("/mediabank", [params]);

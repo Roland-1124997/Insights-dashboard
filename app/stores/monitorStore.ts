@@ -23,8 +23,8 @@ export const useMonitor = defineStore("useMonitor", () => {
 
 		const qeury = {
 			page: params?.page || route.query.page || 1,
-			filter: params?.filter || route.query.filter || "",
-			search: params?.search !== undefined ? params.search : route.query.search || "",
+			filter: params?.filter || route.query.filter || undefined,
+			search: params?.search || route.query.search || undefined,
 		} as { filter: string; page: number; search: string };
 
 		const { data, error: Error } = await Request.Get({
@@ -53,8 +53,8 @@ export const useMonitor = defineStore("useMonitor", () => {
 
 		const params = {
 			page: activePage ? route.query.page || 1 : 1,
-			filter: activePage ? route.query.filter || "" : "",
-			search: activePage ? route.query.search || "" : "",
+			filter: activePage ? route.query.filter || undefined : undefined,
+			search: activePage ? route.query.search || undefined : undefined,
 		} as { filter: string; page: number; search: string };
 
 		set("/monitors", [params]);

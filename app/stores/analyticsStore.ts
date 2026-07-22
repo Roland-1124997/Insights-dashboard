@@ -19,8 +19,12 @@ export const useAnalytics = defineStore("useAnalytics", () => {
 		loading.value = true;
 		await new Promise((resolve) => setTimeout(resolve, 300));
 
+		const query = {
+			filter: params?.filter || useRoute().query.filter || "vandaag",
+		} as { filter: string };
+
 		const { data, error: Error } = await Request.Get({
-			query: { filter: params?.filter || useRoute().query.filter || "vandaag" },
+			query: { ...query },
 		});
 
 		if (!Error && data) {
@@ -45,8 +49,6 @@ export const useAnalytics = defineStore("useAnalytics", () => {
 
 		const params = {
 			filter: activePage ? route.query.filter || "vandaag" : "vandaag",
-			page: null,
-			search: "",
 		} as { filter: string };
 
 		shared.value.forEach((path) => {

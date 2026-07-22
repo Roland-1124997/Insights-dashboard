@@ -88,7 +88,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 		const query = {
 			page: Number(params?.page || useRoute().query.page || pagination.value.page || 1),
 			filter: params?.filter || useRoute().query.filter || "alles",
-			search: params?.search !== undefined ? params.search : useRoute().query.search || "",
+			search: params?.search || useRoute().query.search || undefined,
 		} as { filter: string; page: number; search: string };
 
 		set("/berichten", [query]);
@@ -187,7 +187,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 		const params = {
 			page: activePage ? route.query.page || pagination.value.page || 1 : 1,
 			filter: activePage ? route.query.filter || "alles" : "alles",
-			search: activePage ? route.query.search || "" : "",
+			search: activePage ? route.query.search || undefined : undefined,
 		} as { filter: string; page: number; search: string };
 
 		set("/berichten", [params]);
