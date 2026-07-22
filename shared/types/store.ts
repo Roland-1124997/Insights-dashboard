@@ -6,6 +6,7 @@ export type StoreType = Store<
 	{
 		refresh?: (params?: { filter?: string; page?: number; search?: string }, append?: boolean, indicator?: boolean, rebuildUntilPage?: boolean) => Promise<void>;
 		revalidate?: () => Promise<void>;
+		setSearch?: (params?: { filter?: string; page?: number; search?: string }) => void;
 		alert?: { value: number };
 		loading: boolean;
 		error: ErrorResponse | null;

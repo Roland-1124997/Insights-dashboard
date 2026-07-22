@@ -36,7 +36,11 @@ export type ToolBar = {
 	fallbackFilter?: string;
 	buttons?: Buttons[];
 	filters?: Filters[];
-	search?: search;
+	search?: {
+		label: string;
+		placeholder: string;
+		local: boolean;
+	};
 	store: string;
 };
 

@@ -14,9 +14,10 @@ const createFilter = (type: string, iconName: string, label: string, ariaLabel: 
 	shortLabel: shortLabel,
 });
 
-const createSearch = (context: string) => ({
+const createSearch = (context: string, options?: { local: boolean }) => ({
 	label: `Zoek in ${context}`,
 	placeholder: `Zoek in ${context}...`,
+	local: !!options?.local,
 });
 
 const schared = ["/", "/statistieken/pagina's", "/statistieken/landen", "/statistieken/apparaten", "/statistieken/evenementen"];
