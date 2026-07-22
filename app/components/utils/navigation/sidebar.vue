@@ -20,22 +20,43 @@
 			</div>
 
 			<nav id="sidebar-menu" aria-label="Hoofdnavigatie" class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-				<NuxtLink
-					v-for="(route, to) in routes"
-					v-show="!route.hidden"
-					:key="to"
-					:to="constructRoute(to, route)"
-					:class="routerActiveRelatedClass(route, to)"
-					class="flex items-center gap-3 px-3 py-2 text-gray-700 transition-colors rounded-lg hover:bg-blue-100 hover:text-blue-800"
-					@click="clickAction(route)">
-					<Icon :name="route.iconName" class="w-5 h-5" />
-					<span class="flex-1">{{ route.label }}</span>
-					<span
-						v-if="route.alert && Number(useAlertCount(route.toolbar?.store)) > 0"
-						class="inline-flex items-center justify-center p-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full min-h-5 min-w-5 h-fit w-fit">
-						{{ useAlertCount(route.toolbar?.store, true) }}
-					</span>
-				</NuxtLink>
+				<ClientOnly>
+					<NuxtLink
+						v-for="(route, to) in routes"
+						v-show="!route.hidden"
+						:key="to"
+						:to="constructRoute(to, route)"
+						:class="routerActiveRelatedClass(route, to)"
+						class="flex items-center gap-3 px-3 py-2 text-gray-700 transition-colors rounded-lg hover:bg-blue-100 hover:text-blue-800"
+						@click="clickAction(route)">
+						<Icon :name="route.iconName" class="w-5 h-5" />
+						<span class="flex-1">{{ route.label }}</span>
+						<span
+							v-if="route.alert && Number(useAlertCount(route.toolbar?.store)) > 0"
+							class="inline-flex items-center justify-center p-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full min-h-5 min-w-5 h-fit w-fit">
+							{{ useAlertCount(route.toolbar?.store, true) }}
+						</span>
+					</NuxtLink>
+
+					<template #fallback>
+						<NuxtLink
+							v-for="(route, to) in routes"
+							v-show="!route.hidden"
+							:key="to"
+							:to="to"
+							:class="routerActiveRelatedClass(route, to)"
+							class="flex items-center gap-3 px-3 py-2 text-gray-700 transition-colors rounded-lg hover:bg-blue-100 hover:text-blue-800"
+							@click="clickAction(route)">
+							<Icon :name="route.iconName" class="w-5 h-5" />
+							<span class="flex-1">{{ route.label }}</span>
+							<span
+								v-if="route.alert && Number(useAlertCount(route.toolbar?.store)) > 0"
+								class="inline-flex items-center justify-center p-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full min-h-5 min-w-5 h-fit w-fit">
+								{{ useAlertCount(route.toolbar?.store, true) }}
+							</span>
+						</NuxtLink>
+					</template>
+				</ClientOnly>
 			</nav>
 
 			<div v-if="Object.keys(routes).length > 0" class="p-3 mb-3 border-t md:mb-0">
@@ -79,11 +100,12 @@
 
 		const params = new URLSearchParams();
 
-		if (lastEntry?.filter && lastEntry.filter != Route.toolbar?.fallbackFilter) params.set("filter", lastEntry.filter);
+		if (lastEntry?.filter && lastEntry.filter != Route.toolbar?.fallbackFilter) params.set("filter", (route.query.filter as string) || lastEntry.filter);
 		if (lastEntry?.search) params.set("search", lastEntry.search);
 		if (lastEntry?.page && Number(lastEntry.page) > 1) params.set("page", String(lastEntry.page));
 
 		const queryString = params.toString();
+
 		return queryString ? `${to}?${queryString}` : to;
 	};
 </script>

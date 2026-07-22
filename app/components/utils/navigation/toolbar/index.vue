@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="hidden">
+		<div aria-hidden="true" class="hidden">
 			<label class="sr-only" for="file">file</label>
 			<input id="file" ref="inputRef" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.jpg,.jpeg,.png,.gif,.webp" @change="handleFileSelect" class="sr-only" />
 		</div>
@@ -81,13 +81,15 @@
 <script setup lang="ts">
 	const storageStore = useStorage();
 
+	const route = useRoute();
+
 	const { toolbar, related } = defineProps({
 		toolbar: { type: Object as PropType<ToolBar>, default: null },
 		related: { type: Array as PropType<string[] | null>, default: null },
 	});
 
 	const store = computed(() => useRouterStore(toolbar.store) as StoreType);
-	const fallbackFilter = computed(() => toolbar?.fallbackFilter || null);
+	const fallbackFilter = computed(() => route.query.filter || toolbar?.fallbackFilter || null) as Ref<string | null>;
 
 	const { activeType, loading, filter, setFilter } = useFilter(
 		{
