@@ -1,9 +1,23 @@
 <template>
 	<div>
-		<h1 class="mb-1 text-2xl font-bold">Statistieken Evenementen</h1>
-		<p class="mb-6 text-sm text-gray-500">Hier kun je alle statistieken van de evenementen die je bezoekers hebben getriggerd bekijken.</p>
+		<h1 class="hidden mb-6 text-2xl font-bold md:flex">Evenementen Overzicht</h1>
 
-		<UtilsTable name="events" :data="store.metrics?.events.values || []" :categories />
+		<section class="relative grid grid-cols-2 gap-3 mb-3 md:grid-cols-4">
+			<template v-if="store.metrics?.events.statistics">
+				<ClientOnly>
+					<UtilsAnalyticsQuickView :data="store.metrics?.events.statistics || []" />
+					<template #fallback>
+						<UtilsAnalyticsSkeleton :visable :compact="true" />
+					</template>
+				</ClientOnly>
+			</template>
+
+			<template v-else>
+				<UtilsAnalyticsSkeleton :visable :compact="true" />
+			</template>
+		</section>
+
+		<UtilsTable name="events" :data="store.metrics.events.values || []" :categories />
 	</div>
 </template>
 
@@ -35,6 +49,7 @@
 	});
 
 	const store = useAnalytics();
+	const visable = ref(2);
 
 	const categories = [
 		{

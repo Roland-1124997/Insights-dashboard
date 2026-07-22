@@ -1,9 +1,23 @@
 <template>
 	<div>
-		<h1 class="mb-1 text-2xl font-bold">Statistieken Pagina's</h1>
-		<p class="mb-6 text-sm text-gray-500">Hier kun je alle statistieken van de pagina's bekijken.</p>
+		<h1 class="hidden mb-6 text-2xl font-bold md:flex">Pagina's Overzicht</h1>
 
-		<UtilsTable name="pages" :data="store.metrics?.pages.values || []" :categories />
+		<section class="relative grid grid-cols-2 gap-3 mb-3 md:grid-cols-4">
+			<template v-if="store.metrics?.pages.statistics">
+				<ClientOnly>
+					<UtilsAnalyticsQuickView :data="store.metrics?.pages.statistics || []" />
+					<template #fallback>
+						<UtilsAnalyticsSkeleton :visable :compact="true" />
+					</template>
+				</ClientOnly>
+			</template>
+
+			<template v-else>
+				<UtilsAnalyticsSkeleton :visable :compact="true" />
+			</template>
+		</section>
+
+		<UtilsTable name="pages" :data="store.metrics.pages.values || []" :categories />
 	</div>
 </template>
 
@@ -35,6 +49,7 @@
 	});
 
 	const store = useAnalytics();
+	const visable = ref(2);
 
 	const categories = [
 		{
