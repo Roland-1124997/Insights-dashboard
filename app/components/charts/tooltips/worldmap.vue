@@ -3,7 +3,7 @@
 		<div class="flex items-center gap-1">
 			<div v-if="values.count > 0" class="w-3 h-3 rounded-full" :style="localStyle"></div>
 			<p class="font-bold text-normal">
-				{{ useCounryName(values.id) }}
+				{{ useCountryName(values.id) }}
 			</p>
 		</div>
 

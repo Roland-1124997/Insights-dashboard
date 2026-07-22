@@ -78,7 +78,7 @@
 			<div class="flex-1 min-w-0">
 				<p class="text-xs font-medium tracking-wide text-gray-500 uppercase">Locatie</p>
 				<p class="text-sm font-semibold text-gray-900">
-					{{ useCounryName(session?.country_code) }}
+					{{ useCountryName(session?.country_code) }}
 				</p>
 			</div>
 		</div>
@@ -114,7 +114,7 @@
 			<div class="flex-1 min-w-0">
 				<p class="text-xs font-medium tracking-wide text-gray-500 uppercase">Locatie</p>
 				<p class="text-sm font-semibold text-gray-900">
-					{{ useCounryName(session?.country_code) }}
+					{{ useCountryName(session?.country_code) }}
 				</p>
 			</div>
 		</div>
