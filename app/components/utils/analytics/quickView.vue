@@ -13,7 +13,7 @@
 						{{ useFormatDuration(statistic.value, statistic.format) }}
 					</h3>
 
-					<p :title="`${useFormatDuration(statistic.difference, statistic.format)}`" class="shrink-0">
+					<p v-if="statistic.difference" :title="`${useFormatDuration(statistic.difference, statistic.format)}`" class="shrink-0">
 						<span :class="statistic.positive ? 'text-green-800' : 'text-red-800'" class="text-xs font-medium md:text-sm">
 							<span aria-hidden="true">{{ statistic.positive ? "▲" : "▼" }}</span>
 							{{ useFormatDuration(statistic.percentage) }}%
