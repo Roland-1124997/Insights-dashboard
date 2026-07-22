@@ -103,19 +103,17 @@ export const useSecurity = defineStore("useSecurity", () => {
 			};
 		};
 
-		void new Promise((resolve) => setTimeout(resolve, 400)).then(() => {
-			create({
-				name: props.name || "Nieuwe toegangssleutel",
-				description: "Weet je het zeker dat je deze sleutel wilt aanmaken? Hierdoor wordt er een nieuwe sleutel aangemaakt.",
-				component: "Confirm",
-				props: {
-					...props,
-					request: {
-						...props.request,
-						appendToBody: appendToBody,
-					},
+		create({
+			name: props.name || "Nieuwe toegangssleutel",
+			description: "Weet je het zeker dat je deze sleutel wilt aanmaken? Hierdoor wordt er een nieuwe sleutel aangemaakt.",
+			component: "Confirm",
+			props: {
+				...props,
+				request: {
+					...props.request,
+					appendToBody: appendToBody,
 				},
-			});
+			},
 		});
 	};
 
@@ -124,19 +122,17 @@ export const useSecurity = defineStore("useSecurity", () => {
 			close();
 			await refresh();
 
-			void new Promise((resolve) => setTimeout(resolve, 400)).then(() => {
-				create({
-					name: data?.data?.label || "Nieuwe toegangssleutel",
-					description: "Hieronder staat de toegangssleutel die je kunt gebruiken om in te loggen op je account via de API. ",
-					component: "showToken",
-					props: {
-						content: {
-							label: data?.data?.label,
-							sleutel: data?.data?.sleutel,
-							vervaldatum: data?.data?.vervaldatum,
-						},
+			create({
+				name: data?.data?.label || "Nieuwe toegangssleutel",
+				description: "Hieronder staat de toegangssleutel die je kunt gebruiken om in te loggen op je account via de API. ",
+				component: "showToken",
+				props: {
+					content: {
+						label: data?.data?.label,
+						sleutel: data?.data?.sleutel,
+						vervaldatum: data?.data?.vervaldatum,
 					},
-				});
+				},
 			});
 		};
 
