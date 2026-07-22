@@ -5,7 +5,7 @@ export const useFormatDuration = (value: number, format: boolean = false) => {
 			maximumFractionDigits: 2,
 		})
 			.format(value)
-			.replace("NaN", "0");
+			.replace("NaN", value.toString());
 	}
 
 	const hours = Math.floor(value / 3600);

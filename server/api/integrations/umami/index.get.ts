@@ -1,6 +1,5 @@
 export default defineSupabaseEventHandler(async (event) => {
 	const filter = (getQuery(event).filter || "vandaag") as "vandaag" | "jaar" | "maand" | "week";
-
 	const { startAt, endAt } = formulateDates(filter);
 
 	const { data, error } = await useFetchAnalytics(`stats:${filter}`, {
@@ -22,6 +21,8 @@ export default defineSupabaseEventHandler(async (event) => {
 
 	if (devicesError || !devices) return useReturnResponse(event, internalServerError);
 
+	const deviceName = devices.reduce((max, device) => (device.pageviews > max.pageviews ? device : max)).name;
+
 	const { data: pages, error: pagesError } = await useFetchMetrics(`path:${filter}`, {
 		startAt,
 		endAt,
@@ -32,7 +33,9 @@ export default defineSupabaseEventHandler(async (event) => {
 
 	if (pagesError || !pages) return useReturnResponse(event, internalServerError);
 
-	const { data: country, error: countryError } = await useFetchMetrics(`country:${filter}`, {
+	const pageName = pages.reduce((max, page) => (page.pageviews > max.pageviews ? page : max)).name;
+
+	const { data: countries, error: countriesError } = await useFetchMetrics(`country:${filter}`, {
 		startAt,
 		endAt,
 		unit: "day",
@@ -40,14 +43,17 @@ export default defineSupabaseEventHandler(async (event) => {
 		type: "country",
 	});
 
-	if (countryError || !country) return useReturnResponse(event, internalServerError);
+	if (countriesError || !countries) return useReturnResponse(event, internalServerError);
+
+	const countryName = countries.reduce((max, country) => (country.pageviews > max.pageviews ? country : max)).name;
 
 	const { data: events, error: eventsError } = await useFetchEvents(`events:${filter}`, {
 		startAt,
 		endAt,
 		unit: "day",
 		timezone: "Europe/Amsterdam",
-		pageSize: 1000,
+		pageSize: 200,
+		eventType: 2,
 	});
 
 	if (eventsError || !events) return useReturnResponse(event, internalServerError);
@@ -108,6 +114,23 @@ export default defineSupabaseEventHandler(async (event) => {
 
 			metrics: {
 				devices: {
+					statistics: [
+						{
+							label: "Populairste",
+							value: deviceName.charAt(0).toUpperCase() + deviceName.slice(1).toLowerCase(),
+							color: "#1542a3",
+							icon: "akar-icons:trophy",
+							format: false,
+						},
+
+						{
+							label: "Totale apparaten",
+							value: devices.length,
+							color: "#2563eb",
+							icon: "akar-icons:grid",
+							format: false,
+						},
+					],
 					categories: {
 						desktop: {
 							name: "Desktop",
@@ -129,6 +152,22 @@ export default defineSupabaseEventHandler(async (event) => {
 					values: calculateMetrics(devices),
 				},
 				pages: {
+					statistics: [
+						{
+							label: "Populairste",
+							value: pageName === "/" ? "/index" : pageName,
+							color: "#1542a3",
+							icon: "akar-icons:trophy",
+							format: false,
+						},
+						{
+							label: "Totale pagina's",
+							value: pages.length,
+							color: "#2563eb",
+							icon: "akar-icons:grid",
+							format: false,
+						},
+					],
 					categories: {
 						bezoekers: {
 							name: "Bezoekers",
@@ -147,26 +186,43 @@ export default defineSupabaseEventHandler(async (event) => {
 				},
 
 				events: {
-					categories: {
-						created: {
-							name: "Aangemaakt",
-							color: "#6f97ed",
-						},
-						device: {
-							name: "Apparaat",
-							color: "#2563eb",
-						},
-						browser: {
-							name: "Browser",
+					statistics: [
+						{
+							label: "Evenementen",
+							value: events.length,
 							color: "#1542a3",
+							icon: "akar-icons:sparkles",
+							format: false,
 						},
-					},
-
+						{
+							label: "Unieke evenementen",
+							value: new Set(events.map((event) => event.eventName)).size,
+							color: "#2563eb",
+							icon: "akar-icons:grid",
+							format: false,
+						},
+					],
 					values: calculateEvents(events),
 				},
 
 				countries: {
-					values: calculateMetrics(country),
+					statistics: [
+						{
+							label: "Populairste",
+							value: useCountryName(countryName),
+							color: "#1542a3",
+							icon: "akar-icons:trophy",
+							format: false,
+						},
+						{
+							label: "Totale landen",
+							value: countries.length,
+							color: "#2563eb",
+							icon: "akar-icons:grid",
+							format: false,
+						},
+					],
+					values: calculateMetrics(countries),
 				},
 			},
 		},

@@ -26,6 +26,7 @@ export type AnalyticsQuery = {
 	limit?: number;
 	maxResults?: number;
 	pageSize?: number;
+	eventType?: number;
 	filters?: {
 		path?: string;
 		referrer?: string;
@@ -50,6 +51,8 @@ type baseObject = {
 	visits: number;
 	bounces: number;
 	totaltime: number;
+	uniqueEvents: number;
+	events: number;
 };
 
 export type AnalyticsResponse = {

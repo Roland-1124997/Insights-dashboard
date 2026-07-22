@@ -166,7 +166,6 @@ export const calculateMetrics = (metrics: AnalyticsResponse[]) => {
 
 export const calculateEvents = (events: AnalyticsEventResponse[]) => {
 	const result = events
-		.filter((event) => event.eventType != 1 && event.eventName != "#unknown-event")
 
 		.map((event) => {
 			return {
