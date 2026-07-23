@@ -1,7 +1,7 @@
 <template>
 	<div class="overflow-x-auto bg-white border border-gray-200 rounded-lg">
 		<table class="min-w-full divide-y divide-gray-200">
-			<thead class="bg-gray-50">
+			<thead class="select-none bg-gray-50">
 				<tr>
 					<th class="flex items-center gap-2 px-4 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase">
 						{{ categories[0]?.label }}

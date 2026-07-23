@@ -27,7 +27,7 @@
 				<h2 class="mb-1 text-xl font-bold">Meest gebruikte apparaten</h2>
 				<p class="mb-1 text-sm text-gray-600">Meest gebruikte apparaten van je bezoekers</p>
 
-				<NuxtLink to="/statistieken/apparaten" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline">
+				<NuxtLink to="/statistieken/apparaten" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 select-none hover:underline">
 					Meer details
 					<icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" />
 				</NuxtLink>
@@ -41,7 +41,7 @@
 						<p class="text-sm text-gray-600">Meest bezochte pagina's van je website</p>
 					</div>
 
-					<NuxtLink to="/statistieken/pagina's" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline">
+					<NuxtLink to="/statistieken/pagina's" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 select-none hover:underline">
 						Meer details
 						<icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" />
 					</NuxtLink>
@@ -57,7 +57,7 @@
 						<p class="text-sm text-gray-600">Een overzicht van de evenementen die je bezoekers hebben getriggerd</p>
 					</div>
 
-					<NuxtLink to="/statistieken/evenementen" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline">
+					<NuxtLink to="/statistieken/evenementen" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 select-none hover:underline">
 						Meer details
 						<icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" />
 					</NuxtLink>
@@ -76,7 +76,7 @@
 				<h2 class="mb-1 text-xl font-bold">Top landen</h2>
 				<p class="mb-1 text-sm text-gray-600">De landen waaruit je meeste bezoekers komen,</p>
 
-				<NuxtLink to="/statistieken/landen" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline">
+				<NuxtLink to="/statistieken/landen" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 select-none hover:underline">
 					Meer details
 					<icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" />
 				</NuxtLink>

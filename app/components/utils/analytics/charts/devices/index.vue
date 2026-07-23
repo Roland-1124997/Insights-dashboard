@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<nav class="flex items-center w-full mb-3 overflow-x-auto border-b border-gray-200">
+		<nav class="flex items-center w-full mb-3 overflow-x-auto border-b border-gray-200 select-none">
 			<button
 				type="button"
 				@click="updateActiveDevice('bezoekers')"

@@ -32,7 +32,7 @@
 						data.label
 					}}
 				</caption>
-				<thead>
+				<thead class="select-none">
 					<tr scope="row">
 						<th
 							v-for="category in categories.slice(1, categories.length - calculateRange(categories.length))"
