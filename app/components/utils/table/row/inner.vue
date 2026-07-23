@@ -95,6 +95,4 @@
 		const target = event.target as HTMLImageElement;
 		target.src = "/placeholder.png";
 	};
-
-
 </script>

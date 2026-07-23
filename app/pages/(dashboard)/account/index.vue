@@ -32,7 +32,7 @@
 
 		<UtilsAccountViewerSessions :sessions="account?.sessions || []" />
 
-		<UtilsAccountViewerTokens :data="tokenData" />
+		<UtilsAccountViewerTokens :data="security.tokens?.values || []" />
 	</div>
 </template>
 
@@ -66,13 +66,4 @@
 	const store = useSessions();
 	const account = useAccount();
 	const security = useSecurity();
-
-	const tokenData = computed(() => {
-		return security.tokens && !Array.isArray(security.tokens)
-			? security.tokens
-			: {
-					values: [],
-					categories: [],
-				};
-	});
 </script>
