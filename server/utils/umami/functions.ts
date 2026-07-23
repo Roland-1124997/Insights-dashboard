@@ -172,6 +172,11 @@ export const calculateEvents = (events: AnalyticsEventResponse[]) => {
 				id: event.id,
 				label: event.eventName,
 				hasData: !!event.hasData,
+				session: {
+					value: `https://api.dicebear.com/10.x/glyphs/svg?seed=${event.sessionId}`,
+					subtitle: event.sessionId.slice(0, 8),
+					type: "image",
+				},
 				device: {
 					value: event.device.charAt(0).toUpperCase() + event.device.slice(1),
 					type: "plain",

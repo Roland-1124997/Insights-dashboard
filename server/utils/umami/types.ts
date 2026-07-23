@@ -62,6 +62,7 @@ export type AnalyticsResponse = {
 
 export type AnalyticsEventResponse = {
 	id: string;
+	sessionId: string;
 	eventName: string;
 	hasData: boolean;
 	device: string;

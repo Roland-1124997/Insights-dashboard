@@ -16,6 +16,11 @@
 				<NuxtTime relative :datetime="getValues(category.value).value" />
 			</span>
 
+			<span v-else-if="isImage(category.value)" class="flex items-center w-full h-full justify-evenly">
+				<img @error="imageError" :src="getValues(category.value).value" :alt="getValues(category.value).subtitle" class="object-cover rounded-full w-7 h-7" />
+				<span class="hidden xl:flex"> {{ getValues(category.value).subtitle }}... </span>
+			</span>
+
 			<span v-else>
 				{{ formatCategoryValue(category.value) }}
 			</span>
@@ -58,14 +63,16 @@
 	const getValues = (input: TableRowValue) =>
 		data[input as keyof typeof data] as unknown as {
 			type: TableRowValueType;
-			value: string | number;
+			value: string;
+			subtitle?: string;
 		};
 
 	const formatCategoryValue = (category: TableRowValue) => {
 		const { type, value } = getValues(category);
-		const skipTransform: TableRowValueType[] = ["plain", "relative"];
+		const skipTransform: TableRowValueType[] = ["plain", "relative", "image"];
 
 		if (skipTransform.includes(type)) return value;
+		if (type === "infinity") return "Onbepaald";
 
 		if (type === "date") return useFormatDate(String(value));
 		if (type === "duration") return useFormatDuration(Number(value), true);
@@ -74,8 +81,20 @@
 		return useFormatDuration(Number(value));
 	};
 
+	const isImage = (category: TableRowValue) => {
+		const { type } = getValues(category);
+		return type === "image";
+	};
+
 	const isRelativeDate = (category: TableRowValue) => {
 		const { type } = getValues(category);
 		return type === "relative";
 	};
+
+	const imageError = (event: Event) => {
+		const target = event.target as HTMLImageElement;
+		target.src = "/placeholder.png";
+	};
+
+
 </script>
