@@ -1,8 +1,8 @@
 <template>
-	<div class="w-64 p-1 rounded-xl">
-		<p class="font-bold text-normal">{{ localLabel }}</p>
+	<div class="p-4 border border-gray-200 shadow-md w-72 bg-white/95 rounded-xl">
+		<p class="mb-1 font-bold text-normal text-balance">{{ localLabel }}</p>
 		<div class="flex-col">
-			<div class="flex items-center gap-2" v-for="(value, index) in categories">
+			<div class="flex items-center gap-2" v-for="value in categories">
 				<div class="w-3 h-3 rounded-full" :style="{ background: value.color }"></div>
 
 				<p class="text-sm">

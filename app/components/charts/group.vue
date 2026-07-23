@@ -33,10 +33,24 @@
 
 	const xFormatter = (i: number): string => `${data[i]?.label}`;
 	const yFormatter = (tick: number) => tick.toString();
+
+	const hideTooltip = ref(false);
+
+	watch(
+		() => data,
+		() => {
+			hideTooltip.value = true;
+
+			setTimeout(() => {
+				hideTooltip.value = false;
+			}, 50);
+		},
+	);
 </script>
 
 <template>
 	<BarChart
+		:hideTooltip="hideTooltip"
 		:data="localData"
 		:height
 		:categories
@@ -57,7 +71,7 @@
 		}"
 		:y-grid-line="true">
 		<template #tooltip="{ values }">
-			<ChartsTooltipsGroup :categories="categories" :values="values" />
+			<ChartsTooltipsGroup v-if="values" :categories="categories" :values="values" />
 		</template>
 	</BarChart>
 </template>

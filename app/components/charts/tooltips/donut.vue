@@ -1,6 +1,6 @@
 <template>
-	<div class="w-64 p-1 rounded-xl">
-		<div class="flex items-center gap-1">
+	<div class="p-4 border border-gray-200 w-72 bg-white/95 rounded-xl">
+		<div class="flex items-center gap-1 mb-1">
 			<div class="w-3 h-3 rounded-full" :style="localStyle"></div>
 			<p class="font-bold text-normal">
 				{{ localLabel }}
@@ -30,10 +30,10 @@
 		},
 	});
 
-	const localLabel = computed(() => values?.label || "");
+	const localLabel = computed(() => values?.label || "Onbekend");
 	const localData = computed(() => useFormatDuration(values?.[values.label] || 0));
 	const localStyle = computed(() => {
-		const color = categories[values?.label?.toLowerCase() || ""]?.color || "";
+		const color = categories[values?.label?.toLowerCase() || ""]?.color || "#A3A3A3";
 
 		return { background: color };
 	});

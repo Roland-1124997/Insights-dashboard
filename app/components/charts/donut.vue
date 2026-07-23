@@ -58,7 +58,7 @@
 		</div>
 
 		<template #tooltip="{ values }">
-			<ChartsTooltipsDonut :categories="categories" :active="active" :values="values" />
+			<ChartsTooltipsDonut v-if="values" :categories="categories" :active="active" :values="values" />
 		</template>
 	</DonutChart>
 </template>

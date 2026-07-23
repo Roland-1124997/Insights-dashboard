@@ -10,7 +10,27 @@
 	--vis-donut-background-color: transparent !important;
 	--vis-map-feature-color: #f4f4f4 !important;
 	--vis-map-boundary-color: #85a3c9 !important;
+
+	
+	--vis-tooltip-padding: 0 0 0 0 !important; 
+
+	--vis-tooltip-border-color: transparent !important;
+	--vis-tooltip-background-color: transparent !important;
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ::-webkit-scrollbar {
 	@apply hidden;
