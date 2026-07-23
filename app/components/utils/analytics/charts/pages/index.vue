@@ -37,11 +37,11 @@
 </template>
 
 <script setup lang="ts">
-	defineProps<{
+	const { data } = defineProps<{
 		metrics: object;
 		data: {
 			categories: Record<string, { name: string; color: string }>;
-			values: number[][];
+			values: TableMap[TableName][];
 		};
 	}>();
 </script>

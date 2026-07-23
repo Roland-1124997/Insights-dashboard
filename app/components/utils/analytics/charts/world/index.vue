@@ -27,8 +27,6 @@
 <script setup lang="ts">
 	defineProps<{
 		metrics: object;
-		data: Array<{
-			label: string;
-		}>;
+		data: TableMap["countries"][];
 	}>();
 </script>

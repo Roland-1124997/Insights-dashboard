@@ -55,18 +55,27 @@
 		{
 			label: "Evenement",
 			value: "label",
+			type: "string",
+		},
+		{
+			label: "sessie",
+			value: "session",
+			type: "string",
 		},
 		{
 			label: "Apparaat",
 			value: "device",
+			type: "string",
 		},
 		{
 			label: "Browser",
 			value: "browser",
+			type: "string",
 		},
 		{
 			label: "Aangemaakt",
 			value: "created",
+			type: "date",
 		},
-	] as { label: string; value: TableRowValue }[];
+	] as { label: string; value: TableRowValue; type: string }[];
 </script>

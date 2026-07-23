@@ -20,7 +20,7 @@
 		<section class="grid w-full grid-cols-1 mt-3 gap-y-3 md:gap-3 md:grid-cols-3 h-fit pb-[5.5rem] md:pb-0">
 			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-2">
 				<h2 class="mb-1 text-xl font-bold">Meest bezochte pagina's</h2>
-				<UtilsAnalyticsChartsPages :metrics="store.metrics || []" :data="store.metrics?.pages || []" />
+				<UtilsAnalyticsChartsPages :metrics="metrics || []" :data="metrics?.pages || []" />
 			</article>
 
 			<article class="w-full col-span-1 p-6 bg-white border rounded-lg">
@@ -31,7 +31,7 @@
 					Meer details
 					<icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" />
 				</NuxtLink>
-				<UtilsAnalyticsChartsDevices :metrics="store.metrics || []" :data="store.metrics?.devices || []" />
+				<UtilsAnalyticsChartsDevices :metrics="metrics || []" :data="metrics?.devices || []" />
 			</article>
 
 			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-3">
@@ -47,7 +47,7 @@
 					</NuxtLink>
 				</div>
 
-				<UtilsAnalyticsCardsViewer name="pages" :visable="6" :data="store.metrics?.pages.values || []" />
+				<UtilsAnalyticsCardsViewer @emitter="update" name="pages" :visable="6" :data="metrics?.pages.values || []" />
 			</article>
 
 			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-3">
@@ -63,13 +63,13 @@
 					</NuxtLink>
 				</div>
 
-				<UtilsAnalyticsCardsViewer name="events" :visable="6" :data="store.metrics?.events.values || []" />
+				<UtilsAnalyticsCardsViewer name="events" :visable="6" :data="metrics?.events.values || []" />
 			</article>
 
 			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-2">
 				<h2 class="mb-1 text-xl font-bold">Bezoekers per land</h2>
 				<p class="mb-6 text-sm text-gray-600">Een visuele weergave van waar je bezoekers vandaan komen,</p>
-				<UtilsAnalyticsChartsWorld :metrics="store.metrics || []" :data="store.metrics?.countries.values || []" />
+				<UtilsAnalyticsChartsWorld :metrics="metrics || []" :data="metrics?.countries.values || []" />
 			</article>
 
 			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-1">
@@ -82,7 +82,7 @@
 				</NuxtLink>
 
 				<div class="pt-3">
-					<UtilsAnalyticsCardsViewer name="countries" :visable="3" :data="store.metrics?.countries.values || []" :isSmall="true" :isOpen="true" />
+					<UtilsAnalyticsCardsViewer name="countries" :visable="3" :linked="false" :data="metrics?.countries.values || []" :isSmall="true" :isOpen="true" />
 				</div>
 			</article>
 		</section>
@@ -117,4 +117,23 @@
 	});
 
 	const store = useAnalytics();
+
+	const metrics = ref(store.metrics);
+
+	const update = (value: { data: TableMap[TableName][]; name: string }) => {
+		metrics.value = {
+			...metrics.value,
+			[value.name]: {
+				...metrics.value?.[value.name],
+				values: value.data,
+			},
+		};
+	};
+
+	watch(
+		() => store.metrics,
+		(newMetrics) => {
+			metrics.value = newMetrics;
+		},
+	);
 </script>

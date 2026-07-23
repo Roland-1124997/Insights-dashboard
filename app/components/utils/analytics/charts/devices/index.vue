@@ -60,12 +60,12 @@
 		metrics: object;
 		data: {
 			categories: Record<string, { name: string; color: string }>;
-			values: number[][];
+			values: TableMap["devices"][];
 		};
 	}>();
 
-	const activedDevice = ref("bezoekers");
+	const activedDevice = ref<ObjectKeys<TableMap["devices"]>>("bezoekers");
 	const updateActiveDevice = (device: string) => {
-		activedDevice.value = device;
+		activedDevice.value = device as ObjectKeys<TableMap["devices"]>;
 	};
 </script>

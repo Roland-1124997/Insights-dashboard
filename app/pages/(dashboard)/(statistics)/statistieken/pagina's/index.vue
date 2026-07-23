@@ -55,26 +55,32 @@
 		{
 			label: "Pagina",
 			value: "label",
+			type: "string",
 		},
 		{
 			label: "Weergaven",
 			value: "weergaven",
+			type: "number",
 		},
 		{
 			label: "Bezoekers",
 			value: "bezoekers",
+			type: "number",
 		},
 		{
 			label: "Bezoeken",
 			value: "bezoeken",
+			type: "number",
 		},
 		{
 			label: "Bounces",
 			value: "bounces",
+			type: "number",
 		},
 		{
 			label: "Sessie duur",
 			value: "totaltime",
+			type: "number",
 		},
-	] as { label: string; value: TableRowValue }[];
+	] as { label: string; value: TableRowValue; type: string }[];
 </script>
