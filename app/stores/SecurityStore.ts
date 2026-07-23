@@ -3,9 +3,9 @@ export const useSecurity = defineStore("useSecurity", () => {
 	const { create, close } = useModal();
 
 	const uri: FetchUrl = "/api/auth/account/tokens";
-	const request = useApiHandler<ApiResponse<{ values: TableMap["tokens"][]; categories: { label: string; value: string }[] }>>(uri);
+	const request = useApiHandler<ApiResponse<{ values: TableMap["tokens"][] }>>(uri);
 
-	const tokens = ref<{ values: TableMap["tokens"][]; categories: { label: string; value: string }[] } | null>(null);
+	const tokens = ref<{ values: TableMap["tokens"][] } | null>(null);
 	const error = ref<ErrorResponse | null>(null);
 	const loading = ref<boolean>(true);
 

@@ -5,8 +5,8 @@
 				<div>
 					<h2 class="text-xl font-bold text-gray-900">Actieve sleutels</h2>
 					<p class="mt-1 text-sm text-gray-600">
-						{{ data.values.length || 0 }} actieve
-						{{ data.values.length === 1 ? "sleutel" : "sleutels" }}
+						{{ data.length || 0 }} actieve
+						{{ data.length === 1 ? "sleutel" : "sleutels" }}
 					</p>
 				</div>
 
@@ -17,21 +17,41 @@
 			</div>
 
 			<div>
-				<UtilsTable name="tokens" :data="data.values" :categories="data.categories" :actions :visable="5" :loading="security.loading" />
+				<UtilsTable name="tokens" :data="data" :categories="categories" :actions :visable="5" :loading="security.loading" />
 			</div>
 		</article>
 	</section>
 </template>
 
 <script setup lang="ts">
-	defineProps({
-		data: {
-			type: Object as PropType<{ values: TableMap["tokens"][]; categories: { label: string; value: TableRowValue }[] }>,
-			required: true,
-		},
-	});
+	const { data } = defineProps<{
+		data: TableMap["tokens"][];
+	}>();
 
 	const security = useSecurity();
+
+	const categories = [
+		{
+			label: "naam",
+			value: "naam",
+			type: "string",
+		},
+		{
+			label: "sleutel",
+			value: "sleutel",
+			type: "hidden",
+		},
+		{
+			label: "vervaldatum",
+			value: "vervaldatum",
+			type: "date",
+		},
+		{
+			label: "acties",
+			value: "acties",
+			type: "hidden",
+		},
+	] as { label: string; value: TableRowValue; type: string }[];
 
 	const actions = [
 		{
@@ -50,5 +70,5 @@
 				security.Delete(row);
 			},
 		},
-	];
+	] as any[];
 </script>
