@@ -21,7 +21,7 @@ export default defineSupabaseEventHandler(async (event) => {
 
 	if (devicesError || !devices) return useReturnResponse(event, internalServerError);
 
-	const deviceName = devices.reduce((max, device) => (device.pageviews > max.pageviews ? device : max)).name;
+	const deviceName = devices.length >= 1 ? devices.reduce((max, device) => (device.pageviews > max.pageviews ? device : max)).name : "Onbekend";
 
 	const { data: pages, error: pagesError } = await useFetchMetrics(`path:${filter}`, {
 		startAt,
@@ -33,7 +33,7 @@ export default defineSupabaseEventHandler(async (event) => {
 
 	if (pagesError || !pages) return useReturnResponse(event, internalServerError);
 
-	const pageName = pages.reduce((max, page) => (page.pageviews > max.pageviews ? page : max)).name;
+	const pageName = pages.length >= 1 ? pages.reduce((max, page) => (page.pageviews > max.pageviews ? page : max)).name : "Onbekend";
 
 	const { data: countries, error: countriesError } = await useFetchMetrics(`country:${filter}`, {
 		startAt,
@@ -45,7 +45,7 @@ export default defineSupabaseEventHandler(async (event) => {
 
 	if (countriesError || !countries) return useReturnResponse(event, internalServerError);
 
-	const countryName = countries.reduce((max, country) => (country.pageviews > max.pageviews ? country : max)).name;
+	const countryName = countries.length >= 1 ? countries.reduce((max, country) => (country.pageviews > max.pageviews ? country : max)).name : "Onbekend";
 
 	const { data: events, error: eventsError } = await useFetchEvents(`events:${filter}`, {
 		startAt,
