@@ -61,8 +61,9 @@ export default defineNuxtConfig({
 
 	runtimeConfig: {
 		logging: {
+			limit: 10,
 			include: ["/api/**", "/**"],
-			exclude: ["/api/status", "/_", "/ping.txt"],
+			exclude: ["/api/status", "/_", "/ping.txt", "/.well-known"],
 		},
 
 		security: {
