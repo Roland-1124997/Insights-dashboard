@@ -20,7 +20,12 @@
 
 		<TransitionGroup name="page">
 			<div class="flex flex-col flex-1 w-full overflow-hidden" v-if="!isLoading">
-				<UtilsNavigationToolbar :toolbar :related />
+				<ClientOnly>
+					<UtilsNavigationToolbar :toolbar :related />
+					<template #fallback>
+						<UtilsNavigationToolbar :toolbar :related />
+					</template>
+				</ClientOnly>
 
 				<slot></slot>
 			</div>
