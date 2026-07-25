@@ -1,6 +1,8 @@
 import { getRequestURL, H3Event } from "h3";
 import { FetchError } from "ofetch";
 
+const { logging } = useRuntimeConfig();
+
 const colors = {
 	reset: "\x1b[0m",
 	gray: "\x1b[90m",
@@ -42,6 +44,9 @@ const createLogger = () => {
 
 	const finish = () => {
 		const { pathname } = getRequestURL(event);
+
+		if (logging.exclude.some((route: string) => pathname.startsWith(route))) return;
+		if (logging.include.length && !logging.include.some((route: string) => pathname.startsWith(route.replace("/**", "")))) return;
 
 		const method = event.node.req.method ?? "GET";
 		const status = event.node.res.statusCode;

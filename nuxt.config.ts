@@ -60,6 +60,11 @@ export default defineNuxtConfig({
 	},
 
 	runtimeConfig: {
+		logging: {
+			include: ["/api/**", "/**"],
+			exclude: ["/api/user", "/_", "/ping.txt"],
+		},
+
 		security: {
 			key: process.env.SECURITY_KEY,
 			header: process.env.SECURITY_HEADER,
