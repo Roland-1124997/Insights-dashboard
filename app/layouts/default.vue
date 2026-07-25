@@ -15,6 +15,8 @@
 </template>
 
 <script setup lang="ts">
+	const user = useSessions();
+
 	const account = useAccount();
 	const security = useSecurity();
 	const profile = useProfile();
@@ -38,14 +40,17 @@
 		{ immediate: true },
 	);
 
-	store.initialPayload();
-	account.initialPayload();
-	security.initialPayload();
-	profile.initialPayload();
-	monitor.initialPayload();
-	articles.initialPayload();
-	storageStore.initialPayload();
-	notifications.initialPayload();
+	if (user.user) {
+		store.initialPayload();
+		account.initialPayload();
+		security.initialPayload();
+		profile.initialPayload();
+		monitor.initialPayload();
+		articles.initialPayload();
+		storageStore.initialPayload();
+		notifications.initialPayload();
+	}
+
 	const { syncSubscription } = await usePush();
 
 	const { close } = await notifications.realTime();
