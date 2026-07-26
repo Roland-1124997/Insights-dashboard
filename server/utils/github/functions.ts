@@ -85,14 +85,15 @@ const useFetchRepositories = async (token: string, per_page: number = 100): Prom
 };
 
 export const useGetRepositories = async (token: string, per_page: number) => {
-	const cacheKey = `cache:nitro:functions:repos-${token}`;
+	const cacheKey = `cache:nitro:functions:repos`;
 	const stored = useStorage(cacheKey);
 
-	const cached = await stored.getItem<Repositories>(cacheKey);
+	const cached = await stored.getItem<Repositories>(`${token}.json`);
+
 	if (cached) return { data: cached, error: null };
 
 	const { data, error } = await useFetchRepositories(token, per_page);
-	if (data) await stored.setItem(cacheKey, data, { ttl: 60 * 5 });
+	if (data) await stored.setItem(`${token}.json`, data, { ttl: 60 * 5 });
 
 	return { data, error };
 };

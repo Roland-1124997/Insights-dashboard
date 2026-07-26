@@ -196,7 +196,7 @@ export default defineSupabaseEventHandler(async (event) => {
 						},
 						{
 							label: "Unieke evenementen",
-							value: new Set(events.map((event) => event.eventName)).size,
+							value: events ? new Set(events.map((event) => event.eventName)).size : 0,
 							color: "#2563eb",
 							icon: "akar-icons:grid",
 							format: false,

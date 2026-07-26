@@ -7,70 +7,58 @@ const headers: HeadersInit = {
 
 const baseUrl = `${UMAMI.HOST}`;
 
-export const useFetchMetrics = defineCachedFunction(
-	async (key: string, query: AnalyticsQuery) => {
-		const url = `${baseUrl}/metrics/expanded`;
+export const useFetchMetrics = async (key: string, query: AnalyticsQuery) => {
+	const url = `${baseUrl}/metrics/expanded`;
+	let data: AnalyticsResponse[] | null = null;
+	let error = null;
 
-		let data: AnalyticsResponse[] | null = null;
-		let error = null;
+	try {
+		data = await useFetchCached(url, key, query);
+	} catch (err) {
+		error = err;
+	}
 
-		try {
-			data = await $fetch<AnalyticsResponse[]>(url, { headers, query });
-		} catch (err) {
-			error = err;
-		}
+	return { data, error };
+};
 
-		return { data, error };
+export const useFetchAnalytics = async (key: string, query: AnalyticsQuery) => {
+	const url = `${baseUrl}/stats`;
+	let data: AnalyticsStatistics | null = null;
+	let error = null;
+
+	try {
+		data = await useFetchCached(url, key, query);
+	} catch (err) {
+		error = err;
+	}
+
+	return { data, error };
+};
+
+export const useFetchEvents = async (key: string, query: AnalyticsQuery) => {
+	const url = `${baseUrl}/events`;
+	let data: AnalyticsEventResponse[] | null = null;
+	let error = null;
+
+	try {
+		data = await useFetchCached(url, key, query);
+	} catch (err) {
+		error = err;
+	}
+
+	return { data, error };
+};
+
+const useFetchCached = defineCachedFunction(
+	async (url: string, key: string, query: AnalyticsQuery) => {
+		const data = await $fetch<any>(url, { headers, query });
+		if (data.data) return data.data;
+		return data;
 	},
 	{
-		maxAge: 60 * 60 * 24 * 1,
+		maxAge: 60 * 60 * 3,
 		name: "analytics",
-		getKey: (key: string, query: AnalyticsQuery) => `${key}-${query.timezone.split("/").join("-")}`,
-	},
-);
-
-export const useFetchAnalytics = defineCachedFunction(
-	async (key: string, query: AnalyticsQuery) => {
-		const url = `${baseUrl}/stats`;
-
-		let data: AnalyticsStatistics | null = null;
-		let error = null;
-
-		try {
-			data = await $fetch<AnalyticsStatistics>(url, { headers, query });
-		} catch (err) {
-			error = err;
-		}
-
-		return { data, error };
-	},
-	{
-		maxAge: 60 * 10,
-		name: "analytics",
-		getKey: (key: string, query: AnalyticsQuery) => `${key}-${query.timezone.split("/").join("-")}`,
-	},
-);
-
-export const useFetchEvents = defineCachedFunction(
-	async (key: string, query: AnalyticsQuery) => {
-		const url = `${baseUrl}/events`;
-
-		let data: AnalyticsEventResponse[] | null = null;
-		let error = null;
-
-		try {
-			const { data: event } = await $fetch<{ data: AnalyticsEventResponse[] }>(url, { headers, query });
-			data = event;
-		} catch (err) {
-			error = err;
-		}
-
-		return { data, error };
-	},
-	{
-		maxAge: 60 * 10,
-		name: "analytics",
-		getKey: (key: string, query: AnalyticsQuery) => `${key}-${query.timezone.split("/").join("-")}`,
+		getKey: (url: string, key: string, query: AnalyticsQuery) => `${key}-${query.timezone.split("/").join("-")}`,
 	},
 );
 
@@ -165,32 +153,30 @@ export const calculateMetrics = (metrics: AnalyticsResponse[]) => {
 };
 
 export const calculateEvents = (events: AnalyticsEventResponse[]) => {
-	const result = events
-
-		.map((event) => {
-			return {
-				id: event.id,
-				label: event.eventName,
-				hasData: !!event.hasData,
-				session: {
-					value: `https://api.dicebear.com/10.x/glyphs/svg?seed=${event.sessionId}`,
-					subtitle: event.sessionId.slice(0, 8),
-					type: "image",
-				},
-				device: {
-					value: event.device.charAt(0).toUpperCase() + event.device.slice(1),
-					type: "plain",
-				},
-				browser: {
-					value: event.browser == "ios" ? "Safari" : event.browser.charAt(0).toUpperCase() + event.browser.slice(1),
-					type: "plain",
-				},
-				created: {
-					value: event.createdAt,
-					type: "relative",
-				},
-			};
-		});
+	const result = events.map((event) => {
+		return {
+			id: event.id,
+			label: event.eventName,
+			hasData: !!event.hasData,
+			session: {
+				value: `https://api.dicebear.com/10.x/glyphs/svg?seed=${event.sessionId}`,
+				subtitle: event.sessionId.slice(0, 8),
+				type: "image",
+			},
+			device: {
+				value: event.device.charAt(0).toUpperCase() + event.device.slice(1),
+				type: "plain",
+			},
+			browser: {
+				value: event.browser == "ios" ? "Safari" : event.browser.charAt(0).toUpperCase() + event.browser.slice(1),
+				type: "plain",
+			},
+			created: {
+				value: event.createdAt,
+				type: "relative",
+			},
+		};
+	});
 
 	result.sort((a, b) => new Date(b.created.value).getTime() - new Date(a.created.value).getTime());
 
