@@ -25,7 +25,7 @@
 		</nav>
 
 		<ClientOnly v-if="metrics && data.values.length >= 1">
-			<ChartsDonut :active="activedDevice" :data="data?.values" :categories="data.categories" :height="300" :arc-width="40" />
+			<ChartsDonut :active="activedDevice" :data="data?.values" :categories="data.chart.categories" :height="300" :arc-width="40" />
 			<template #fallback>
 				<div aria-hidden class="flex items-center justify-center mt-16 h-[300px]">
 					<div class="relative w-[19rem] h-[19rem]">
@@ -59,7 +59,9 @@
 	defineProps<{
 		metrics: object;
 		data: {
-			categories: Record<string, { name: string; color: string }>;
+			chart: {
+				categories: Record<string, { name: string; color: string }>;
+			};
 			values: TableMap["devices"][];
 		};
 	}>();

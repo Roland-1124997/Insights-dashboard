@@ -1,7 +1,7 @@
 <template>
 	<UtilsApp>
 		<div aria-hidden class="absolute top-0 left-0 w-1 h-1 overflow-hidden">
-			<NuxtImg src="/github.jpg" />
+			<NuxtImg src="/github.jpg" alt="loader" />
 		</div>
 
 		<UtilsNavigation>

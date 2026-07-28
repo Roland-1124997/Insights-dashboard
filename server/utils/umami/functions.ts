@@ -214,3 +214,65 @@ export const calculatePercentage = (current: number, previous: number) => {
 	if (previous === 0) return 100;
 	return (((current - previous) / previous) * 100).toFixed(0);
 };
+
+export const calulateTimeLine = (events: AnalyticsEventResponse[], filter: "vandaag" | "week" | "maand" | "jaar") => {
+	const hours = Array.from({ length: 24 }, (_, hour) => `${hour.toString().padStart(2, "0")}:00`);
+	const weekdays = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
+	const months = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"];
+
+	let timeline: { label: string | number; events: number }[] = [];
+
+	if (filter === "vandaag") {
+		timeline = hours.map((hour) => ({
+			label: hour,
+			events: 0,
+		}));
+	}
+
+	if (filter === "week") {
+		timeline = weekdays.map((day) => ({
+			label: day,
+			events: 0,
+		}));
+	}
+
+	if (filter === "maand") {
+		const now = new Date();
+
+		const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+		const currentMonth = now.getMonth() + 1;
+
+		timeline = Array.from({ length: daysInMonth }, (_, day) => ({
+			label: `${months[currentMonth - 1]} ${day + 1}`,
+			events: 0,
+		}));
+	}
+
+	if (filter === "jaar") {
+		timeline = months.map((month) => ({
+			label: month,
+			events: 0,
+		}));
+	}
+
+	for (const event of events) {
+		const createdDate = new Date(event.createdAt);
+
+		if (filter === "vandaag") {
+			const hour = createdDate.getHours();
+			if (timeline[hour]) timeline[hour].events += 1;
+		} else if (filter === "week") {
+			const day = createdDate.getDay() === 0 ? 6 : createdDate.getDay() - 1;
+
+			timeline[day]!.events += 1;
+		} else if (filter === "maand") {
+			const date = createdDate.getDate() - 1;
+			if (timeline[date]) timeline[date].events += 1;
+		} else if (filter === "jaar") {
+			const month = createdDate.getMonth();
+			if (timeline[month]) timeline[month].events += 1;
+		}
+	}
+
+	return timeline;
+};

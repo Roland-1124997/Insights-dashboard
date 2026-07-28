@@ -131,24 +131,63 @@ export default defineSupabaseEventHandler(async (event) => {
 							format: false,
 						},
 					],
-					categories: {
-						desktop: {
-							name: "Desktop",
-							color: "#93c5fd",
-						},
-						mobile: {
-							name: "Mobile",
-							color: "#60a5fa",
-						},
-						laptop: {
-							name: "Laptop",
-							color: "#3b82f6",
-						},
-						tablet: {
-							name: "Tablet",
-							color: "#2563eb",
+
+					table: {
+						categories: [
+							{
+								label: "Apparaat",
+								value: "label",
+								type: "string",
+							},
+							{
+								label: "Weergaven",
+								value: "weergaven",
+								type: "number",
+							},
+							{
+								label: "Bezoekers",
+								value: "bezoekers",
+								type: "number",
+							},
+							{
+								label: "Bezoeken",
+								value: "bezoeken",
+								type: "number",
+							},
+							{
+								label: "Bounces",
+								value: "bounces",
+								type: "number",
+							},
+							{
+								label: "Sessie duur",
+								value: "totaltime",
+								type: "number",
+							},
+						],
+					},
+
+					chart: {
+						categories: {
+							desktop: {
+								name: "Desktop",
+								color: "#93c5fd",
+							},
+							mobile: {
+								name: "Mobile",
+								color: "#60a5fa",
+							},
+							laptop: {
+								name: "Laptop",
+								color: "#3b82f6",
+							},
+							tablet: {
+								name: "Tablet",
+								color: "#2563eb",
+							},
 						},
 					},
+
 					values: calculateMetrics(devices),
 				},
 				pages: {
@@ -168,20 +207,59 @@ export default defineSupabaseEventHandler(async (event) => {
 							format: false,
 						},
 					],
-					categories: {
-						bezoekers: {
-							name: "Bezoekers",
-							color: "#6f97ed",
-						},
-						weergaven: {
-							name: "Weergaven",
-							color: "#2563eb",
-						},
-						bezoeken: {
-							name: "Bezoeken",
-							color: "#1542a3",
+
+					table: {
+						categories: [
+							{
+								label: "Pagina",
+								value: "label",
+								type: "string",
+							},
+							{
+								label: "Weergaven",
+								value: "weergaven",
+								type: "number",
+							},
+							{
+								label: "Bezoekers",
+								value: "bezoekers",
+								type: "number",
+							},
+							{
+								label: "Bezoeken",
+								value: "bezoeken",
+								type: "number",
+							},
+							{
+								label: "Bounces",
+								value: "bounces",
+								type: "number",
+							},
+							{
+								label: "Sessie duur",
+								value: "totaltime",
+								type: "number",
+							},
+						],
+					},
+
+					chart: {
+						categories: {
+							bezoekers: {
+								name: "Bezoekers",
+								color: "#6f97ed",
+							},
+							weergaven: {
+								name: "Weergaven",
+								color: "#2563eb",
+							},
+							bezoeken: {
+								name: "Bezoeken",
+								color: "#1542a3",
+							},
 						},
 					},
+
 					values: calculateMetrics(pages),
 				},
 
@@ -202,7 +280,48 @@ export default defineSupabaseEventHandler(async (event) => {
 							format: false,
 						},
 					],
-					values: calculateEvents(events),
+
+					table: {
+						categories: [
+							{
+								label: "Evenement",
+								value: "label",
+								type: "string",
+							},
+							{
+								label: "Sessie",
+								value: "session",
+								type: "string",
+							},
+							{
+								label: "Apparaat",
+								value: "device",
+								type: "string",
+							},
+							{
+								label: "Browser",
+								value: "browser",
+								type: "string",
+							},
+							{
+								label: "Aangemaakt",
+								value: "created",
+								type: "string",
+							},
+						],
+
+						values: calculateEvents(events),
+					},
+
+					chart: {
+						categories: {
+							events: {
+								name: "Evenementen",
+								color: "#1542a3",
+							},
+						},
+						values: calulateTimeLine(events, filter),
+					},
 				},
 
 				countries: {
@@ -222,6 +341,42 @@ export default defineSupabaseEventHandler(async (event) => {
 							format: false,
 						},
 					],
+
+					table: {
+						categories: [
+							{
+								label: "Laand",
+								value: "label",
+								type: "string",
+							},
+							{
+								label: "Weergaven",
+								value: "weergaven",
+								type: "number",
+							},
+							{
+								label: "Bezoekers",
+								value: "bezoekers",
+								type: "number",
+							},
+							{
+								label: "Bezoeken",
+								value: "bezoeken",
+								type: "number",
+							},
+							{
+								label: "Bounces",
+								value: "bounces",
+								type: "number",
+							},
+							{
+								label: "Sessie duur",
+								value: "totaltime",
+								type: "number",
+							},
+						],
+					},
+
 					values: calculateMetrics(countries),
 				},
 			},

@@ -1,8 +1,8 @@
 <template>
-	<div>
+	<div class="space-y-6">
 		<h1 class="hidden mb-6 text-2xl font-bold md:flex">Evenementen Overzicht</h1>
 
-		<section class="relative grid grid-cols-2 gap-3 mb-3 md:grid-cols-4">
+		<section class="relative grid grid-cols-2 gap-3 md:grid-cols-4">
 			<template v-if="store.metrics?.events.statistics">
 				<ClientOnly>
 					<UtilsAnalyticsQuickView :data="store.metrics?.events.statistics || []" />
@@ -17,7 +17,7 @@
 			</template>
 		</section>
 
-		<UtilsTable name="events" :data="store.metrics.events.values || []" :categories />
+		<UtilsTable name="events" :data="store.metrics.events.table.values || []" :categories="store.metrics.events.table.categories" />
 	</div>
 </template>
 
@@ -50,32 +50,4 @@
 
 	const store = useAnalytics();
 	const visable = ref(2);
-
-	const categories = [
-		{
-			label: "Evenement",
-			value: "label",
-			type: "string",
-		},
-		{
-			label: "sessie",
-			value: "session",
-			type: "string",
-		},
-		{
-			label: "Apparaat",
-			value: "device",
-			type: "string",
-		},
-		{
-			label: "Browser",
-			value: "browser",
-			type: "string",
-		},
-		{
-			label: "Aangemaakt",
-			value: "created",
-			type: "date",
-		},
-	] as { label: string; value: TableRowValue; type: string }[];
 </script>

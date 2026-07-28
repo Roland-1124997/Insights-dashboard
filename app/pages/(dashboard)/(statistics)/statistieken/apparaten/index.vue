@@ -17,7 +17,7 @@
 			</template>
 		</section>
 
-		<UtilsTable name="devices" :data="store.metrics.devices.values || []" :categories :linked="false" />
+		<UtilsTable name="devices" :data="store.metrics.devices.values || []" :categories="store.metrics.devices.table.categories" :linked="false" />
 	</div>
 </template>
 
@@ -50,37 +50,4 @@
 
 	const store = useAnalytics();
 	const visable = ref(2);
-
-	const categories = [
-		{
-			label: "Apparaat",
-			value: "label",
-			type: "string",
-		},
-		{
-			label: "Weergaven",
-			value: "weergaven",
-			type: "number",
-		},
-		{
-			label: "Bezoekers",
-			value: "bezoekers",
-			type: "number",
-		},
-		{
-			label: "Bezoeken",
-			value: "bezoeken",
-			type: "number",
-		},
-		{
-			label: "Bounces",
-			value: "bounces",
-			type: "number",
-		},
-		{
-			label: "Sessie duur",
-			value: "totaltime",
-			type: "number",
-		},
-	] as { label: string; value: TableRowValue; type: string }[];
 </script>

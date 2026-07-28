@@ -17,7 +17,7 @@
 			</template>
 		</section>
 
-		<UtilsTable name="countries" :data="store.metrics.countries.values || []" :categories :linked="false" />
+		<UtilsTable name="countries" :data="store.metrics.countries.values || []" :categories="store.metrics.countries.table.categories" :linked="false" />
 	</div>
 </template>
 
@@ -50,37 +50,4 @@
 
 	const store = useAnalytics();
 	const visable = ref(2);
-
-	const categories = [
-		{
-			label: "Land",
-			value: "label",
-			type: "string",
-		},
-		{
-			label: "Weergaven",
-			value: "weergaven",
-			type: "number",
-		},
-		{
-			label: "Bezoekers",
-			value: "bezoekers",
-			type: "number",
-		},
-		{
-			label: "Bezoeken",
-			value: "bezoeken",
-			type: "number",
-		},
-		{
-			label: "Bounces",
-			value: "bounces",
-			type: "number",
-		},
-		{
-			label: "Sessie duur",
-			value: "totaltime",
-			type: "number",
-		},
-	] as { label: string; value: TableRowValue; type: string }[];
 </script>

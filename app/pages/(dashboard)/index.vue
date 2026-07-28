@@ -18,12 +18,12 @@
 		</section>
 
 		<section class="grid w-full grid-cols-1 mt-3 gap-y-3 md:gap-3 md:grid-cols-3 h-fit pb-[5.5rem] md:pb-0">
-			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-2">
+			<article class="order-1 w-full col-span-1 p-6 border rounded-lg md:col-span-2">
 				<h2 class="mb-1 text-xl font-bold">Meest bezochte pagina's</h2>
 				<UtilsAnalyticsChartsPages :metrics="metrics || []" :data="metrics?.pages || []" />
 			</article>
 
-			<article class="w-full col-span-1 p-6 bg-white border rounded-lg">
+			<article class="order-2 w-full col-span-1 p-6 bg-white border rounded-lg md:order-1">
 				<h2 class="mb-1 text-xl font-bold">Meest gebruikte apparaten</h2>
 				<p class="mb-1 text-sm text-gray-600">Meest gebruikte apparaten van je bezoekers</p>
 
@@ -34,7 +34,7 @@
 				<UtilsAnalyticsChartsDevices :metrics="metrics || []" :data="metrics?.devices || []" />
 			</article>
 
-			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-3">
+			<article class="order-1 w-full col-span-1 p-6 border rounded-lg md:col-span-3">
 				<div class="flex flex-col justify-between w-full md:items-center md:flex-row">
 					<div class="mb-1 md:mb-6">
 						<h2 class="mb-1 text-xl font-bold">Breakdown per pagina</h2>
@@ -47,10 +47,15 @@
 					</NuxtLink>
 				</div>
 
-				<UtilsAnalyticsCardsViewer @emitter="update" name="pages" :visable="6" :data="metrics?.pages.values || []" />
+				<UtilsAnalyticsCardsViewer @emitter="update" name="pages" :visable="6" :data="{ values: metrics?.pages.values || [], categories: metrics?.pages.table.categories || [] }" />
 			</article>
 
-			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-3">
+			<article class="order-1 w-full col-span-1 p-6 border rounded-lg md:col-span-3">
+				<h2 class="mb-1 text-xl font-bold">Tijdlijn evenementen</h2>
+				<UtilsAnalyticsChartsEvents :metrics="metrics || []" :data="metrics?.events.chart || []" />
+			</article>
+
+			<article class="order-1 w-full col-span-1 p-6 border rounded-lg md:col-span-3">
 				<div class="flex flex-col justify-between w-full md:items-center md:flex-row">
 					<div class="mb-1 md:mb-6">
 						<h2 class="mb-1 text-xl font-bold">Breakdown per evenement</h2>
@@ -63,16 +68,16 @@
 					</NuxtLink>
 				</div>
 
-				<UtilsAnalyticsCardsViewer name="events" :visable="6" :data="metrics?.events.values || []" />
+				<UtilsAnalyticsCardsViewer name="events" :visable="6" :data="metrics?.events.table || []" />
 			</article>
 
-			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-2">
+			<article class="order-3 w-full col-span-1 p-6 border rounded-lg md:col-span-2">
 				<h2 class="mb-1 text-xl font-bold">Bezoekers per land</h2>
 				<p class="mb-6 text-sm text-gray-600">Een visuele weergave van waar je bezoekers vandaan komen,</p>
 				<UtilsAnalyticsChartsWorld :metrics="metrics || []" :data="metrics?.countries.values || []" />
 			</article>
 
-			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-1">
+			<article class="order-3 w-full col-span-1 p-6 border rounded-lg md:col-span-1">
 				<h2 class="mb-1 text-xl font-bold">Top landen</h2>
 				<p class="mb-1 text-sm text-gray-600">De landen waaruit je meeste bezoekers komen,</p>
 
@@ -82,7 +87,13 @@
 				</NuxtLink>
 
 				<div class="pt-3">
-					<UtilsAnalyticsCardsViewer name="countries" :visable="3" :linked="false" :data="metrics?.countries.values || []" :isSmall="true" :isOpen="true" />
+					<UtilsAnalyticsCardsViewer
+						name="countries"
+						:visable="3"
+						:linked="false"
+						:data="{ values: metrics?.countries.values || [], categories: metrics?.countries.table.categories || [] }"
+						:isSmall="true"
+						:isOpen="true" />
 				</div>
 			</article>
 		</section>

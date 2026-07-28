@@ -1,20 +1,23 @@
 <template>
 	<div>
-		<ClientOnly v-if="metrics && data.values.length >= 1">
+		<ClientOnly v-if="metrics.events.table.values.length >= 1 && data.values.length >= 1">
 			<div class="md:hidden">
-				<ChartsGroup :data="data?.values?.slice(0, 3) || []" :categories="data.chart.categories" :height="250" :y_axis="['bezoekers', 'weergaven', 'bezoeken']" />
+				<ChartsLine :categories="data.categories" :data="data.values" :height="210" />
 			</div>
 
 			<div class="hidden md:block">
-				<ChartsGroup :data="data?.values?.slice(0, 5) || []" :categories="data.chart.categories" :height="410" :y_axis="['bezoekers', 'weergaven', 'bezoeken']" />
+				<ChartsLine :categories="data.categories" :data="data.values" :height="310" />
 			</div>
 
 			<template #fallback>
-				<div aria-hidden class="flex flex-col gap-3 h-[248px] mt-10 md:h-[388px] animate-pulse">
+				<div aria-hidden class="flex flex-col gap-3 h-[210px] mt-10 md:h-[310px] animate-pulse">
 					<div class="flex h-full gap-2">
 						<div class="flex-1 bg-gray-200 rounded"></div>
 						<div class="flex-1 bg-gray-200 rounded"></div>
 						<div class="flex-1 bg-gray-200 rounded"></div>
+						<div class="flex-1 bg-gray-200 rounded"></div>
+						<div class="flex-1 hidden bg-gray-200 rounded md:flex"></div>
+						<div class="flex-1 hidden bg-gray-200 rounded md:flex"></div>
 						<div class="flex-1 hidden bg-gray-200 rounded md:flex"></div>
 						<div class="flex-1 hidden bg-gray-200 rounded md:flex"></div>
 					</div>
@@ -23,11 +26,14 @@
 		</ClientOnly>
 
 		<template v-else>
-			<div aria-hidden class="flex flex-col gap-3 h-[248px] mt-10 md:h-[388px] animate-pulse">
+			<div aria-hidden class="flex flex-col gap-3 h-[210px] mt-10 md:h-[310px] animate-pulse">
 				<div class="flex h-full gap-2">
 					<div class="flex-1 bg-gray-200 rounded"></div>
 					<div class="flex-1 bg-gray-200 rounded"></div>
 					<div class="flex-1 bg-gray-200 rounded"></div>
+					<div class="flex-1 bg-gray-200 rounded md:flex"></div>
+					<div class="flex-1 hidden bg-gray-200 rounded md:flex"></div>
+					<div class="flex-1 hidden bg-gray-200 rounded md:flex"></div>
 					<div class="flex-1 hidden bg-gray-200 rounded md:flex"></div>
 					<div class="flex-1 hidden bg-gray-200 rounded md:flex"></div>
 				</div>
@@ -38,12 +44,12 @@
 
 <script setup lang="ts">
 	const { data } = defineProps<{
-		metrics: object;
+		metrics: any;
 		data: {
-			chart: {
-				categories: Record<string, { name: string; color: string }>;
-			};
-			values: TableMap[TableName][];
+			categories: Record<string, { name: string; color: string }>;
+			values: TableMap["events"][];
 		};
 	}>();
+
+	const { filter } = useFilter() as any;
 </script>
