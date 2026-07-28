@@ -34,31 +34,47 @@
 		return availableCategories;
 	});
 
-	const localData = computed(() => {
-		return data.map((item) => item[active].value);
-	});
+	// const localData = computed(() => {
+	// 	return data.map((item) => item[active].value);
+	// });
+
+	const localData = computed((): Record<string, string>[] =>
+		data.map((item) => {
+			const entries = Object.entries(item);
+			const [, label] = entries.shift() as [unknown, string];
+			const values = Object.fromEntries((entries as [string, { value: number | string }][]).map(([key, value]) => [key, value.value]));
+
+			return {
+				label,
+				...values,
+			};
+		}),
+	);
 </script>
 
 <template>
-	<DonutChart
-		:data="localData"
-		:height
-		:categories="localCategories"
-		:radius="160"
-		:pad-angle="0.1"
-		:arc-width="arcWidth"
-		:legend-position="LegendPosition.TopLeft"
-		:hide-legend="false"
-		:legend-style="{ marginBottom: '2rem' }">
-		<div class="text-center">
-			<div class="text-lg font-semibold capitalize">{{ active }}</div>
-			<div class="text-muted">
-				{{ useFormatDuration(localData.reduce((a, b) => a + b, 0)) }}
-			</div>
-		</div>
+	<ChartsUtilsLegend :categories="localCategories" v-slot="{ visible, filterDonut }">
+		<div class="mt-9">
+			<DonutChart
+				:data="filterDonut(localData, active)"
+				:height
+				:categories="localCategories"
+				:radius="160"
+				:pad-angle="0.1"
+				:arc-width="arcWidth"
+				:hide-legend="true"
+				:legend-style="{ marginBottom: '2rem' }">
+				<div class="text-center">
+					<div class="text-lg font-semibold capitalize">{{ active }}</div>
+					<div class="text-muted">
+						{{ useFormatDuration(filterDonut(localData, active).reduce((a, b) => a + b, 0)) }}
+					</div>
+				</div>
 
-		<template #tooltip="{ values }">
-			<ChartsTooltipsDonut v-if="values" :categories="categories" :active="active" :values="values" />
-		</template>
-	</DonutChart>
+				<template #tooltip="{ values }">
+					<ChartsTooltipsDonut v-if="values" :categories="categories" :active="active" :values="values" />
+				</template>
+			</DonutChart>
+		</div>
+	</ChartsUtilsLegend>
 </template>

@@ -1,0 +1,31 @@
+<template>
+	<div class="p-4 border border-gray-200 shadow-md w-72 bg-white/95 rounded-xl">
+		<p class="mb-1 font-bold text-normal text-balance">{{ localLabel }}</p>
+		<div class="flex-col">
+			<div class="flex items-center gap-2" v-for="value in categories">
+				<div class="w-3 h-3 rounded-full" :style="{ background: value.color }"></div>
+
+				<p class="text-sm">
+					<strong>{{ useFormatDuration(values.events || 0) }}</strong>
+					{{ value.name }}
+				</p>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script setup lang="ts">
+	const { categories, values } = defineProps({
+		categories: {
+			type: Object as () => Record<string, { name: string; color: string }>,
+			required: true,
+		},
+		values: {
+			type: Object,
+			required: false,
+			default: null,
+		},
+	});
+
+	const localLabel = computed(() => values?.label || "Onbekend");
+</script>
