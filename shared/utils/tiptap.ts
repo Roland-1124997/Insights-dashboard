@@ -1,6 +1,7 @@
 import { useFilterParagraphs } from "#shared/utils/useFilterParagraphs";
 import { blockImages } from "#shared/utils/extensions";
 import { nodeView } from "#shared/utils/connection";
+import { topicsView } from "#shared/utils/topics";
 import { Selection } from "@tiptap/extensions";
 import { Editor } from "@tiptap/core";
 
@@ -243,6 +244,7 @@ export const articleExtensions = [
 	details,
 	nodeView,
 	blockImages,
+	topicsView,
 	DetailsSummary,
 	DetailsContent,
 	articleStarterKit,

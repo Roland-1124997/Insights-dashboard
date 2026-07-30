@@ -17,22 +17,18 @@
 
 										<p v-if="Object.keys(errors).length" class="w-full p-2 text-center text-blue-600 border border-blue-600 rounded-md select-none">{{ Object.keys(errors).length }} fouten</p>
 
-										<button
-											@click.prevent="toggleEditable"
-											class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none cursor-pointer select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+										<button @click.prevent="toggleEditable" class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none cursor-pointer select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
 											<icon :name="!editable ? 'akar-icons:edit' : 'akar-icons:eye'" class="w-4 h-4" aria-hidden="true" />
 											<span class="">{{ !editable ? "Bewerken" : "Voorbeeld" }}</span>
 										</button>
 
-										<button
-											v-if="Object.keys(errors).length < 1"
-											class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+										<button v-if="Object.keys(errors).length < 1" class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
 											<icon name="akar-icons:save" class="w-4 h-4" aria-hidden="true" />
 											<span class="">{{ editId ? "Bijwerken" : "Aanmaken" }}</span>
 										</button>
 									</div>
 
-									<div class="sr-only" aria-hidden>
+									<div class="sr-only " aria-hidden>
 										<UtilsInput name="title" :initial-value="title" />
 										<UtilsInput name="description" :initial-value="description" />
 										<UtilsInput name="words" :initial-value="words" type="number" />
@@ -177,9 +173,10 @@
 		words.value = editor.storage.characterCount.words();
 		title.value = editor.$doc.firstChild?.textContent || "Ongetiteld Artikel";
 
-		const items = (editor.getJSON().content?.[1]?.content ?? []) as { text: string }[];
+		const item = content.value?.content.filter((node) => node.type === "topicsView")[0];
 
-		topics.value = items.map((item) => item.text?.trim()).filter((text: string) => !!text);
+		
+		topics.value = (Array.isArray(item?.attrs.topics) ? item?.attrs.topics : item?.attrs.topics.split(",")) || [];
 
 		const { filtered } = useFilterParagraphs(content.value?.content, "paragraph");
 		description.value = filtered.value[0] ? filtered.value[0].content[0]?.text : "";
@@ -245,9 +242,7 @@
 	};
 
 	const successMessage = editId.value ? "Het artikel is succesvol bijgewerkt." : "Het artikel is succesvol aangemaakt.";
-	const failureMessage = editId.value
-		? "Er is een fout opgetreden bij het bijwerken van het artikel. Probeer het later opnieuw."
-		: "Er is een fout opgetreden bij het aanmaken van het artikel. Probeer het later opnieuw.";
+	const failureMessage = editId.value ? "Er is een fout opgetreden bij het bijwerken van het artikel. Probeer het later opnieuw." : "Er is een fout opgetreden bij het aanmaken van het artikel. Probeer het later opnieuw.";
 
 	const { upload, setFormData } = useHandleFormData(successMessage, failureMessage);
 

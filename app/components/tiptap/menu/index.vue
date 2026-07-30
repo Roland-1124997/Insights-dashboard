@@ -37,12 +37,14 @@
 			onConfirm: (selected: Repo) => {
 				if (!selected) return;
 
-				const tagsHtml = (selected.topics || []).map((topic) => `<strong><mark>${topic.toUpperCase()}</mark></strong>`).join(" ");
 				const title = `<h1 class="mb-3 text-3xl font-bold">${selected.name.replaceAll("/", "-")}</h1>`;
+
+				const topics = `<topics-view topics="${selected.topics}"></topics-view>`;
+
 				const connection = `<connection-view private="${selected.private}" html_url="${selected.html_url}" homepage="${selected.homepage}"> </connection-view>`;
 				const description = `<p class="mb-4 text-sm text-gray-700">${selected.description ?? ""}</p>`;
 
-				const html = `${title}<div class="flex items-center mb-4">${tagsHtml}</div>${connection}<img src="/github.jpg" alt="GitHub " contenteditable="false" draggable="true">${description}`;
+				const html = `${title}<div class="flex items-center mb-4">${topics}</div>${connection}<img src="/github.jpg" alt="GitHub " contenteditable="false" draggable="true">${description}`;
 
 				editor.commands.setContent(html);
 
@@ -227,6 +229,7 @@
 			title: "Verbind project",
 			action: async () => {
 				const nodeView = editor.$node("nodeView");
+				const nodeTopicView = editor.$node("topicsView");
 
 				if (!nodeView) {
 					addToast({
@@ -267,6 +270,7 @@
 								if (!repositories) return;
 
 								const nodeAttrs = nodeView.node.attrs;
+								const topicNodeAttrs = nodeTopicView?.node.attrs;
 								const selected = repositories?.find((repo) => repo.html_url === nodeAttrs.html_url);
 
 								const attrs = {
@@ -274,6 +278,17 @@
 									html_url: selected?.html_url || nodeAttrs.html_url || "",
 									homepage: selected?.homepage || nodeAttrs.homepage || "",
 								};
+
+								const topicAttrs = {
+									topics: selected?.topics || topicNodeAttrs?.topics || "",
+								};
+
+								if (nodeTopicView) nodeTopicView.setAttribute(topicAttrs);
+								else {
+									const html = `<topics-view topics="${topicAttrs.topics}"></topics-view>`;
+									const heading = editor.$node("heading", { level: 1 });
+									if (heading?.after) heading.after.content = html;
+								}
 
 								nodeView.setAttribute(attrs);
 
