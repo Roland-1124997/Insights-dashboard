@@ -47,7 +47,18 @@ export default defineSupabaseEventHandler(async (event) => {
 
 	const countryName = countries.length >= 1 ? countries.reduce((max, country) => (country.pageviews > max.pageviews ? country : max)).name : "Onbekend";
 
-	const { data: events, error: eventsError } = await useFetchEvents(`events:${filter}`, {
+	const { data: eventsType1, error: eventsErrorType1 } = await useFetchEvents(`events:type-1:${filter}`, {
+		startAt,
+		endAt,
+		unit: "day",
+		timezone: "Europe/Amsterdam",
+		pageSize: 200,
+		eventType: 1,
+	});
+
+	if (eventsErrorType1 || !eventsType1) return useReturnResponse(event, internalServerError);
+
+	const { data: eventsType2, error: eventsErrorType2 } = await useFetchEvents(`events:type-2:${filter}`, {
 		startAt,
 		endAt,
 		unit: "day",
@@ -56,7 +67,7 @@ export default defineSupabaseEventHandler(async (event) => {
 		eventType: 2,
 	});
 
-	if (eventsError || !events) return useReturnResponse(event, internalServerError);
+	if (eventsErrorType2 || !eventsType2) return useReturnResponse(event, internalServerError);
 
 	return useReturnResponse(event, {
 		status: {
@@ -267,14 +278,14 @@ export default defineSupabaseEventHandler(async (event) => {
 					statistics: [
 						{
 							label: "Evenementen",
-							value: events.length,
+							value: eventsType2.concat(eventsType1).length,
 							color: "#1542a3",
 							icon: "akar-icons:sparkles",
 							format: false,
 						},
 						{
 							label: "Unieke evenementen",
-							value: events ? new Set(events.map((event) => event.eventName)).size : 0,
+							value: eventsType2 ? new Set(eventsType2.concat(eventsType1).map((event) => event.eventName)).size : 0,
 							color: "#2563eb",
 							icon: "akar-icons:grid",
 							format: false,
@@ -310,17 +321,21 @@ export default defineSupabaseEventHandler(async (event) => {
 							},
 						],
 
-						values: calculateEvents(events),
+						values: calculateEvents(eventsType2.concat(eventsType1)),
 					},
 
 					chart: {
 						categories: {
-							events: {
+							evenementen: {
 								name: "Evenementen",
 								color: "#1542a3",
 							},
+							weergaven: {
+								name: "Weergaven",
+								color: "#2563eb",
+							},
 						},
-						values: calulateTimeLine(events, filter),
+						values: calulateTimeLine(eventsType2.concat(eventsType1), filter),
 					},
 				},
 

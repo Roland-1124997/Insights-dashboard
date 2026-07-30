@@ -49,7 +49,7 @@
 </script>
 
 <template>
-	<ChartsUtilsLegend :categories="categories" v-slot="{ disableToolTip, filterData }">
+	<ChartsUtilsLegend :categories="categories" v-slot="{ visible, disableToolTip, filterData }">
 		<BarChart
 			:hideTooltip="hideTooltip || disableToolTip"
 			:data="disableToolTip ? [] : filterData(localData)"
@@ -71,7 +71,7 @@
 			}"
 			:y-grid-line="true">
 			<template #tooltip="{ values }">
-				<ChartsTooltipsGroup v-if="values" :categories="categories" :values="values" />
+				<ChartsTooltipsGroup v-if="values" :categories="visible" :values="values" />
 			</template>
 		</BarChart>
 	</ChartsUtilsLegend>

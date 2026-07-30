@@ -27,7 +27,8 @@ export default defineTask({
 					cache.removeItem(`nitro:functions:analytics:device:${cacheKey}.json`),
 					cache.removeItem(`nitro:functions:analytics:path:${cacheKey}.json`),
 					cache.removeItem(`nitro:functions:analytics:country:${cacheKey}.json`),
-					cache.removeItem(`nitro:functions:analytics:events:${cacheKey}.json`),
+					cache.removeItem(`nitro:functions:analytics:events:type-1:${cacheKey}.json`),
+					cache.removeItem(`nitro:functions:analytics:events:type-2:${cacheKey}.json`),
 				]);
 
 				await Promise.all([
@@ -62,7 +63,16 @@ export default defineTask({
 						type: "country",
 					}),
 
-					useFetchEvents(`events:${value}`, {
+					useFetchEvents(`events:type-1:${value}`, {
+						startAt,
+						endAt,
+						unit: "day",
+						timezone,
+						pageSize: 200,
+						eventType: 1,
+					}),
+
+					useFetchEvents(`events:type-2:${value}`, {
 						startAt,
 						endAt,
 						unit: "day",

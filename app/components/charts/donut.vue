@@ -53,7 +53,7 @@
 </script>
 
 <template>
-	<ChartsUtilsLegend :categories="localCategories" v-slot="{ visible, filterDonut }">
+	<ChartsUtilsLegend :categories="localCategories" v-slot="{ filterDonut }">
 		<div class="mt-9">
 			<DonutChart
 				:data="filterDonut(localData, active)"

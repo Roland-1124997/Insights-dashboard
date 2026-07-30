@@ -156,7 +156,7 @@ export const calculateEvents = (events: AnalyticsEventResponse[]) => {
 	const result = events.map((event) => {
 		return {
 			id: event.id,
-			label: event.eventName,
+			label: (event.eventName || "page_view").replace("#", ""),
 			hasData: !!event.hasData,
 			session: {
 				value: `https://api.dicebear.com/10.x/glyphs/svg?seed=${event.sessionId}`,
@@ -220,19 +220,21 @@ export const calulateTimeLine = (events: AnalyticsEventResponse[], filter: "vand
 	const weekdays = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
 	const months = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"];
 
-	let timeline: { label: string | number; events: number }[] = [];
+	let timeline: { label: string | number; evenementen: number; weergaven: number }[] = [];
 
 	if (filter === "vandaag") {
 		timeline = hours.map((hour) => ({
 			label: hour,
-			events: 0,
+			weergaven: 0,
+			evenementen: 0,
 		}));
 	}
 
 	if (filter === "week") {
 		timeline = weekdays.map((day) => ({
 			label: day,
-			events: 0,
+			weergaven: 0,
+			evenementen: 0,
 		}));
 	}
 
@@ -244,33 +246,46 @@ export const calulateTimeLine = (events: AnalyticsEventResponse[], filter: "vand
 
 		timeline = Array.from({ length: daysInMonth }, (_, day) => ({
 			label: `${months[currentMonth - 1]} ${day + 1}`,
-			events: 0,
+			weergaven: 0,
+			evenementen: 0,
 		}));
 	}
 
 	if (filter === "jaar") {
 		timeline = months.map((month) => ({
 			label: month,
-			events: 0,
+			weergaven: 0,
+			evenementen: 0,
 		}));
 	}
 
 	for (const event of events) {
 		const createdDate = new Date(event.createdAt);
+		const eventType = event.eventType;
 
 		if (filter === "vandaag") {
 			const hour = createdDate.getHours();
-			if (timeline[hour]) timeline[hour].events += 1;
+			if (timeline[hour]) {
+				timeline[hour].evenementen += 1;
+				timeline[hour].weergaven += eventType === 1 ? 1 : 0;
+			}
 		} else if (filter === "week") {
 			const day = createdDate.getDay() === 0 ? 6 : createdDate.getDay() - 1;
 
-			timeline[day]!.events += 1;
+			timeline[day]!.evenementen += 1;
+			timeline[day]!.weergaven += eventType === 1 ? 1 : 0;
 		} else if (filter === "maand") {
 			const date = createdDate.getDate() - 1;
-			if (timeline[date]) timeline[date].events += 1;
+			if (timeline[date]) {
+				timeline[date].evenementen += 1;
+				timeline[date].weergaven += eventType === 1 ? 1 : 0;
+			}
 		} else if (filter === "jaar") {
 			const month = createdDate.getMonth();
-			if (timeline[month]) timeline[month].events += 1;
+			if (timeline[month]) {
+				timeline[month].evenementen += 1;
+				timeline[month].weergaven += eventType === 1 ? 1 : 0;
+			}
 		}
 	}
 

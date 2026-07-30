@@ -3,14 +3,12 @@
 		<p class="mb-1 font-bold text-normal text-balance">{{ localLabel }}</p>
 		<div class="flex-col">
 			<div class="flex items-center gap-2" v-for="value in categories">
-				<template v-if="localValues[value.name.toLowerCase()]">
-					<div class="w-3 h-3 rounded-full" :style="{ background: value.color }"></div>
+				<div class="w-3 h-3 rounded-full" :style="{ background: value.color }"></div>
 
-					<p class="text-sm">
-						<strong>{{ useFormatDuration(localValues[value.name.toLowerCase()] || 0) }}</strong>
-						{{ value.name }}
-					</p>
-				</template>
+				<p class="text-sm">
+					<strong>{{ useFormatDuration(localValues[value.name.toLowerCase()] || 0) }}</strong>
+					{{ value.name }}
+				</p>
 			</div>
 		</div>
 	</div>

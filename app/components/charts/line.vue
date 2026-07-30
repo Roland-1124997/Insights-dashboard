@@ -33,7 +33,7 @@
 </script>
 
 <template>
-	<ChartsUtilsLegend :categories="categories" v-slot="{ disableToolTip, filterData }">
+	<ChartsUtilsLegend :categories="categories" v-slot="{ visible, disableToolTip, filterData }">
 		<AreaChart
 			:padding="{
 				top: 30,
@@ -57,7 +57,7 @@
 				strokeWidth: 1,
 			}">
 			<template #tooltip="{ values }">
-				<ChartsTooltipsLine :categories v-if="values" :values="{ ...values }" />
+				<ChartsTooltipsLine :categories="visible" v-if="values" :values="{ ...values }" />
 			</template>
 		</AreaChart>
 	</ChartsUtilsLegend>
