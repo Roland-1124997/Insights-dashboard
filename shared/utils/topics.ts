@@ -39,7 +39,7 @@ export const topicsView = Node.create({
 			function renderContent(attrs = details) {
 				dom.innerHTML = "";
 
-				const topics = (Array.isArray(attrs.topics) ? attrs.topics : attrs.topics.split(",")) || []
+				const topics = (Array.isArray(attrs.topics) ? attrs.topics : attrs.topics.split(",")) || [];
 
 				topics.forEach((topic: string) => {
 					const span = document.createElement("span");
