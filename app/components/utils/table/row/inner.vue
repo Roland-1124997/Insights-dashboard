@@ -12,13 +12,21 @@
 		</div>
 
 		<div v-else>
-			<span v-if="isRelativeDate(category.value)" class="text-sm text-gray-500">
+			<span v-if="isRelativeDate(category.value)" class="text-sm">
 				<NuxtTime relative :datetime="getValues(category.value).value" />
 			</span>
 
-			<span v-else-if="isImage(category.value)" class="flex items-center w-full h-full justify-evenly">
+			<span v-else-if="isImage(category.value)" class="flex items-center w-full h-full text-sm justify-evenly">
 				<img @error="imageError" :src="getValues(category.value).value" :alt="getValues(category.value).subtitle" class="object-cover rounded-full w-7 h-7" />
 				<span class="hidden xl:flex"> {{ getValues(category.value).subtitle }}... </span>
+			</span>
+
+			<span v-else-if="isPercentage(category.value)" class="flex items-center w-full h-full text-sm justify-evenly">
+				<span class="flex items-center w-20 gap-2.5 px-2 py-1 bg-gray-100 border border-gray-200 rounded-lg">
+					<Icon name="akar-icons:radio-fill" class="w-4 h-4" :class="percentageColor(category.value)" />
+
+					{{ formatCategoryValue(category.value) }}
+				</span>
 			</span>
 
 			<span v-else>
@@ -89,6 +97,21 @@
 	const isRelativeDate = (category: TableRowValue) => {
 		const { type } = getValues(category);
 		return type === "relative";
+	};
+
+	const isPercentage = (category: TableRowValue) => {
+		const { type } = getValues(category);
+		return type === "percentage";
+	};
+
+	const percentageColor = (category: TableRowValue) => {
+		const { value } = getValues(category);
+		const percentage = Number(value);
+
+		if (percentage > 80) return "text-red-600";
+		if (percentage > 60) return "text-orange-400";
+		if (percentage > 40) return "text-yellow-500";
+		return "text-green-600";
 	};
 
 	const imageError = (event: Event) => {
