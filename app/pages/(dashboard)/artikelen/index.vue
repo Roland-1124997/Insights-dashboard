@@ -1,5 +1,5 @@
 <template>
-	<div class="grid gap-4 grid-cols-1 md:grid-cols-3 pb-[5.5rem] md:pb-0">
+	<div class="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 pb-[5.5rem] md:pb-0">
 		<UtilsArticlesCardSkeleton v-if="store.loading" />
 		<ClientOnly v-else-if="store.articles && store.articles.length > 0">
 			<UtilsArticlesCard :articles="store.articles" />

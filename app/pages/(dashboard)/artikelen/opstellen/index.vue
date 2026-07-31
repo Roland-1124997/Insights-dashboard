@@ -6,7 +6,7 @@
 					<div class="z-10 bg-white md:pr-4 md:border-r">
 						<div class="relative flex flex-col mt-1 outline-none appearance-none md:mt-auto h-[85vh] md:h-[88vh]">
 							<div class="sticky top-0 z-20 bg-white">
-								<TiptapMenu v-if="!loaded" class="flex items-center p-1 py-1 mb-1 overflow-x-auto underline border rounded-lg bg-gray-50" :editor="editor" :editable />
+								<TiptapMenu v-if="!loaded" class="flex items-center p-1 py-1 mb-1 overflow-x-auto underline border rounded-lg bg-gray-50" :editor="editor" :editable v-model="connectionId" />
 
 								<FormBase :appendToBody :request :schema="schema.article.frontend" v-slot="{ loading, errors, meta }">
 									<div v-if="!loaded" class="flex items-center justify-between gap-2 py-1 pb-3 mb-3 overflow-x-auto text-sm border-b">
@@ -33,6 +33,7 @@
 									</div>
 
 									<div class="sr-only" aria-hidden>
+										<UtilsInput name="connected_with_id" :initial-value="connectionId" type="number" />
 										<UtilsInput name="title" :initial-value="title" />
 										<UtilsInput name="description" :initial-value="description" />
 										<UtilsInput name="words" :initial-value="words" type="number" />
@@ -105,6 +106,7 @@
 		content: any[];
 	} | null>(null);
 
+	const connectionId = ref();
 	const activeId = ref<null | string>(null);
 	const editable = ref(true);
 
@@ -147,7 +149,10 @@
 	if (editId.value) {
 		const { data, error } = await useFetch(`/api/articles/${editId.value}`);
 		if (error.value) content.value = store.articles?.find((article) => article.id === editId.value)?.content || store.getSavedPayload();
-		else content.value = store.getSavedPayload() || data.value.data.content;
+		else {
+			content.value = store.getSavedPayload() || data.value.data.content;
+			connectionId.value = data.value.data.connected_with_id;
+		}
 	} else content.value = store.getSavedPayload();
 
 	const title = ref("");

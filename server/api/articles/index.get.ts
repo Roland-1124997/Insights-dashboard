@@ -14,6 +14,10 @@ export default defineBaseEventHandler(async (event, { server, user }) => {
 		const content = article.content.content;
 		const { filtered } = useFilterParagraphs(content, "image");
 		article.thumbnail_url = filtered.value[0]?.attrs?.src || null;
+
+		if (!user) {
+			delete article.connected_with_id;
+		}
 	});
 
 	return useReturnResponse(event, {

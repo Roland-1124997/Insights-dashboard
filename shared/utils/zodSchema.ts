@@ -42,6 +42,7 @@ const articleField = {
 	title: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }),
 
 	words: zod.number({ invalid_type_error: defaultMessage }).min(1, { message: defaultMessage }),
+	connected_with_id: zod.number({ invalid_type_error: defaultMessage }).optional(),
 };
 
 const mulfiFactorField = {

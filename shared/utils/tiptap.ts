@@ -1,6 +1,6 @@
 import { useFilterParagraphs } from "#shared/utils/useFilterParagraphs";
 import { blockImages } from "#shared/utils/extensions";
-import { nodeView } from "#shared/utils/connection";
+import { githubView } from "~~/shared/utils/github";
 import { topicsView } from "#shared/utils/topics";
 import { Selection } from "@tiptap/extensions";
 import { Editor } from "@tiptap/core";
@@ -242,7 +242,7 @@ export const extensions = [starterKit, blockImages, underline, link, highlight, 
 
 export const articleExtensions = [
 	details,
-	nodeView,
+	githubView,
 	blockImages,
 	topicsView,
 	DetailsSummary,

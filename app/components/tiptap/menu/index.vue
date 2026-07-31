@@ -37,14 +37,16 @@
 			onConfirm: (selected: Repo) => {
 				if (!selected) return;
 
+				connectionId.value = selected.id;
+
 				const title = `<h1 class="mb-3 text-3xl font-bold">${selected.name.replaceAll("/", "-")}</h1>`;
 
 				const topics = `<topics-view topics="${selected.topics}"></topics-view>`;
 
-				const connection = `<connection-view private="${selected.private}" html_url="${selected.html_url}" homepage="${selected.homepage}"> </connection-view>`;
+				const github = `<github-view stargazers_count="${selected.stargazers_count}" private="${selected.private}" html_url="${selected.html_url}" home_page="${selected.homepage}"> </github-view>`;
 				const description = `<p class="mb-4 text-sm text-gray-700">${selected.description ?? ""}</p>`;
 
-				const html = `${title}<div class="flex items-center mb-4">${topics}</div>${connection}<img src="/github.jpg" alt="GitHub " contenteditable="false" draggable="true">${description}`;
+				const html = `${title}${github}<div class="mb-4">${topics}</div><img src="/github.jpg" alt="GitHub " contenteditable="false" draggable="true">${description}`;
 
 				editor.commands.setContent(html);
 
@@ -66,6 +68,8 @@
 		hidden?: Array<string>;
 		editable?: boolean;
 	}>();
+
+	const connectionId = defineModel<any | null>({ required: false, default: null });
 
 	const list = ref([
 		{
@@ -228,10 +232,9 @@
 			icon: "bxl:github",
 			title: "Verbind project",
 			action: async () => {
-				const nodeView = editor.$node("nodeView");
-				const nodeTopicView = editor.$node("topicsView");
+				const linked = connectionId.value;
 
-				if (!nodeView) {
+				if (!linked) {
 					addToast({
 						type: "info",
 						message: "Ophalen van repositories...",
@@ -260,7 +263,6 @@
 							},
 							onUpdate: async () => {
 								close();
-
 								addToast({
 									type: "info",
 									message: "Bijwerken repository gegevens...",
@@ -269,28 +271,21 @@
 								const repositories = await fetchRepositories();
 								if (!repositories) return;
 
-								const nodeAttrs = nodeView.node.attrs;
-								const topicNodeAttrs = nodeTopicView?.node.attrs;
-								const selected = repositories?.find((repo) => repo.html_url === nodeAttrs.html_url);
+								const links = editor.$node("nodeView");
+								const topics = editor.$node("topicsView");
 
-								const attrs = {
-									private: selected?.private || nodeAttrs.private || false,
-									html_url: selected?.html_url || nodeAttrs.html_url || "",
-									homepage: selected?.homepage || nodeAttrs.homepage || "",
-								};
+								const selected = repositories?.find((repo) => repo.id === linked);
 
-								const topicAttrs = {
-									topics: selected?.topics || topicNodeAttrs?.topics || "",
-								};
+								connectionId.value = selected?.id;
 
-								if (nodeTopicView) nodeTopicView.setAttribute(topicAttrs);
-								else {
-									const html = `<topics-view topics="${topicAttrs.topics}"></topics-view>`;
-									const heading = editor.$node("heading", { level: 1 });
-									if (heading?.after) heading.after.content = html;
-								}
+								if (topics) topics.setAttribute({ topics: selected?.topics });
 
-								nodeView.setAttribute(attrs);
+								if (links)
+									links.setAttribute({
+										private: selected?.private || false,
+										html_url: selected?.html_url || null,
+										home_page: selected?.homepage || null,
+									});
 
 								new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
 									addToast({
@@ -299,18 +294,14 @@
 									});
 								});
 							},
-
 							onChange: async () => {
 								close();
-
 								addToast({
 									type: "info",
 									message: "Ophalen van repositories...",
 								});
-
 								const repositories = await fetchRepositories();
 								if (!repositories) return;
-
 								new Promise((resolve) => setTimeout(resolve, 400)).then(() => {
 									create({
 										name: "Verbind met GitHub",

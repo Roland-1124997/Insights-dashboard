@@ -73,6 +73,7 @@ export type Database = {
 					updated_at: string | null;
 					words: number | null;
 					published: boolean | null;
+					connected_with_id?: number | null;
 				};
 				Insert: {
 					anchors?: Json | null;
@@ -86,6 +87,7 @@ export type Database = {
 					updated_at?: string | null;
 					words?: number | null;
 					published?: boolean | null;
+					connected_with_id?: number | null;
 				};
 				Update: {
 					anchors?: Json | null;
@@ -99,6 +101,7 @@ export type Database = {
 					updated_at?: string | null;
 					words?: number | null;
 					published?: boolean | null;
+					connected_with_id?: number | null;
 				};
 				Relationships: [];
 			};
@@ -272,6 +275,7 @@ export type Database = {
 					updated_at: string | null;
 					words: number | null;
 					published: boolean | null;
+					connected_with_id?: number | null;
 				}[];
 			};
 

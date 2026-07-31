@@ -21,6 +21,7 @@ export default defineSupabaseEventHandler(async (event, { server }) => {
 			words: request.words,
 			topics: request.topics,
 			read_time: `${Math.ceil(request.words / 200)}`,
+			connected_with_id: request.connected_with_id,
 		})
 		.select()
 		.single();

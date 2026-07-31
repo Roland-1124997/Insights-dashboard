@@ -55,6 +55,7 @@ export default defineSupabaseEventHandler(async (event, { server }) => {
 			topics: request.topics,
 			read_time: `${Math.ceil(request.words / 200)}`,
 			updated_at: new Date().toISOString(),
+			connected_with_id: request.connected_with_id,
 		})
 		.eq("id", id);
 

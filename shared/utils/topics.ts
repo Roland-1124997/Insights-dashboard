@@ -41,17 +41,21 @@ export const topicsView = Node.create({
 
 				const topics = (Array.isArray(attrs.topics) ? attrs.topics : attrs.topics.split(",")) || [];
 
+				const span = document.createElement("span");
+				span.className = "px-3 py-2 text-xs font-bold text-blue-800 border border-blue-600 rounded-full";
+
+				const innerSpan = document.createElement("span");
+				innerSpan.className = "flex items-center justify-center gap-1 ";
+
 				topics.forEach((topic: string) => {
-					const span = document.createElement("span");
-					span.className = "px-3 py-1 text-xs font-bold text-blue-800 border border-blue-600 rounded-full";
+					const local = span.cloneNode(true);
 
-					const innerSpan = document.createElement("span");
-					innerSpan.className = "flex items-center justify-center gap-1 ";
-					innerSpan.appendChild(icon.cloneNode(true));
-					innerSpan.appendChild(document.createTextNode(topic.toUpperCase()));
+					const innerLocal = innerSpan.cloneNode(true);
+					innerLocal.appendChild(icon.cloneNode(true));
+					innerLocal.appendChild(document.createTextNode(topic.toUpperCase()));
 
-					span.appendChild(innerSpan);
-					dom.appendChild(span);
+					local.appendChild(innerLocal);
+					dom.appendChild(local);
 				});
 			}
 
