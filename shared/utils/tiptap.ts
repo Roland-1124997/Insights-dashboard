@@ -1,7 +1,6 @@
 import { useFilterParagraphs } from "#shared/utils/useFilterParagraphs";
 import { blockImages } from "#shared/utils/extensions";
 import { githubView } from "~~/shared/utils/github";
-import { topicsView } from "#shared/utils/topics";
 import { Selection } from "@tiptap/extensions";
 import { Editor } from "@tiptap/core";
 
@@ -244,7 +243,6 @@ export const articleExtensions = [
 	details,
 	githubView,
 	blockImages,
-	topicsView,
 	DetailsSummary,
 	DetailsContent,
 	articleStarterKit,

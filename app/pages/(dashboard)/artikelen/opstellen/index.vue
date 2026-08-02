@@ -2,7 +2,7 @@
 	<div class="">
 		<div class="">
 			<div v-if="editor">
-				<div class="grid grid-cols-1 md:grid-cols-[1fr_0.45fr] h-full">
+				<div class="grid grid-cols-1 md:grid-cols-[1fr_1fr] h-full">
 					<div class="z-10 bg-white md:pr-4 md:border-r">
 						<div class="relative flex flex-col mt-1 outline-none appearance-none md:mt-auto h-[85vh] md:h-[88vh]">
 							<div class="sticky top-0 z-20 bg-white">
@@ -146,14 +146,24 @@
 		loaded.value = false;
 	});
 
+	const payload = store.getSavedPayload();
+
 	if (editId.value) {
-		const { data, error } = await useFetch(`/api/articles/${editId.value}`);
-		if (error.value) content.value = store.articles?.find((article) => article.id === editId.value)?.content || store.getSavedPayload();
-		else {
-			content.value = store.getSavedPayload() || data.value.data.content;
-			connectionId.value = data.value.data.connected_with_id;
+		if (payload) {
+			content.value = payload.content;
+			connectionId.value = payload.connected_with_id;
+		} else {
+			const payload = store.articles?.find((article) => article.id === editId.value);
+
+			if (payload) {
+				content.value = payload.content;
+				connectionId.value = payload.connected_with_id;
+			}
 		}
-	} else content.value = store.getSavedPayload();
+	} else {
+		content.value = payload?.content;
+		connectionId.value = payload?.connected_with_id;
+	}
 
 	const title = ref("");
 	const description = ref("");
@@ -177,14 +187,20 @@
 
 	const populateFields = (editor: Editor) => {
 		content.value = editor.getJSON();
-		store.savePayload(content.value);
+		store.savePayload({
+			connected_with_id: connectionId.value,
+			content: content.value,
+		});
 
 		words.value = editor.storage.characterCount.words();
 		title.value = editor.$doc.firstChild?.textContent || "Ongetiteld Artikel";
 
-		const item = content.value?.content.filter((node) => node.type === "topicsView")[0];
+		const item = content.value?.content.filter((node) => node.type === "nodeView")[0];
 
-		topics.value = (Array.isArray(item?.attrs.topics) ? item?.attrs.topics : item?.attrs.topics.split(",")) || [];
+		const stored = (Array.isArray(item?.attrs.topics) ? item?.attrs.topics : item?.attrs.topics.split(",")) || [];
+
+		if (stored.every((item: string) => item === "")) topics.value = ["geen onderwerp"];
+		else topics.value = stored;
 
 		const { filtered } = useFilterParagraphs(content.value?.content, "paragraph");
 		description.value = filtered.value[0] ? filtered.value[0].content[0]?.text : "";

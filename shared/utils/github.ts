@@ -15,6 +15,9 @@ export const githubView = Node.create({
 			home_page: {
 				default: null,
 			},
+			topics: {
+				default: [],
+			},
 		};
 	},
 
@@ -37,6 +40,11 @@ export const githubView = Node.create({
 
 			const details = { ...node.attrs };
 
+			const icon = document.createElement("span");
+			icon.className = "topic-icon";
+			icon.setAttribute("aria-hidden", "true");
+			icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><!-- Icon from Akar Icons by Arturo Wibawa - https://github.com/artcoholic/akar-icons/blob/master/LICENSE --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 3L6 21M18 3l-4 18M4 8h17M3 16h17"/></svg>`;
+
 			const github = document.createElement("span");
 			github.className = "github-icon";
 			github.setAttribute("aria-hidden", "true");
@@ -51,48 +59,74 @@ export const githubView = Node.create({
 				dom.innerHTML = "";
 
 				const span = document.createElement("span");
-				span.className = "px-3 py-2 text-xs font-bold text-blue-800 border border-blue-600 rounded-full hover:bg-blue-50";
+				span.className = "px-3 py-2 text-xs font-bold text-blue-800 border border-blue-600 rounded-full hover:bg-blue-50 ";
 
 				const innerSpan = document.createElement("span");
 				innerSpan.className = "flex items-center justify-center gap-1 ";
 
-				if (attrs.private) return;
+				if (!attrs.private) {
+					if (attrs.html_url) {
+						const local = span.cloneNode(true);
+						const innerLocal = innerSpan.cloneNode(true);
 
-				if (attrs.html_url) {
-					const local = span.cloneNode(true);
-					const innerLocal = innerSpan.cloneNode(true);
+						innerLocal.appendChild(github.cloneNode(true));
 
-					innerLocal.appendChild(github.cloneNode(true));
+						const link = document.createElement("a");
+						link.href = attrs.html_url || "#";
 
-					const link = document.createElement("a");
-					link.href = attrs.html_url || "#";
+						link.target = "_blank";
+						link.rel = "noopener noreferrer";
 
-					link.target = "_blank";
-					link.rel = "noopener noreferrer";
+						link.textContent = "Bekijk op GitHub";
 
-					link.textContent = "Bekijk op GitHub";
+						innerLocal.appendChild(link);
 
-					innerLocal.appendChild(link);
+						local.appendChild(innerLocal);
+						dom.appendChild(local);
+					}
 
-					local.appendChild(innerLocal);
-					dom.appendChild(local);
+					if (attrs.home_page) {
+						const local = span.cloneNode(true);
+						const innerLocal = innerSpan.cloneNode(true);
+
+						innerLocal.appendChild(website.cloneNode(true));
+
+						const link = document.createElement("a");
+						link.href = attrs.home_page || "#";
+
+						link.target = "_blank";
+						link.rel = "noopener noreferrer";
+
+						link.textContent = "Website";
+
+						innerLocal.appendChild(link);
+
+						local.appendChild(innerLocal);
+						dom.appendChild(local);
+					}
 				}
 
-				if (attrs.home_page) {
-					const local = span.cloneNode(true);
+				const topicsSpan = document.createElement("span");
+				topicsSpan.className = "px-3 py-2 text-xs font-bold text-blue-800 border border-blue-600 rounded-full";
+
+				const topics = (Array.isArray(attrs.topics) ? attrs.topics : attrs.topics.split(",")) || [];
+
+				if (attrs.topics != "")
+					topics.forEach((topic: string) => {
+						const local = topicsSpan.cloneNode(true);
+
+						const innerLocal = innerSpan.cloneNode(true);
+						innerLocal.appendChild(icon.cloneNode(true));
+						innerLocal.appendChild(document.createTextNode(topic.toUpperCase()));
+
+						local.appendChild(innerLocal);
+						dom.appendChild(local);
+					});
+				else {
+					const local = topicsSpan.cloneNode(true);
 					const innerLocal = innerSpan.cloneNode(true);
-
-					innerLocal.appendChild(website.cloneNode(true));
-
-					const link = document.createElement("a");
-					link.href = attrs.home_page || "#";
-
-					link.target = "_blank";
-					link.rel = "noopener noreferrer";
-
-					link.textContent = "Website";
-
-					innerLocal.appendChild(link);
+					innerLocal.appendChild(icon.cloneNode(true));
+					innerLocal.appendChild(document.createTextNode("Geen onderwerpen"));
 
 					local.appendChild(innerLocal);
 					dom.appendChild(local);
@@ -107,6 +141,7 @@ export const githubView = Node.create({
 					if (!updatedNode) return false;
 					const newAttrs = updatedNode.attrs || {};
 
+					details.topics = newAttrs.topics || [];
 					details.private = !!newAttrs.private;
 					details.html_url = newAttrs.html_url ?? null;
 					details.home_page = newAttrs.home_page ?? null;

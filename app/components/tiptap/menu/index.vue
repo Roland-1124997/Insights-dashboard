@@ -10,6 +10,15 @@
 <script lang="ts" setup>
 	import type { Editor } from "@tiptap/vue-3";
 
+	const { addToast } = useToast();
+	const { create, close } = useModal();
+
+	const { editor, hidden } = defineProps<{
+		editor: Editor;
+		hidden?: Array<string>;
+		editable?: boolean;
+	}>();
+
 	const { open } = useWindow();
 
 	const fetchRepositories = async () => {
@@ -39,14 +48,15 @@
 
 				connectionId.value = selected.id;
 
+				const Topics = selected.topics || [];
+				const Privatte = !!selected.private;
+
 				const title = `<h1 class="mb-3 text-3xl font-bold">${selected.name.replaceAll("/", "-")}</h1>`;
 
-				const topics = `<topics-view topics="${selected.topics}"></topics-view>`;
-
-				const github = `<github-view stargazers_count="${selected.stargazers_count}" private="${selected.private}" html_url="${selected.html_url}" home_page="${selected.homepage}"> </github-view>`;
+				const github = `<github-view topics="${Topics}" private="${Privatte}" html_url="${selected.html_url}" home_page="${selected.homepage}"> </github-view>`;
 				const description = `<p class="mb-4 text-sm text-gray-700">${selected.description ?? ""}</p>`;
 
-				const html = `${title}${github}<div class="mb-4">${topics}</div><img src="/github.jpg" alt="GitHub " contenteditable="false" draggable="true">${description}`;
+				const html = `${title}${github}<img src="/github.jpg" alt="GitHub" draggable="true">${description}`;
 
 				editor.commands.setContent(html);
 
@@ -60,14 +70,67 @@
 		};
 	};
 
-	const { addToast } = useToast();
-	const { create, close } = useModal();
+	const update = async (linked: number) => {
+		addToast({
+			type: "info",
+			message: "Bijwerken repository gegevens...",
+		});
 
-	const { editor, hidden } = defineProps<{
-		editor: Editor;
-		hidden?: Array<string>;
-		editable?: boolean;
-	}>();
+		const repositories = await fetchRepositories();
+		if (!repositories) return;
+
+		const links = editor.$node("nodeView");
+
+		const selected = repositories?.find((repo) => repo.id === linked);
+
+		if (!selected) return;
+
+		connectionId.value = selected.id;
+
+		const oldTopics = links?.attributes.topics || [];
+		const Topics = [...new Set([...selected.topics, ...oldTopics])];
+
+		const Privatte = !!selected.private;
+
+		if (links)
+			links.setAttribute({
+				private: Privatte,
+				html_url: selected.html_url,
+				home_page: selected.homepage,
+				topics: Topics,
+			});
+
+		close();
+
+		new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
+			addToast({
+				type: "success",
+				message: "De repository gegevens zijn bijgewerkt.",
+			});
+		});
+	};
+
+	const connect = async () => {
+		close();
+		addToast({
+			type: "info",
+			message: "Ophalen van repositories...",
+		});
+
+		const repositories = await fetchRepositories();
+		if (!repositories) return;
+
+		create({
+			name: "Verbind met GitHub",
+			description: "Kies een repository om mee te verbinden",
+			component: "FormSelect",
+			props: {
+				...github(repositories),
+			},
+		});
+	};
+
+	const { wait } = useDebounce();
 
 	const connectionId = defineModel<any | null>({ required: false, default: null });
 
@@ -151,7 +214,7 @@
 		},
 		{
 			icon: "fluent:image-edit-24-regular",
-			title: "Image Meta",
+			title: "Metadata",
 			action: () => {
 				const { alt, src, title } = editor.getAttributes("image");
 
@@ -204,9 +267,8 @@
 			type: "divider",
 		},
 		{
-			icon: "fluent:link-add-20-regular",
-			activeIcon: "fluent:link-dismiss-20-regular",
-			title: "link",
+			icon: "fluent:link-multiple-24-filled",
+			title: "Hyperlink",
 			action: () => {
 				const existingHref = editor.isActive("link") ? editor.getAttributes("link").href : "";
 
@@ -229,29 +291,16 @@
 			isActive: () => editor.isActive("link"),
 		},
 		{
-			icon: "bxl:github",
-			title: "Verbind project",
+			icon: "fluent:organization-horizontal-24-regular",
+			title: "GitHub Repository",
+			isActive: () => !!connectionId.value,
 			action: async () => {
+				const route = useRoute();
 				const linked = connectionId.value;
 
-				if (!linked) {
-					addToast({
-						type: "info",
-						message: "Ophalen van repositories...",
-					});
-
-					const repositories = await fetchRepositories();
-					if (!repositories) return;
-
-					create({
-						name: "Verbind met GitHub",
-						description: "Kies een repository om mee te verbinden",
-						component: "FormSelect",
-						props: {
-							...github(repositories),
-						},
-					});
-				} else {
+				if (!linked) await connect();
+				else if (route.query.edit) wait(async () => await update(linked), 500);
+				else {
 					create({
 						name: "Bijwerken repository gegevens",
 						description: "Bijwerken van de verbonden repository gegevens",
@@ -261,58 +310,8 @@
 								confirm: "Koppeling bijwerken",
 								change: "Koppeling wijzigen",
 							},
-							onUpdate: async () => {
-								close();
-								addToast({
-									type: "info",
-									message: "Bijwerken repository gegevens...",
-								});
-
-								const repositories = await fetchRepositories();
-								if (!repositories) return;
-
-								const links = editor.$node("nodeView");
-								const topics = editor.$node("topicsView");
-
-								const selected = repositories?.find((repo) => repo.id === linked);
-
-								connectionId.value = selected?.id;
-
-								if (topics) topics.setAttribute({ topics: selected?.topics });
-
-								if (links)
-									links.setAttribute({
-										private: selected?.private || false,
-										html_url: selected?.html_url || null,
-										home_page: selected?.homepage || null,
-									});
-
-								new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
-									addToast({
-										type: "success",
-										message: "De repository gegevens zijn bijgewerkt.",
-									});
-								});
-							},
-							onChange: async () => {
-								close();
-								addToast({
-									type: "info",
-									message: "Ophalen van repositories...",
-								});
-								const repositories = await fetchRepositories();
-								if (!repositories) return;
-								new Promise((resolve) => setTimeout(resolve, 400)).then(() => {
-									create({
-										name: "Verbind met GitHub",
-										description: "Kies een repository om mee te verbinden",
-										component: "FormSelect",
-										props: {
-											...github(repositories),
-										},
-									});
-								});
-							},
+							onUpdate: async () => await update(linked),
+							onChange: async () => await connect(),
 						},
 					});
 				}

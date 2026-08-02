@@ -72,6 +72,7 @@ export type Article = {
 	topics: string[];
 	published: boolean;
 	thumbnail_url: string;
+	connected_with_id: number | null;
 };
 
 export type Inbox = {
