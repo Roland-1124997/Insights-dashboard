@@ -97,6 +97,20 @@ const githubInstallationField = {
 	code: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).length(20, { message: "De code moet uit 20 tekens bestaan" }),
 };
 
+const topicField = {
+	topics: zod.preprocess(
+		(value) => {
+			if (typeof value === "string")
+				return value
+					.split(",")
+					.map((t) => t.trim())
+					.filter(Boolean);
+			return value;
+		},
+		zod.array(zod.string().max(20, { message: "Mag niet langer zijn dan 20 tekens" }).min(2, { message: "Moet minimaal 2 tekens lang zijn" })),
+	),
+};
+
 export const schema = {
 	login: {
 		backend: zod.object(loginFields),
@@ -153,6 +167,11 @@ export const schema = {
 	installation: {
 		backend: zod.object(githubInstallationField),
 		frontend: toTypedSchema(zod.object(githubInstallationField)),
+	},
+
+	topics: {
+		backend: zod.object(topicField),
+		frontend: toTypedSchema(zod.object(topicField)),
 	},
 };
 

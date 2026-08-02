@@ -7,6 +7,10 @@
 		<FormInputUrl :props="props" />
 	</template>
 
+	<template v-else-if="component == 'FormInput'">
+		<FormInput :props="props" />
+	</template>
+
 	<template v-else-if="component == 'Confirm'">
 		<FormSelectChoices :props="props" />
 	</template>

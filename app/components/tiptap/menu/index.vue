@@ -291,6 +291,51 @@
 			isActive: () => editor.isActive("link"),
 		},
 		{
+			icon: "fluent:collections-24-regular",
+			title: "Topics",
+			action: () => {
+				const links = editor.$node("nodeView");
+				const existing = links?.attributes.topics || [];
+				const linked = connectionId.value;
+
+				create({
+					name: "Onderwerpen toevoegen",
+					description: "Voeg onderwerpen toe aan de inhoud",
+					component: "FormInput",
+					props: {
+						topics: existing,
+						onConfirm: async (values: any) => {
+							const newest = values.topics;
+
+							if (links)
+								links?.setAttribute({
+									topics: newest,
+								});
+							else {
+								const repositories = await fetchRepositories();
+								if (!repositories) return;
+
+								const selected = repositories?.find((repo) => repo.id === linked);
+
+								const github = `<github-view topics="${newest}" private="${selected?.private}" html_url="${selected?.html_url}" home_page="${selected?.homepage}"> </github-view>`;
+
+								editor.chain().focus().insertContent(github).run();
+							}
+
+							close();
+
+							new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
+								addToast({
+									type: "success",
+									message: "De onderwerpen zijn succesvol toegevoegd.",
+								});
+							});
+						},
+					},
+				});
+			},
+		},
+		{
 			icon: "fluent:organization-horizontal-24-regular",
 			title: "GitHub Repository",
 			isActive: () => !!connectionId.value,
