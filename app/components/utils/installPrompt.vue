@@ -40,7 +40,9 @@
 	const pwa = usePWA();
 
 	const handleInstall = async () => {
-		await pwa?.install();
+		const test = await pwa?.install();
+
+		console.log(test);
 	};
 
 	const dismissPrompt = () => {

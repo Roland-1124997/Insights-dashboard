@@ -3,7 +3,7 @@
 		<th scope="row" class="flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap">
 			<div class="flex items-center gap-3">
 				<icon :name="iconName(name, data.label)" aria-hidden="true" class="object-cover w-6 h-6 mr-2 text-blue-600 rounded-sm opacity-50 group-hover:opacity-100" />
-				<span class="truncate w-fit max-w-48 md:max-w-fit">
+				<span class="truncate w-fit max-w-40 md:max-w-40 xl:max-w-fit">
 					{{ displayName(name, data.label) }}
 				</span>
 			</div>

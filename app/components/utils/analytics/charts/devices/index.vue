@@ -25,7 +25,10 @@
 		</nav>
 
 		<ClientOnly v-if="metrics && data.values.length >= 1">
-			<ChartsDonut :active="activedDevice" :data="data?.values" :categories="data.chart.categories" :height="300" :arc-width="40" />
+			<template v-if="!rerendering">
+				<ChartsDonut :active="activedDevice" :data="data?.values" :categories="data.chart.categories" :height="300" :arc-width="40" />
+			</template>
+
 			<template #fallback>
 				<div aria-hidden class="flex items-center justify-center mt-16 h-[300px]">
 					<div class="relative w-[19rem] h-[19rem]">
@@ -58,6 +61,7 @@
 <script setup lang="ts">
 	defineProps<{
 		metrics: object;
+		rerendering: boolean;
 		data: {
 			chart: {
 				categories: Record<string, { name: string; color: string }>;

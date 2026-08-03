@@ -3,6 +3,7 @@
 		:class="[
 			'fixed inset-y-0 left-0 z-[60] w-64 bg-gray-50 border-r transform transition-transform md:transition-none duration-300 ease-in-out lg:translate-x-0 h-full lg:static lg:inset-0',
 			isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full',
+			installed ? 'pt-[2.5rem] md:pt-0' : '',
 		]">
 		<div class="flex flex-col h-full select-none">
 			<div class="flex items-center justify-between h-16 px-4 border-b">
@@ -74,6 +75,8 @@
 <script setup lang="ts">
 	const store = useSessions();
 	const route = useRoute();
+
+	const { installed } = useCheckPwa();
 
 	const { LastEntry } = useHistory();
 

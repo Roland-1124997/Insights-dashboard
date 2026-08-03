@@ -4,7 +4,7 @@
 			<UtilsInstallPrompt v-if="!disablePwaPrompt" />
 		</ClientOnly>
 
-		<div class="flex w-full h-full overflow-hidden">
+		<div :class="installed ? 'pt-[2.5rem] md:pt-[1rem] xl:pt-0' : ''" class="flex w-full h-full overflow-hidden">
 			<slot></slot>
 		</div>
 
@@ -33,4 +33,6 @@
 			default: false,
 		},
 	});
+
+	const { installed } = useCheckPwa();
 </script>

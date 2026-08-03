@@ -1,11 +1,13 @@
 <template>
 	<div>
 		<ClientOnly v-if="metrics && data.length >= 1">
-			<div class="pt-3 overflow-hidden">
-				<div class="">
-					<LazyChartsWorldmap :data="data" :zoom-extent="[2.6, 45]" />
+			<template v-if="!rerendering">
+				<div class="pt-3 overflow-hidden">
+					<div class="">
+						<LazyChartsWorldmap :data="data" :zoom-extent="[2.6, 45]" />
+					</div>
 				</div>
-			</div>
+			</template>
 
 			<template #fallback>
 				<div aria-hidden class="pt-3 animate-pulse">
@@ -27,6 +29,7 @@
 <script setup lang="ts">
 	defineProps<{
 		metrics: object;
+		rerendering: boolean;
 		data: TableMap["countries"][];
 	}>();
 </script>

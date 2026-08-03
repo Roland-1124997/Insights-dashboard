@@ -1,5 +1,5 @@
 <template>
-	<div class="select-none">
+	<div class="select-none lg:max-w-[48vw] xl:max-w-screen-2xl">
 		<div v-for="(item, index) in list" :key="index">
 			<div class="divider" v-if="item.type === 'divider'" :key="`divider${index}`"></div>
 			<TiptapMenuList v-else :action="item.action ?? (() => {})" :icon="item.icon || ''" :title="item.title || ''" :key="index" v-bind="item" :editable />

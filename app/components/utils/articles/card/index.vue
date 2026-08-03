@@ -41,7 +41,7 @@
 				@error="handleImageError"
 				:src="article?.thumbnail_url ? article?.thumbnail_url : '/github.jpg'"
 				:alt="`Thumbnail voor ${article.title}`"
-				class="object-cover object-top w-full h-40 mb-2 bg-white border rounded-lg select-none" />
+				class="object-cover object-top w-full mb-2 bg-white border rounded-lg select-none h-44 sm:h-96 md:h-52 xl:h-44" />
 
 			<div class="flex flex-wrap items-center gap-2 mb-2 select-none">
 				<span v-for="topic in article.topics" :key="topic" class="flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-md">
@@ -70,17 +70,7 @@
 
 <script setup lang="ts">
 	defineProps<{
-		articles: Array<{
-			id: string;
-			title: string;
-			description?: string;
-			thumbnail_url?: string;
-			topics: string[];
-			words?: number;
-			read_time?: string;
-			updated_at?: string;
-			published: boolean;
-		}>;
+		articles: Article[];
 	}>();
 
 	const store = useArticles();

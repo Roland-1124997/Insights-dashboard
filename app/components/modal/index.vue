@@ -5,11 +5,11 @@
 				v-if="isVisible"
 				ref="target"
 				:class="hideOnDesktop ? ' md:hidden' : ''"
-				class="fixed top-0 left-0 z-50 flex items-end justify-center w-screen h-full bg-black md:justify-center md:items-center bg-opacity-60 backdrop-blur-sm">
+				class="fixed top-0 left-0 z-50 flex items-end justify-center w-screen h-full bg-black md:justify-center sm:items-center bg-opacity-60 backdrop-blur-sm">
 				<div tabindex="0" class="mx-6 outline-none md:mb-0 rounded-xl" ref="modal">
 					<Transition name="modalDelay">
 						<div ref="modalDelay" v-if="isFullyVisible">
-							<div class="w-screen max-w-[46rem] p-5 bg-white min-h-[25vh] h-fit max-h-[95vh] rounded-2xl flex flex-col items-start justify-between">
+							<div class="w-screen max-w-[46rem] p-5 bg-white min-h-[25vh] sm:max-w-[40rem] h-fit max-h-[95vh] rounded-2xl flex flex-col items-start justify-between">
 								<div class="w-full mb-8">
 									<div class="flex items-start justify-between w-full">
 										<h1 class="text-2xl font-bold text-black truncate text-balance">

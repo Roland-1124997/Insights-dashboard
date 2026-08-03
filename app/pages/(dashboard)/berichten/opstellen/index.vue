@@ -91,7 +91,7 @@
 
 	const { addToast } = useToast();
 
-	const hidden = ["Highlight", "link", "Paragraph", "Code Block", "Horizontal Rule", "Heading 1", "Heading 2", "Heading 3", "Heading 4", "Details", "Verbind project", "Image Meta"];
+	const hidden = ["Highlight", "Paragraph", "Code Block", "Horizontal Rule", "Heading 1", "Heading 2", "Heading 3", "Heading 4", "Details", "Topics", "Metadata", "GitHub Repository"];
 
 	const store = useNotifications();
 

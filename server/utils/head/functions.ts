@@ -6,6 +6,8 @@ export const headConfiguration: Partial<ConfigSchema["app"]> = {
 		meta: [
 			{ name: "apple-mobile-web-app-capable", content: "yes" },
 			{ name: "apple-mobile-web-app-title", content: "Insights" },
+			{ name: "theme-color", media: "(prefers-color-scheme: light)", content: "#FFFFFF" },
+			{ name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
 		],
 		link: [
 			{ rel: "icon", href: "/favicon.ico", sizes: "48x48" },
@@ -240,6 +242,6 @@ export const headConfiguration: Partial<ConfigSchema["app"]> = {
 			{ rel: "manifest", href: "/manifest.webmanifest" },
 		],
 		charset: "utf-8",
-		viewport: "width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no",
+		viewport: "viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no",
 	},
 };

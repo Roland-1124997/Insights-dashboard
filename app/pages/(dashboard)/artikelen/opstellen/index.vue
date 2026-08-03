@@ -2,7 +2,7 @@
 	<div class="">
 		<div class="">
 			<div v-if="editor">
-				<div class="grid grid-cols-1 md:grid-cols-[1fr_1fr] h-full">
+				<div class="grid grid-cols-1 lg:grid-cols-[1fr_1fr] h-full">
 					<div class="z-10 bg-white md:pr-4 md:border-r">
 						<div class="relative flex flex-col mt-1 outline-none appearance-none md:mt-auto h-[85vh] md:h-[88vh]">
 							<div class="sticky top-0 z-20 bg-white">

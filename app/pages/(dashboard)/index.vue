@@ -17,13 +17,13 @@
 			</template>
 		</section>
 
-		<section class="grid w-full grid-cols-1 mt-3 gap-y-3 md:gap-3 md:grid-cols-3 h-fit pb-[5.5rem] md:pb-0">
+		<section class="grid w-full grid-cols-1 mt-3 gap-y-3 md:gap-3 md:grid-cols-4 xl:grid-cols-3 h-fit pb-[5.5rem] md:pb-0">
 			<article class="order-1 w-full col-span-1 p-6 border rounded-lg md:col-span-2">
 				<h2 class="mb-1 text-xl font-bold">Meest bezochte pagina's</h2>
-				<UtilsAnalyticsChartsPages :metrics="metrics || []" :data="metrics?.pages || []" />
+				<UtilsAnalyticsChartsPages :rerendering :metrics="metrics || []" :data="metrics?.pages || []" />
 			</article>
 
-			<article class="order-2 w-full col-span-1 p-6 bg-white border rounded-lg md:order-1">
+			<article class="order-2 w-full col-span-1 p-6 bg-white border rounded-lg md:col-span-2 xl:col-span-1 md:order-1">
 				<h2 class="mb-1 text-xl font-bold">Meest gebruikte apparaten</h2>
 				<p class="mb-1 text-sm text-gray-600">Meest gebruikte apparaten van je bezoekers</p>
 
@@ -31,10 +31,10 @@
 					Meer details
 					<icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" />
 				</NuxtLink>
-				<UtilsAnalyticsChartsDevices :metrics="metrics || []" :data="metrics?.devices || []" />
+				<UtilsAnalyticsChartsDevices :rerendering :metrics="metrics || []" :data="metrics?.devices || []" />
 			</article>
 
-			<article class="order-1 w-full col-span-1 p-6 border rounded-lg md:col-span-3">
+			<article class="order-1 w-full col-span-1 p-6 border rounded-lg md:col-span-4 xl:col-span-3">
 				<div class="flex flex-col justify-between w-full md:items-center md:flex-row">
 					<div class="mb-1 md:mb-6">
 						<h2 class="mb-1 text-xl font-bold">Breakdown per pagina</h2>
@@ -50,12 +50,12 @@
 				<UtilsAnalyticsCardsViewer @emitter="update" name="pages" :visable="6" :data="{ values: metrics?.pages.values || [], categories: metrics?.pages.table.categories || [] }" />
 			</article>
 
-			<article class="order-1 w-full col-span-1 p-6 border rounded-lg md:col-span-3">
+			<article class="order-1 w-full col-span-1 p-6 border rounded-lg md:col-span-4 xl:col-span-3">
 				<h2 class="mb-1 text-xl font-bold">Tijdlijn evenementen</h2>
-				<UtilsAnalyticsChartsEvents :metrics="metrics || []" :data="metrics?.events.chart || []" />
+				<UtilsAnalyticsChartsEvents :rerendering :metrics="metrics || []" :data="metrics?.events.chart || []" />
 			</article>
 
-			<article class="order-1 w-full col-span-1 p-6 border rounded-lg md:col-span-3">
+			<article class="order-1 w-full col-span-1 p-6 border rounded-lg md:col-span-4 xl:col-span-3">
 				<div class="flex flex-col justify-between w-full md:items-center md:flex-row">
 					<div class="mb-1 md:mb-6">
 						<h2 class="mb-1 text-xl font-bold">Breakdown per evenement</h2>
@@ -74,10 +74,10 @@
 			<article class="order-3 w-full col-span-1 p-6 border rounded-lg md:col-span-2">
 				<h2 class="mb-1 text-xl font-bold">Bezoekers per land</h2>
 				<p class="mb-6 text-sm text-gray-600">Een visuele weergave van waar je bezoekers vandaan komen,</p>
-				<UtilsAnalyticsChartsWorld :metrics="metrics || []" :data="metrics?.countries.values || []" />
+				<UtilsAnalyticsChartsWorld :rerendering :metrics="metrics || []" :data="metrics?.countries.values || []" />
 			</article>
 
-			<article class="order-3 w-full col-span-1 p-6 border rounded-lg md:col-span-1">
+			<article class="order-3 w-full col-span-1 p-6 border rounded-lg md:col-span-2 xl:col-span-1">
 				<h2 class="mb-1 text-xl font-bold">Top landen</h2>
 				<p class="mb-1 text-sm text-gray-600">De landen waaruit je meeste bezoekers komen,</p>
 
@@ -101,6 +101,8 @@
 </template>
 
 <script setup lang="ts">
+	import { breakpointsTailwind } from "@vueuse/core";
+
 	useSeoMeta({
 		title: "Insights - Dashboard",
 		description: "Bekijk een overzicht van de algemene statistieken van je website, inclusief bezoekers, weergaven en bezoekduur.",
@@ -145,6 +147,20 @@
 		() => store.metrics,
 		(newMetrics) => {
 			metrics.value = newMetrics;
+		},
+	);
+
+	const breakpoints = useBreakpoints(breakpointsTailwind);
+	const rerendering = ref(false);
+
+	watch(
+		() => breakpoints,
+		() => {
+			rerendering.value = !rerendering.value;
+			setTimeout(() => (rerendering.value = !rerendering.value), 100);
+		},
+		{
+			deep: true,
 		},
 	);
 </script>
