@@ -2,7 +2,7 @@ import { H3Event } from "h3";
 import { SupabaseClient, Session, User, AuthError } from "@supabase/supabase-js";
 
 export type { SupabaseClient, Session, User };
-export type SupaBaseUser = User & { current_session_id: string; aal: string };
+export type SupaBaseUser = User & { current_session_id: string; aal: string; isPassKey: boolean };
 type SessionLookupResult = {
 	data: { user: SupaBaseUser | null };
 	error: any;
@@ -127,10 +127,26 @@ export const extractSessionId = (session: Omit<Session, "user">): string | undef
 	return;
 };
 
+export const useGetLoginMethod = (access_token?: string): string | null => {
+	if (access_token) {
+		const token = access_token?.split(".")[1];
+
+		if (!token) return null;
+
+		const payload = JSON.parse(Buffer.from(token, "base64").toString("utf8"));
+
+		return payload.amr[0].method;
+	}
+
+	return null;
+};
+
 export const useSetSessionData = async (event: H3Event, user: SupaBaseUser | null) => {
 	if (user) {
+		const isPasskey = user?.isPassKey || false;
+
 		const hasMFA = !!(user.factors && user.factors[0] && user.factors[0].status === "verified");
-		const needsVerification = hasMFA && user?.aal !== "aal2";
+		const needsVerification = hasMFA && user?.aal !== "aal2" && !isPasskey;
 
 		if (needsVerification) return { mfa_needs_to_verified: true };
 

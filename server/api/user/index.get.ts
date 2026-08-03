@@ -2,6 +2,8 @@ export default defineEventHandler(async (event) => {
 	const client = await serverSupabaseClient(event);
 	const currentSession = await useGetCookies(event);
 
+	const method = useGetLoginMethod(currentSession?.access_token);
+
 	const { data, error: sessionError } = await useGetSession(event, client, currentSession);
 
 	if (sessionError) {
@@ -12,6 +14,8 @@ export default defineEventHandler(async (event) => {
 		const { data: refreshedData, error: refreshError } = await useRefreshSession(client, currentSession);
 		if (!refreshedData.session || refreshError) return useReturnResponse(event, unauthorizedError);
 
+		const method = useGetLoginMethod(currentSession?.access_token);
+
 		useSetCookies(event, refreshedData.session);
 
 		return useReturnResponse(event, {
@@ -20,7 +24,7 @@ export default defineEventHandler(async (event) => {
 				message: "Ok",
 				code: 200,
 			},
-			data: await useSetSessionData(event, refreshedData.user as SupaBaseUser),
+			data: await useSetSessionData(event, { ...refreshedData.user, isPassKey: method == "passkey" } as SupaBaseUser),
 		});
 	}
 
@@ -30,6 +34,6 @@ export default defineEventHandler(async (event) => {
 			message: "gebruiker gevonden",
 			code: 200,
 		},
-		data: await useSetSessionData(event, data.user as SupaBaseUser),
+		data: await useSetSessionData(event, { ...data.user, isPassKey: method == "passkey" } as SupaBaseUser),
 	});
 });

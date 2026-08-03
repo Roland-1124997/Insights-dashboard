@@ -56,6 +56,15 @@ export default defineNuxtConfig({
 			secure: process.env.NODE_ENV === "development" ? false : true,
 			path: "/",
 		},
+
+		clientOptions: {
+			auth: {
+				experimental: {
+					passkey: true,
+				},
+			},
+		},
+
 		types: "~~/server/utils/supabase/types/database.types.ts",
 	},
 

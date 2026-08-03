@@ -32,7 +32,7 @@ export default defineAuthEventHandler(async (event, { user, server }) => {
 
 	const data: NavigatorRequest = kownIps.get(request.ip)!;
 
-	await server.from("navigator_sessions").insert({
+	const { error } = await server.from("navigator_sessions").insert({
 		id: user.current_session_id,
 		ip: request.ip,
 		screen: request.screen,
@@ -41,5 +41,15 @@ export default defineAuthEventHandler(async (event, { user, server }) => {
 		continent_code: data.continent_code,
 		city: data.city,
 		timezone: data.timezone,
+	});
+
+	if (error) return useReturnResponse(event, internalServerError);
+
+	return useReturnResponse(event, {
+		status: {
+			code: 200,
+			message: "Navigator session saved successfully",
+			success: true,
+		},
 	});
 });

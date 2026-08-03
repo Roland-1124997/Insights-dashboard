@@ -55,9 +55,14 @@ export const defineBaseEventHandler = (
 			const client = await serverSupabaseClient(event);
 			const server = serverSupabaseServiceRole(event);
 
+			const currentSession = await useGetCookies(event);
+			const method = useGetLoginMethod(currentSession?.access_token);
+
+			const isPasskeyUser = method === "passkey";
+
 			const { data: user } = await useSessionExists(event, client);
 
-			return callback(event, { client, user: user as SupaBaseUser, server });
+			return callback(event, { client, user: { ...user, isPassKey: isPasskeyUser } as SupaBaseUser, server });
 		}
 
 		return useReturnResponse(event, {
@@ -86,7 +91,7 @@ export const defineSupabaseEventHandler = (
 
 		const IsFactorVerified = (user.factors && user.factors[0] && user.factors[0].status === "verified") || false;
 
-		if (IsFactorVerified && user.aal != "aal2")
+		if (IsFactorVerified && user.aal != "aal2" && !user.isPassKey)
 			return useReturnResponse(event, {
 				status: {
 					success: false,
@@ -116,7 +121,7 @@ export const defineMultiFactorVerificationEventHandler = (
 	) => any,
 ) => {
 	return defineSupabaseEventHandler(async (event, { user, client, server, IsFactorVerified }) => {
-		if (IsFactorVerified && user.aal == "aal2") {
+		if (IsFactorVerified && (user.aal == "aal2" || user.isPassKey)) {
 			const { data: factors, error: factorError } = await client.auth.mfa.listFactors();
 			if (factorError || !factors.all || !factors.all[0]) return useReturnResponse(event, internalServerError);
 
