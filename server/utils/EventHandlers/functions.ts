@@ -132,7 +132,7 @@ export const defineMultiFactorVerificationEventHandler = (
 				code: request.code,
 			});
 
-			if(!error && user.isPassKey) await useDeleteCachedUser(user.current_session_id);
+			if (!error && user.isPassKey) await useDeleteCachedUser(user.current_session_id);
 
 			if (error)
 				return useReturnResponse(event, {
