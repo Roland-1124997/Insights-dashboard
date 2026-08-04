@@ -121,7 +121,7 @@ export const defineMultiFactorVerificationEventHandler = (
 	) => any,
 ) => {
 	return defineSupabaseEventHandler(async (event, { user, client, server, IsFactorVerified }) => {
-		if (IsFactorVerified && (user.aal == "aal2" || user.isPassKey)) {
+		if (IsFactorVerified && user.aal == "aal2") {
 			const { data: factors, error: factorError } = await client.auth.mfa.listFactors();
 			if (factorError || !factors.all || !factors.all[0]) return useReturnResponse(event, internalServerError);
 
@@ -131,8 +131,6 @@ export const defineMultiFactorVerificationEventHandler = (
 				factorId: factors.all[0].id,
 				code: request.code,
 			});
-
-			if (!error && user.isPassKey) await useDeleteCachedUser(user.current_session_id);
 
 			if (error)
 				return useReturnResponse(event, {

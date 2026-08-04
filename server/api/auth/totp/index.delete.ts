@@ -1,12 +1,18 @@
-export default defineMultiFactorVerificationEventHandler(async (event, { user, client }) => {
+export default defineMultiFactorVerificationEventHandler(async (event, { user, client, server }) => {
 	const { data: factors, error: factorError } = await client.auth.mfa.listFactors();
 	if (factorError || !factors.all || !factors.all[0]) return useReturnResponse(event, internalServerError);
 
-	const { error } = await client.auth.mfa.unenroll({
-		factorId: factors!.all[0]!.id,
-	});
+	const { error } = user.isPassKey
+		? await server.auth.admin.mfa.deleteFactor({
+				id: factors!.all[0]!.id,
+				userId: user.id,
+			})
+		: await client.auth.mfa.unenroll({
+				factorId: factors!.all[0]!.id,
+			});
 
 	if (error) return useReturnResponse(event, internalServerError);
+
 	await useDeleteCachedUser(user.current_session_id);
 
 	return useReturnResponse(event, {

@@ -5,6 +5,7 @@ export type UserDisplay = {
 	factors?: {
 		verified: boolean;
 		enabled: boolean;
+		passkey: boolean;
 	};
 	mfa_needs_to_verified?: boolean;
 };

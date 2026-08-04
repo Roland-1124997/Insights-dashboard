@@ -1,4 +1,4 @@
-export default defineAuthEventHandler(async (event, { client }) => {
+export default defineAuthEventHandler(async (event, { client, server }) => {
 	await new Promise((resolve) => setTimeout(resolve, 1000));
 
 	const request = await readBody(event);
@@ -31,6 +31,9 @@ export default defineAuthEventHandler(async (event, { client }) => {
 		});
 
 	useSetCookies(event, data.session);
+
+	const session_id = extractSessionId(data.session) as string;
+	await useCreateNavigatorSession(event, server, { ...data.user, current_session_id: session_id } as SupaBaseUser, request);
 
 	if (data.user.factors && data.user.factors[0] && data.user.factors[0].status === "verified") {
 		return useReturnResponse(event, {

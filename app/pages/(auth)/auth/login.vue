@@ -6,7 +6,7 @@
 				<p class="text-sm text-gray-600 md:text-base">Vul hieronder je e-mailadres en wachtwoord in om toegang te krijgen tot je account.</p>
 			</div>
 
-			<FormBase :schema="schema.login.frontend" :request v-slot="{ loading }" class="mt-10">
+			<FormBase :appendToBody="appendToBody" :schema="schema.login.frontend" :request v-slot="{ loading }" class="mt-10">
 				<UtilsInput name="email" label="E-mailadres" icon-name="akar-icons:envelope" type="email" placeholder="you@company.com" :required="true" :disabled="loading" />
 
 				<UtilsInput name="password" label="Wachtwoord" icon-name="akar-icons:lock-on" type="password" placeholder="••••••••" :disabled="loading" :required="true" />
@@ -65,33 +65,31 @@
 		],
 	});
 
-	const create = async () => {
-		const ipRequest = useApiHandler<{ ip: string }>("https://api.ipify.org?format=json");
+	const request: requestOptions = {
+		url: "/api/auth",
+		method: "POST",
+		successMessage: "Je bent succesvol ingelogd! en wordt doorgestuurd...",
+	};
 
-		const { data, error } = await ipRequest.Get();
-		if (error || !data) return;
+	const appendToBody = async (values: Record<string, unknown>) => {
+		const request = useApiHandler<{ ip: string }>("https://api.ipify.org?format=json");
+
+		const { data, error } = await request.Get();
+		if (error || !data) return values;
 
 		const {
 			screen: { width, height },
 			navigator: { language },
 		} = window;
 
-		const request = useApiHandler("/api/auth/account/sessions");
+		const screen = `${width}x${height}`;
 
-		request.Post({
-			body: {
-				screen: `${width}x${height}`,
-				language,
-				ip: data.ip,
-			},
-		});
-	};
-
-	const request: requestOptions = {
-		url: "/api/auth",
-		method: "POST",
-		successMessage: "Je bent succesvol ingelogd! en wordt doorgestuurd...",
-		onsuccess: async () => await create(),
+		return {
+			...values,
+			screen,
+			language,
+			ip: data.ip,
+		};
 	};
 
 	const uri: FetchUrl = "/api/auth/passkeys/login";
@@ -118,7 +116,7 @@
 
 				const { data, error } = await Request.Post({
 					extends: "/verify",
-					body: { challenge_id, credential },
+					body: await appendToBody({ challenge_id, credential }),
 				});
 
 				if (error)
@@ -137,7 +135,6 @@
 					});
 
 					if (redirect) await navigateTo(redirect);
-					await create();
 				}
 			} catch (err) {
 				const error = err as DOMException;

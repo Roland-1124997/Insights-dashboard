@@ -8,6 +8,17 @@ type SessionLookupResult = {
 	error: any;
 };
 
+type NavigatorRequest = {
+	ip: string;
+	country_code?: string;
+	region_code?: string;
+	city?: string;
+	continent_code?: string;
+	timezone?: string;
+	screen?: string;
+};
+
+const kownIps = new Map<string, NavigatorRequest>();
 const pendingSessionLookups = new Map<string, Promise<SessionLookupResult>>();
 
 export const validateAccessToken = (currentSession: Session | Omit<Session, "user">) => {
@@ -155,8 +166,9 @@ export const useSetSessionData = async (event: H3Event, user: SupaBaseUser | nul
 			session: user.current_session_id,
 			email: user.email,
 			factors: {
-				verified: hasMFA,
-				enabled: !!user.factors,
+				verified: isPasskey ? false : hasMFA,
+				enabled: !!(user.factors && user.factors[0] && user.factors[0].status === "verified"),
+				passkey: isPasskey,
 			},
 		};
 	}
@@ -214,4 +226,37 @@ export const useFetchUserByAccessToken = async (client: SupabaseClient<Database>
 	}
 
 	return { data: null, error };
+};
+
+export const useCreateNavigatorSession = async (event: H3Event, server: SupabaseClient<Database>, user: SupaBaseUser, request: NavigatorRequest) => {
+	let data: NavigatorRequest | null = null;
+	let error: any = null;
+
+	if (!kownIps.has(request.ip)) {
+		await fetch(`https://geoip.vuiz.net/geoip?ip=${request.ip}`)
+			.then((res) => res.json())
+			.then((data: NavigatorRequest) => kownIps.set(request.ip, data))
+			.catch((err) => {
+				error = err;
+			});
+	}
+
+	if (error) return { data, error };
+
+	data = kownIps.get(request.ip)!;
+
+	const { error: failure } = await server.from("navigator_sessions").insert({
+		id: user.current_session_id,
+		ip: request.ip,
+		screen: request.screen,
+		country_code: data.country_code,
+		region_code: data.region_code,
+		continent_code: data.continent_code,
+		city: data.city,
+		timezone: data.timezone,
+	});
+
+	if (failure) return { data, error: failure };
+
+	return { data, error: null };
 };
