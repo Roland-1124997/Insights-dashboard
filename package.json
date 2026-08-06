@@ -59,7 +59,7 @@
 		"imapflow": "^1.4.7",
 		"jsdom": "^29.1.1",
 		"mailparser": "^3.9.14",
-		"nuxt": "^4.5.0",
+		"nuxt": "^4.5.2",
 		"nuxt-charts": "^2.2.1",
 		"resend": "^6.17.2",
 		"tailwindcss-animate": "^1.0.7",
