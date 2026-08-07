@@ -45,7 +45,7 @@
 			<article class="prose text-gray-800 max-w-none">
 				<div class="text-balance">
 					<div :class="!collapsed ? ' h-[46vh]' : ' h-[60vh]'" class="w-full overflow-hidden rounded">
-						<iframe :srcdoc="store.selected.html" sandbox="allow-popups allow-popups-to-escape-sandbox" :title="store.selected.subject" class="w-full h-full " style="color-scheme: light;"></iframe>
+						<iframe :srcdoc="store.selected.html" sandbox="allow-popups allow-popups-to-escape-sandbox" :title="store.selected.subject" class="w-full h-full" style="color-scheme: light"></iframe>
 					</div>
 				</div>
 			</article>
