@@ -1,6 +1,6 @@
 import { getRequestURL, H3Event } from "h3";
 
-const { logging } = useRuntimeConfig();
+const { logging, production } = useRuntimeConfig();
 
 const createLogger = (event: H3Event) => {
 	let details: string[] = [];
@@ -36,7 +36,7 @@ const createLogger = (event: H3Event) => {
 			base.push(`  ${prefix} ${line}`);
 		});
 
-		console.log(base.join("\n") + "\n" + `\u200B`);
+		if (production) console.log(base.join("\n") + "\n" + `\u200B`);
 	};
 
 	return {
