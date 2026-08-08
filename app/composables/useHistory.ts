@@ -1,13 +1,15 @@
-const history: RouteHistory = {};
-
 export const useHistory = () => {
+	const history = useLocalStorage<RouteHistory>("history", {});
+
 	const clearHistory = (path: string) => {
-		history[path] = [];
+		history.value[path] = [];
 	};
 
-	const getHistory = (path: string): HistoryEntry[] => history[path] || [];
+	const getHistory = (path: string): HistoryEntry[] => history.value[path] || [];
 	const getHistoryLastEntry = (path: string): HistoryEntry | null => getHistory(path)[0] || null;
-	const setHistory = (path: string, entries: HistoryEntry[]) => (history[path] = entries);
+	const setHistory = (path: string, entries: HistoryEntry[]) => {
+		history.value[path] = entries;
+	};
 
 	return {
 		clear: clearHistory,
