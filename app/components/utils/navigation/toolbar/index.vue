@@ -26,6 +26,7 @@
 					<UtilsButtonFilter
 						v-if="toolbar.filters"
 						v-for="filterItem in toolbar.filters"
+						:activeType
 						:loading="pending"
 						:setFilter
 						:filter
@@ -59,6 +60,7 @@
 				<div v-if="toolbar.filters" class="flex items-center justify-between w-full gap-2">
 					<UtilsButtonFilter
 						v-for="filterItem in toolbar.filters"
+						:activeType
 						:loading="pending"
 						:setFilter
 						:filter
@@ -89,7 +91,7 @@
 	const store = computed(() => useRouterStore(toolbar.store) as StoreType);
 	const fallbackFilter = computed(() => route.query.filter || toolbar?.fallbackFilter || null) as Ref<string | null>;
 
-	const { loading, filter, setFilter } = useFilter(
+	const { activeType, loading, filter, setFilter } = useFilter(
 		{
 			fallbackFilter: fallbackFilter,
 			callback: async (params) => {

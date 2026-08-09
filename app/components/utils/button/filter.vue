@@ -11,7 +11,7 @@
 		]"
 		:aria-label="label"
 		:aria-pressed="$route.query.filter === type">
-		<Icon v-if="loading && $route.query.filter == type" name="akar-icons:arrow-cycle" class="w-4 h-4 animate-spin" aria-hidden="true" />
+		<Icon v-if="loading && activeType == type" name="akar-icons:arrow-cycle" class="w-4 h-4 animate-spin" aria-hidden="true" />
 		<Icon v-else :name="iconName" class="w-4 h-4" aria-hidden="true" />
 
 		<span :class="alwaysShowLabel ? 'flex' : 'hidden md:flex'">
@@ -33,6 +33,7 @@
 		color: string;
 		large: boolean;
 		loading: boolean;
+		activeType: string | null;
 	}>();
 
 	const getColorClasses = (color: string, isActive: boolean) => {
