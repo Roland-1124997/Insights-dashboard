@@ -1,17 +1,17 @@
 <template>
 	<button
-		:disabled="loading || $route.query.filter == type"
+		:disabled="isDisabled($route.query.filter as string)"
 		type="button"
 		@click="setFilter(type)"
 		:class="[
 			'flex items-center justify-center gap-2 px-4 select-none text-sm font-medium transition-colors duration-200 border rounded-lg outline-none disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus:ring-2',
 			large ? 'w-full' : 'w-fit',
 			alwaysShowLabel ? 'py-2' : 'py-[0.68rem] md:py-2',
-			getColorClasses(color, $route.query.filter === type),
+			getColorClasses($route.query.filter as string),
 		]"
 		:aria-label="label"
-		:aria-pressed="$route.query.filter === type">
-		<Icon v-if="loading && activeType == type" name="akar-icons:arrow-cycle" class="w-4 h-4 animate-spin" aria-hidden="true" />
+		:aria-pressed="isPressed($route.query.filter as string)">
+		<Icon v-if="isLoading(activeType as string)" name="akar-icons:arrow-cycle" class="w-4 h-4 animate-spin" aria-hidden="true" />
 		<Icon v-else :name="iconName" class="w-4 h-4" aria-hidden="true" />
 
 		<span :class="alwaysShowLabel ? 'flex' : 'hidden md:flex'">
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-	defineProps<{
+	const { color, type, activeType, loading } = defineProps<{
 		filter: string | null;
 		setFilter: (filter: string) => void;
 		type: string;
@@ -36,7 +36,12 @@
 		activeType: string | null;
 	}>();
 
-	const getColorClasses = (color: string, isActive: boolean) => {
+	const getColorClasses = (current: string) => {
+		let isActive = false;
+
+		if (!current) isActive = activeType === type;
+		else isActive = current === type;
+
 		const colors: Record<string, { active: string; inactive: string }> = {
 			neutral: {
 				active: "bg-neutral-100 text-neutral-800 border-neutral-400 focus:ring-neutral-400",
@@ -53,5 +58,19 @@
 		};
 
 		return isActive ? colors[color]?.active : colors[color]?.inactive;
+	};
+
+	const isDisabled = (current: string) => {
+		if (!current) return loading || activeType === type;
+		else return loading || current === type;
+	};
+
+	const isPressed = (current: string) => {
+		if (!current) return activeType === type;
+		else return current === type;
+	};
+
+	const isLoading = (current: string) => {
+		return loading && current === type;
 	};
 </script>
