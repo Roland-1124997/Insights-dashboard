@@ -236,14 +236,14 @@ export const calculateEvents = (events: AnalyticsEventResponse[]) => {
 };
 
 export const calculateValues = (options: { label: string; value: number; previous: number; color: string; icon: string; format: boolean }) => {
-	const difference = calculateDifference(options.value, options.previous);
-	const percentage = calculatePercentage(options.value, options.previous);
+	const difference = calculateDifference(options.value || 0, options.previous || 0);
+	const percentage = calculatePercentage(options.value || 0, options.previous || 0);
 	const isPositive = positivePercentage(Number(percentage));
 
 	return {
 		label: options.label,
-		value: options.value,
-		difference: difference,
+		value: options.value || 0,
+		difference: difference || 0,
 		percentage: percentage,
 		positive: isPositive,
 		color: options.color,
