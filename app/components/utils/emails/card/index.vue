@@ -1,5 +1,7 @@
 <template>
-	<UtilsEmailsCardItem v-for="inbox in store.messages" :key="inbox.id" :inbox="inbox" :parent="parent" @visibilityChanged="onVisibilityChanged" />
+	<div class="pb-[5.5rem] pt-[1.5rem] md:pb-0 md:pt-0">
+		<UtilsEmailsCardItem v-for="inbox in store.messages" :key="inbox.id" :inbox="inbox" :parent="parent" @visibilityChanged="onVisibilityChanged" />
+	</div>
 </template>
 
 <script setup lang="ts">
