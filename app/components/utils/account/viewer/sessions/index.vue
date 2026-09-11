@@ -15,11 +15,19 @@
 				</div>
 			</div>
 
-			<div v-if="sessions && sessions.length" class="grid gap-3 md:grid-cols-2">
-				<div v-for="(inner_session, index) in sessions" :key="inner_session.id" class="relative pt-5 bg-white border-t md:border md:p-5 md:rounded-xl">
-					<UtilsAccountViewerSessionsCard :session="inner_session" />
+			<UtilsAccountViewerSessionsCardSkeleton v-if="account.loading" />
+
+			<ClientOnly v-else-if="sessions && sessions.length > 0">
+				<div class="grid gap-3 md:grid-cols-2">
+					<div v-for="(inner_session, index) in sessions" :key="inner_session.id" class="relative pt-5 bg-white border-t md:border md:p-5 md:rounded-xl">
+						<UtilsAccountViewerSessionsCard :session="inner_session" />
+					</div>
 				</div>
-			</div>
+
+				<template #fallback>
+					<UtilsAccountViewerSessionsCardSkeleton v-if="account.loading" />
+				</template>
+			</ClientOnly>
 
 			<div v-else class="p-12 text-center text-gray-500">
 				<div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full">

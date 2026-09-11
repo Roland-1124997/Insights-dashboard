@@ -120,7 +120,7 @@
 		</div>
 	</div>
 
-	<div class="flex flex-wrap items-center justify-between gap-2 pt-4 mt-4 text-xs text-gray-500 border-t border-gray-200">
+	<div class="flex flex-wrap items-center justify-between gap-2 pt-4 mt-4 text-xs text-gray-500 border-t border-gray-200 select-none">
 		<span class="flex items-center gap-1">
 			<icon name="akar-icons:key" class="w-3.5 h-3.5" />
 			<span class="font-mono">{{ session?.id?.substring(0, 8) }}...</span>
