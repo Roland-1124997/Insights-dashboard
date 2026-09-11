@@ -7,6 +7,21 @@ const headers: HeadersInit = {
 
 const baseUrl = `${UMAMI.HOST}`;
 
+export const useFetchReport = async (key: string, query: AnalyticsQuery) => {
+	const url = `${UMAMI.BREAKDOWN_HOST}/breakdown`;
+
+	let data: AnalyticsResponse[] | null = null;
+	let error = null;
+
+	try {
+		data = await useFetchReportCached(url, key, query);
+	} catch (err) {
+		error = err;
+	}
+
+	return { data, error };
+};
+
 export const useFetchMetrics = async (key: string, query: AnalyticsQuery) => {
 	const url = `${baseUrl}/metrics/expanded`;
 	let data: AnalyticsResponse[] | null = null;
@@ -49,9 +64,46 @@ export const useFetchEvents = async (key: string, query: AnalyticsQuery) => {
 	return { data, error };
 };
 
+const useFetchReportCached = defineCachedFunction(
+	async (url: string, key: string, query: AnalyticsQuery) => {
+		const data = await $fetch<any>(url, {
+			headers,
+			body: {
+				websiteId: UMAMI.WEBSITE_ID,
+				type: "breakdown",
+				filters: {},
+				parameters: {
+					startDate: new Date(query.startAt).toISOString(),
+					endDate: new Date(query.endAt).toISOString(),
+					timezone: query.timezone,
+					unit: query.unit,
+					fields: [query.type || "path"],
+				},
+			},
+			method: "POST",
+		});
+
+		return data.map((item: any) => ({
+			...item,
+			name: item.path,
+			pageviews: item.views,
+			path: undefined,
+		}));
+	},
+	{
+		maxAge: 60 * 60 * 3,
+		name: "analytics",
+		getKey: (url: string, key: string, query: AnalyticsQuery) => `${key}-${query.timezone.split("/").join("-")}`,
+	},
+);
+
 const useFetchCached = defineCachedFunction(
 	async (url: string, key: string, query: AnalyticsQuery) => {
-		const data = await $fetch<any>(url, { headers, query });
+		const data = await $fetch<any>(url, {
+			headers,
+			query,
+		});
+
 		if (data.data) return data.data;
 		return data;
 	},

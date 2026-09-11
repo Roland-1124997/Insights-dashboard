@@ -23,7 +23,7 @@ export default defineSupabaseEventHandler(async (event) => {
 
 	const deviceName = devices.length >= 1 ? devices.reduce((max, device) => (device.pageviews > max.pageviews ? device : max)).name : "Onbekend";
 
-	const { data: pages, error: pagesError } = await useFetchMetrics(`path:${filter}`, {
+	const { data: pages, error: pagesError } = await useFetchReport(`path:${filter}`, {
 		startAt,
 		endAt,
 		unit: "day",

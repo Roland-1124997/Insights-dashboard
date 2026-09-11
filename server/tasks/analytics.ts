@@ -47,7 +47,7 @@ export default defineTask({
 						type: "device",
 					}),
 
-					useFetchMetrics(`path:${value}`, {
+					useFetchReport(`path:${value}`, {
 						startAt,
 						endAt,
 						unit: "day",

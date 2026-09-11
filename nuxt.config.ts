@@ -103,6 +103,8 @@ export default defineNuxtConfig({
 		UMAMI: {
 			SHARE_TOKEN: process.env.UMAMI_SHARE_TOKEN,
 			HOST: `${process.env.UMAMI_HOST}/${process.env.UMAMI_ROUTE}/${process.env.UMAMI_WEBSITE_ID}`,
+			BREAKDOWN_HOST: `${process.env.UMAMI_HOST}/api/reports`,
+			WEBSITE_ID: process.env.UMAMI_WEBSITE_ID,
 		},
 
 		IMAP_HOST: process.env.IMAP_HOST,
