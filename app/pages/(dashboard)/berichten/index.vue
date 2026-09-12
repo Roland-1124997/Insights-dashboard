@@ -2,17 +2,19 @@
 	<div class="grid flex-1 grid-cols-1 overflow-hidden h-[74dvh] md:h-[74dvh] md:grid-cols-2">
 		<div class="z-10 md:pr-4 md:border-r">
 			<div ref="el" class="flex-1 h-[73.8dvh] md:h-[73.8dvh] overflow-y-auto">
-				<UtilsEmailsCardSkeleton v-if="store.loading" />
-				<template v-else>
-					<UtilsDisplayError label="berichten" IconName="akar-icons:inbox" v-if="store.messages.length === 0" />
-					<ClientOnly v-else>
-						<UtilsEmailsCard :parent="el" @lastVisibleChanged="onItemVisible" />
-						<UtilsEmailsCardSkeleton v-if="isLoading" />
-						<template #fallback>
-							<UtilsEmailsCardSkeleton />
-						</template>
-					</ClientOnly>
-				</template>
+				<div class="pb-[5.5rem] md:pb-0">
+					<UtilsEmailsCardSkeleton v-if="store.loading" />
+					<template v-else>
+						<UtilsDisplayError label="berichten" IconName="akar-icons:inbox" v-if="store.messages.length === 0" />
+						<ClientOnly v-else>
+							<UtilsEmailsCard :parent="el" @lastVisibleChanged="onItemVisible" />
+							<UtilsEmailsCardSkeleton v-if="isLoading" />
+							<template #fallback>
+								<UtilsEmailsCardSkeleton />
+							</template>
+						</ClientOnly>
+					</template>
+				</div>
 			</div>
 		</div>
 		<UtilsEmailsPreview />
