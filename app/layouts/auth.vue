@@ -2,7 +2,7 @@
 	<UtilsApp :disablePwaPrompt="true">
 		<UtilsDotPattern class="opacity-60" :width="20" :height="20" :cx="1" :cy="1" :cr="1" />
 
-		<aside class="relative hidden lg:flex lg:w-2/3 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800">
+		<aside :class="installed ? 'md:mt-[-1rem] xl:mt-0' : ''" class="relative hidden lg:flex lg:w-2/3 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800">
 			<div class="relative z-10 flex flex-col justify-between w-full p-12 xl:p-16">
 				<header>
 					<div class="flex items-center space-x-3">
@@ -62,3 +62,7 @@
 		</main>
 	</UtilsApp>
 </template>
+
+<script setup lang="ts">
+	const { installed } = useCheckPwa();
+</script>
