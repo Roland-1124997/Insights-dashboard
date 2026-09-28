@@ -157,7 +157,7 @@
 		: "Er is een fout opgetreden bij het verzenden van je bericht. Probeer het later opnieuw.";
 
 	const request: requestOptions = {
-		url: "/api/notifications" as FetchUrl,
+		url: "/api/integrations/strato/mail" as FetchUrl,
 		method: "POST" as SendOptions["method"],
 		successMessage,
 
