@@ -13,8 +13,7 @@ export const extendHtml = (html: string) => {
 			.replace(/<meta\s+name=["']color-scheme["'][^>]*>/gi, '<meta name="color-scheme" content="light">')
 			.replace(/<meta\s+name=["']supported-color-schemes["'][^>]*>/gi, '<meta name="supported-color-schemes" content="light">')
 			.replace(/@media\s*\(prefers-color-scheme:\s*dark\)\s*\{[\s\S]*?\}\s*/gi, "")
-			.replace(/color-scheme:\s*light\s+dark/gi, "color-scheme: light") +
-		`<style>html,body {color-scheme: light only !important;background: #ffffff !important;}body,body * {color: #000000 !important;}a {color: #0066cc !important;}.button, .button * {color: #000000 !important; background-color: #ffffff !important; border-color: #000000 !important} .button:hover { color: #ffffff !important; }   </style>`
+			.replace(/color-scheme:\s*light\s+dark/gi, "color-scheme: light") + `<style>html,body {color-scheme: light only !important;background: #ffffff !important;}body,body * {color: #000000 !important;}a {color: #0066cc !important;}.button, .button * {color: #000000 !important; background-color: #ffffff !important; border-color: #000000 !important} .button:hover { color: #ffffff !important; }   </style>`
 	);
 };
 
@@ -76,17 +75,20 @@ export const buildResponse = async (message: FetchMessageObject, threadmap: Map<
 
 	const mail = await simpleParser(message.source);
 
-	const document = new JSDOM(mail.html || "");
+	const document = new JSDOM(mail.textAsHtml || "");
 	const body = document.window.document.body;
 
 	body.querySelectorAll("p").forEach((element, index) => {
-		if (index < 3) previewText += element.textContent + " ";
+		if (index < 3) previewText += (element.textContent + " ")
+			.replaceAll("*", "")
+			.replaceAll("()", "");
 	});
 
 	html = mail.html ? extendHtml(mail.html) : mail.textAsHtml ? extendHtml(mail.textAsHtml) : "";
 
 	attachments = mail.attachments;
-	preview = previewText || mail.text || mail.textAsHtml || "";
+	preview = previewText || "";
+
 	preview = preview
 		.replace(/https?:\/\/[^\s]+/g, "")
 		.replace(/\[/g, "")

@@ -24,7 +24,7 @@
 							<icon name="akar-icons:chat-dots" class="w-3 h-3" aria-hidden="true" />
 							<span>{{ threadCount }}</span>
 						</div>
-						<h2 class="font-bold text-gray-900 capitalize truncate text-balance">
+						<h2 class="font-bold text-gray-900 capitalize truncate line-clamp-1 text-balance">
 							{{ inbox.from.name || inbox.from.address.split("@")[1]?.split(".")[0] || "Onbekende afzender" }}
 						</h2>
 					</div>
