@@ -70,8 +70,14 @@ const timestamp = () => {
 export const useCreateRequestLogger = (event: H3Event) => {
 	const log = createLogger(event);
 
-	log.set({ requestId: event.context.requestId });
-	if (event.context.requestIp) log.set({ ip: event.context.requestIp });
+	try {
+
+		log.set({ requestId: event?.context?.requestId || crypto.randomUUID() });
+		if (event.context.requestIp) log.set({ ip: event.context.requestIp });
+
+	} catch (error) {
+		log.set({ error: `Failed to set request logger details: ${error}` });
+	}
 
 	return log;
 };
