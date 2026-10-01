@@ -58,7 +58,7 @@
 		"focus-trap": "^8.2.2",
 		"imapflow": "^1.4.7",
 		"jsdom": "^29.1.1",
-		"mailparser": "^3.9.14",
+		"mailparser": "^3.9.32",
 		"nuxt": "^4.5.2",
 		"nuxt-charts": "^2.2.1",
 		"resend": "^6.17.2",
