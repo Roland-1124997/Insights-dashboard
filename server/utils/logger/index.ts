@@ -73,7 +73,7 @@ export const useCreateRequestLogger = (event: H3Event) => {
 	try {
 		log.set({ requestId: event?.context?.requestId || crypto.randomUUID() });
 		if (event.context.requestIp) log.set({ ip: event.context.requestIp });
-	} catch (error) {
+	} catch (error: any) {
 		log.set({ error: `Failed to set request logger details: ${error}` });
 	}
 

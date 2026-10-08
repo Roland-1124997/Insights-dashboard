@@ -191,6 +191,7 @@ export const useDeleteMessage = async (client: ImapFlow, search: any) => {
 export const unseenMessagesCount = async (client: ImapFlow, mailbox: string = "INBOX") => {
 	const status = await client.status(mailbox, { unseen: true });
 	if (status.unseen) return status.unseen;
+	return 0;
 };
 
 export const makeImapPagination = (totalItems: number, currentPage: number, itemsPerPage: number) => {
