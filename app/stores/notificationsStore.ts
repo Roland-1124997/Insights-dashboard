@@ -184,16 +184,16 @@ export const useNotifications = defineStore("useNotifications", () => {
 		const route = useRoute();
 		const activePage = route.path === "/berichten";
 
-		const params = {
+		const query = {
 			page: activePage ? route.query.page || pagination.value.page || 1 : 1,
 			filter: activePage ? route.query.filter || "alles" : "alles",
 			search: activePage ? route.query.search || undefined : undefined,
 		} as { filter: string; page: number; search: string };
 
-		set("/berichten", [params]);
+		set("/berichten", [query]);
 
 		const { data, error: Error } = await useFetch<ApiResponse<any>>(`${uri}/inbox`, {
-			query: { ...params },
+			query: { ...query },
 		});
 
 		if (!Error.value && data.value) {

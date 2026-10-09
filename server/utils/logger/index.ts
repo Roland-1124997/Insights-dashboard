@@ -17,26 +17,30 @@ const createLogger = (event: H3Event) => {
 	};
 
 	const finish = () => {
-		const { pathname } = getRequestURL(event);
+		try {
+			const { pathname } = getRequestURL(event) || { pathname: "" };
 
-		if (logging.exclude.some((route: string) => pathname.startsWith(route))) return;
-		if (logging.include.length && !logging.include.some((route: string) => pathname.startsWith(route.replace("/**", "")))) return;
+			if (logging.exclude.some((route: string) => pathname.startsWith(route))) return;
+			if (logging.include.length && !logging.include.some((route: string) => pathname.startsWith(route.replace("/**", "")))) return;
 
-		const method = event.node.req.method ?? "GET";
-		const status = event.node.res.statusCode;
-		const duration = Math.round(performance.now() - event.context.starttime);
+			const method = event.node.req.method ?? "GET";
+			const status = event.node.res.statusCode;
+			const duration = Math.round(performance.now() - event.context.starttime);
 
-		const level = status >= 400 ? `${colors.red}ERROR${colors.reset}` : `${colors.blue}INFO${colors.reset}`;
-		const statusColor = status >= 400 ? colors.red : colors.green;
+			const level = status >= 400 ? `${colors.red}ERROR${colors.reset}` : `${colors.blue}INFO${colors.reset}`;
+			const statusColor = status >= 400 ? colors.red : colors.green;
 
-		const base = [`${colors.gray}${timestamp()}${colors.reset} ${level} ${method} ${pathname} ${statusColor}${status}${colors.reset} ${colors.gray}in ${duration}ms${colors.reset}`];
+			const base = [`${colors.gray}${timestamp()}${colors.reset} ${level} ${method} ${pathname} ${statusColor}${status}${colors.reset} ${colors.gray}in ${duration}ms${colors.reset}`];
 
-		details.forEach((line, index) => {
-			const prefix = index === details.length - 1 ? "└─" : "├─";
-			base.push(`  ${prefix} ${line}`);
-		});
+			details.forEach((line, index) => {
+				const prefix = index === details.length - 1 ? "└─" : "├─";
+				base.push(`  ${prefix} ${line}`);
+			});
 
-		if (production) console.log(base.join("\n") + "\n" + `\u200B`);
+			if (production) console.log(base.join("\n") + "\n" + `\u200B`);
+		} catch (error: any) {
+			details.push(`${colors.red}Logger Error:${colors.reset} ${colors.gray}${String(error)}${colors.reset}`);
+		}
 	};
 
 	return {
