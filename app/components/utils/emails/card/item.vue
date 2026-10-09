@@ -93,7 +93,6 @@
 <script setup lang="ts">
 	type InboxItem = Inbox & { showDropdown?: boolean };
 
-
 	const waiting = ref(true);
 
 	new Promise((resolve) => {
