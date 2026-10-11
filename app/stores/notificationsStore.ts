@@ -1,3 +1,4 @@
+
 type PatchResponse = ApiResponse<{ message: Inbox; unseen: number }>;
 
 const pagination = ref<{
@@ -48,8 +49,9 @@ export const useNotifications = defineStore("useNotifications", () => {
 		const currentPage = Number(route.query.page || 1);
 
 		if (index === -1 && !flagOnly && currentPage == 1) {
-			messages.value.unshift(data);
-			messages.value.pop();
+			messages.value.unshift(data)
+			if(messages.value.length > 5) messages.value.pop();
+			
 		} else {
 			const oldMessage = messages.value[index];
 			const updatedMessage = flagOnly
@@ -68,6 +70,8 @@ export const useNotifications = defineStore("useNotifications", () => {
 				selected.value = updatedMessage;
 			}
 		}
+
+		messages.value = messages.value.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 	};
 
 	const updateUnseenCount = async (count: number) => {
@@ -242,7 +246,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 			const { data, unseen, events } = JSON.parse(response);
 
 			if (events.deleted) await refresh();
-
+				
 			if (data) {
 				if (events.update) updateMessageInList(data, true);
 				if (events.incoming) updateMessageInList(data);

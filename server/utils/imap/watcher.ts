@@ -98,6 +98,11 @@ export const startImapWatcher = async () => {
 	const connectAndWatch = async () => {
 		let client: ImapFlow | null = null;
 		let idleTimer: NodeJS.Timeout | null = null;
+		let connectionLost = false;
+		let resolveConnectionLost: (() => void) | null = null;
+		const connectionLostPromise = new Promise<void>((resolve) => {
+			resolveConnectionLost = resolve;
+		});
 
 		try {
 			const { imap_client, imap_error } = await useConnectClient();
@@ -114,42 +119,56 @@ export const startImapWatcher = async () => {
 			// Setup event listeners
 			IMAP_EVENTS.forEach((event: string) => {
 				const handler = async (mail: any) => {
-					const eventFlags = mapEventFlags(event);
-					const unseen = await unseenMessagesCount(client!);
+					try {
+						const eventFlags = mapEventFlags(event);
+						const unseen = await unseenMessagesCount(client!);
 
-					let data = null;
+						let data = null;
 
-					if (eventFlags.deleted) await removeImapMessageFromCache(mail?.uid);
-					if (!eventFlags.deleted) {
-						const search = mail?.uid ?? mail?.seq ?? mail?.count;
-						const fetchOpts = mail?.uid ? { uid: true } : undefined;
+						if (eventFlags.deleted) {
+							await refreshImapMessagesCache(client!, true);
+							await new Promise<void>((resolve) => setTimeout(resolve, 2000));
+						}
 
-						data = await useFetchImapSingleMessage(client!, search, FETCH_CONFIG, fetchOpts as any);
+						if (!eventFlags.deleted) {
+							const search = mail?.uid ?? mail?.seq ?? mail?.count;
+							const fetchOpts = mail?.uid ? { uid: true } : undefined;
 
-						if (eventFlags.incoming) await upsertImapMessageCache(data);
-						else if (eventFlags.update) await updateFlagsImapMessageCache(data);
+							data = await useFetchImapSingleMessage(client!, search, FETCH_CONFIG, fetchOpts as any);
+
+							if (eventFlags.incoming) await upsertImapMessageCache(data);
+							else if (eventFlags.update) await updateFlagsImapMessageCache(data);
+						}
+
+						const payload = { data, events: eventFlags, unseen };
+						imapEmitter.emit("new", payload);
+
+						await sendPushNotifications(data, eventFlags, unseen);
+					} catch (error) {
+						consola.error(`[IMAP Watcher] Failed to process ${event} event:`, error);
 					}
-
-					const payload = { data, events: eventFlags, unseen };
-					imapEmitter.emit("new", payload);
-
-					await sendPushNotifications(data, eventFlags, unseen);
 				};
 				eventHandlers.set(event, handler);
 				client!.on(event as any, handler);
 			});
 
 			// Handle connection errors
-			client.on("error", () => {
-				stopped = true; // Trigger reconnect
-			});
+			const errorHandler = (error: unknown) => {
+				connectionLost = true;
+				resolveConnectionLost?.();
+				consola.warn("[IMAP Watcher] Connection error; reconnecting...", error);
+			};
+			client.on("error", errorHandler);
 
-			client.on("close", () => {
+			const closeHandler = () => {
+				connectionLost = true;
+				resolveConnectionLost?.();
 				consola.info("[IMAP Watcher] Connection closed");
-			});
+			};
+			client.on("close", closeHandler);
 
 			// IDLE loop with timeout protection
-			while (!stopped && client.authenticated) {
+			while (!stopped && !connectionLost && client.authenticated) {
 				try {
 					// Set timeout to force reconnect before IMAP timeout
 					const idlePromise = (client as any).idle?.();
@@ -157,7 +176,7 @@ export const startImapWatcher = async () => {
 						return "timeout";
 					});
 
-					const result = await Promise.race([idlePromise, timeoutPromise]);
+					const result = await Promise.race([idlePromise, timeoutPromise, connectionLostPromise]);
 
 					if (result === "timeout") {
 						break; // Break to reconnect
@@ -172,7 +191,13 @@ export const startImapWatcher = async () => {
 				clearTimeout(idleTimer);
 			}
 			await cleanupClient(client);
-			currentClient = null;
+			if (client) {
+				client.removeAllListeners("error");
+				client.removeAllListeners("close");
+			}
+			if (currentClient === client) {
+				currentClient = null;
+			}
 		}
 	};
 

@@ -106,6 +106,8 @@ export const refreshImapMessagesCache = async (client: ImapFlow, revalidate = tr
 };
 
 export const updateFlagsImapMessageCache = async (message: any) => {
+	if (!message) return false;
+
 	return await updateCachedImapMessages((messages) => {
 		const nextFlags: string[] = message.flags || [];
 
