@@ -29,7 +29,6 @@
 	</ChartsUtilsLegend>
 </template>
 
-
 <script setup lang="ts">
 	const { data, height, categories } = defineProps({
 		data: {
@@ -63,4 +62,3 @@
 		},
 	);
 </script>
-

@@ -65,4 +65,3 @@
 
 	const customProjection = geoMercator().center([0, 0]);
 </script>
-
