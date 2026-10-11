@@ -25,9 +25,9 @@ export default defineNuxtConfig({
 		experimental: {
 			tasks: true,
 		},
-		externals: {
-			inline: [/[\\/]node_modules[\\/]nuxt[\\/]dist[\\/]/],
-		},
+		// externals: {
+		// 	inline: [/[\\/]node_modules[\\/]nuxt[\\/]dist[\\/]/],
+		// },
 	},
 
 	vite: {
