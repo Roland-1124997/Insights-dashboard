@@ -45,7 +45,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 
 	const updateMessageInList = (data: any, flagOnly?: boolean) => {
 		const index = messages.value.findIndex((msg: any) => msg.uid === data.uid);
-		const currentPage = Number(useRoute().query.page || 1);
+		const currentPage = Number(route.query.page || 1);
 
 		if (index === -1 && !flagOnly && currentPage == 1) {
 			messages.value.unshift(data);
@@ -86,9 +86,9 @@ export const useNotifications = defineStore("useNotifications", () => {
 		await new Promise((resolve) => setTimeout(resolve, 300));
 
 		const query = {
-			page: Number(params?.page || useRoute().query.page || pagination.value.page || 1),
-			filter: params?.filter || useRoute().query.filter || "alles",
-			search: params?.search || useRoute().query.search || undefined,
+			page: Number(params?.page || route.query.page || pagination.value.page || 1),
+			filter: params?.filter || route.query.filter || "alles",
+			search: params?.search || route.query.search || undefined,
 		} as { filter: string; page: number; search: string };
 
 		set("/berichten", [query]);
@@ -151,7 +151,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 		if (!Error && data) {
 			loading.value = false;
 
-			const currentPage = Number(useRoute().query.page || 1);
+			const currentPage = Number(route.query.page || 1);
 			const totalPages = data.pagination?.total || 1;
 
 			pagination.value.page = data.pagination?.page || 1;
@@ -181,7 +181,6 @@ export const useNotifications = defineStore("useNotifications", () => {
 	const initialPayload = async () => {
 		loading.value = true;
 
-		const route = useRoute();
 		const activePage = route.path === "/berichten";
 
 		const query = {
@@ -387,7 +386,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 		router
 			.replace({
 				query: {
-					...useRoute().query,
+					...route.query,
 					id: message.id,
 				},
 			})
@@ -427,7 +426,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 		router
 			.replace({
 				query: {
-					...useRoute().query,
+					...route.query,
 					id: undefined,
 				},
 			})
@@ -450,7 +449,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 			router
 				.replace({
 					query: {
-						...useRoute().query,
+						...route.query,
 						page: pagination.value.page,
 					},
 				})
@@ -468,7 +467,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 			router
 				.replace({
 					query: {
-						...useRoute().query,
+						...route.query,
 						page: pagination.value.page,
 					},
 				})
@@ -486,7 +485,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 			router
 				.replace({
 					query: {
-						...useRoute().query,
+						...route.query,
 						page: pagination.value.page,
 					},
 				})

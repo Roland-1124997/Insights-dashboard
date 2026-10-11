@@ -37,12 +37,18 @@ export default defineNitroPlugin((nitroApp) => {
 		}
 	});
 
-	nitroApp.hooks.hook("error", (error, { event }) => {
+	nitroApp.hooks.hook("error", (_error, context) => {
+		const event = context?.event;
+
+		if (!event) return;
+
 		const Event = event as H3Event;
 		useCreateRequestLogger(Event).finish();
 	});
 
 	nitroApp.hooks.hook("beforeResponse", (event, { body }) => {
+		if (!event) return;
+
 		const Event = event as H3Event;
 		const response = body as Record<string, any> | undefined;
 
