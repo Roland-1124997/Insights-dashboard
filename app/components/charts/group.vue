@@ -1,3 +1,32 @@
+<template>
+	<ChartsUtilsLegend :categories="categories" v-slot="{ visible, disableToolTip, filterData }">
+		<BarChart
+			:hideTooltip="hideTooltip || disableToolTip"
+			:data="disableToolTip ? [] : filterData(localData)"
+			:height
+			:categories="categories"
+			:y-axis="y_axis"
+			:group-padding="0"
+			:bar-padding="0.2"
+			:x-num-ticks="disableToolTip ? 1 : data.length - 1"
+			:radius="4"
+			:x-formatter="xFormatter"
+			:y-formatter="yFormatter"
+			:hide-legend="true"
+			:padding="{
+				top: 30,
+				left: 0,
+				right: 0,
+				bottom: 0,
+			}"
+			:y-grid-line="true">
+			<template #tooltip="{ values }">
+				<ChartsTooltipsGroup v-if="values" :categories="visible" :values="values" />
+			</template>
+		</BarChart>
+	</ChartsUtilsLegend>
+</template>
+
 <script lang="ts" setup>
 	const { data, height, categories, y_axis } = defineProps({
 		data: {
@@ -48,31 +77,3 @@
 	);
 </script>
 
-<template>
-	<ChartsUtilsLegend :categories="categories" v-slot="{ visible, disableToolTip, filterData }">
-		<BarChart
-			:hideTooltip="hideTooltip || disableToolTip"
-			:data="disableToolTip ? [] : filterData(localData)"
-			:height
-			:categories="categories"
-			:y-axis="y_axis"
-			:group-padding="0"
-			:bar-padding="0.2"
-			:x-num-ticks="disableToolTip ? 1 : data.length - 1"
-			:radius="4"
-			:x-formatter="xFormatter"
-			:y-formatter="yFormatter"
-			:hide-legend="true"
-			:padding="{
-				top: 30,
-				left: 0,
-				right: 0,
-				bottom: 0,
-			}"
-			:y-grid-line="true">
-			<template #tooltip="{ values }">
-				<ChartsTooltipsGroup v-if="values" :categories="visible" :values="values" />
-			</template>
-		</BarChart>
-	</ChartsUtilsLegend>
-</template>

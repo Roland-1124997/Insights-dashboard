@@ -1,6 +1,15 @@
+<template>
+	<div class="overflow-hidden bg-blue-200 border rounded-lg">
+		<TopoJSONMap map-feature-key="countries" :height="mapHeight" :zoom-extent="zoomExtent" :projection="customProjection" :data="worldData" :topo-json="WorldMapTopoJSON" :area-color="areaColor">
+			<template #tooltip="{ values }">
+				<ChartsTooltipsWorldmap v-if="values" :values="{ ...values }" :areaColor />
+			</template>
+		</TopoJSONMap>
+	</div>
+</template>
+
 <script setup lang="ts">
 	import { WorldMapTopoJSON } from "@unovis/ts/maps";
-
 	import { geoMercator } from "d3-geo";
 
 	const { data, height, zoomExtent } = defineProps({
@@ -57,12 +66,3 @@
 	const customProjection = geoMercator().center([0, 0]);
 </script>
 
-<template>
-	<div class="overflow-hidden bg-blue-200 border rounded-lg">
-		<TopoJSONMap map-feature-key="countries" :height="mapHeight" :zoom-extent="zoomExtent" :projection="customProjection" :data="worldData" :topo-json="WorldMapTopoJSON" :area-color="areaColor">
-			<template #tooltip="{ values }">
-				<ChartsTooltipsWorldmap v-if="values" :values="{ ...values }" :areaColor />
-			</template>
-		</TopoJSONMap>
-	</div>
-</template>
