@@ -136,7 +136,8 @@ export const startImapWatcher = async () => {
 
 							data = await useFetchImapSingleMessage(client!, search, FETCH_CONFIG, fetchOpts as any);
 
-							if (eventFlags.incoming) await upsertImapMessageCache(data);
+							if (data?.isSpam) return await useMoveImapMessage(client!, data.uid);
+							else if (eventFlags.incoming) await upsertImapMessageCache(data);
 							else if (eventFlags.update) await updateFlagsImapMessageCache(data);
 						}
 

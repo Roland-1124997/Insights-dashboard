@@ -13,8 +13,7 @@ export const extendHtml = (html: string) => {
 			.replace(/<meta\s+name=["']color-scheme["'][^>]*>/gi, '<meta name="color-scheme" content="light">')
 			.replace(/<meta\s+name=["']supported-color-schemes["'][^>]*>/gi, '<meta name="supported-color-schemes" content="light">')
 			.replace(/@media\s*\(prefers-color-scheme:\s*dark\)\s*\{[\s\S]*?\}\s*/gi, "")
-			.replace(/color-scheme:\s*light\s+dark/gi, "color-scheme: light") +
-		`<style>html,body {color-scheme: light only !important;background: #ffffff !important;}body,body * {color: #000000 !important;}a {color: #0066cc !important;}.button, .button * {color: #000000 !important; background-color: #ffffff !important; border-color: #000000 !important} .button:hover { color: #ffffff !important; }   </style>`
+			.replace(/color-scheme:\s*light\s+dark/gi, "color-scheme: light") + `<style>html,body {color-scheme: light only !important;background: #ffffff !important;}body,body * {color: #000000 !important;}a {color: #0066cc !important;}.button, .button * {color: #000000 !important; background-color: #ffffff !important; border-color: #000000 !important} .button:hover { color: #ffffff !important; }   </style>`
 	);
 };
 
@@ -58,6 +57,13 @@ export const useReleaseImapMailbox = async (lock: any) => {
 	lock.release();
 };
 
+export const useMoveImapMessage = async (client: ImapFlow, search: any, targetMailbox: string = "Spam") => {
+	const lock = await client.getMailboxLock("INBOX");
+
+	await client.messageMove(search, targetMailbox, { uid: true });
+	await useReleaseImapMailbox(lock);
+};
+
 export const buildResponse = async (message: FetchMessageObject, threadmap: Map<string, string>) => {
 	let html = "";
 	let preview = "";
@@ -75,6 +81,7 @@ export const buildResponse = async (message: FetchMessageObject, threadmap: Map<
 	}
 
 	const mail = await simpleParser(message.source);
+	const { isSpam, score } = analyzeSpam(mail);
 
 	const document = new JSDOM(mail.textAsHtml || "");
 	const body = document.window.document.body;
@@ -108,6 +115,8 @@ export const buildResponse = async (message: FetchMessageObject, threadmap: Map<
 		preview,
 		html,
 		references: mail.references || null,
+		isSpam,
+		score,
 	};
 };
 
@@ -127,7 +136,7 @@ export const useFetchImapMessages = async (client: ImapFlow, criteria: any, fetc
 	try {
 		for await (let message of client.fetch(criteria, fetchOptions)) {
 			const response = await buildResponse(message, threadmap);
-			if (response) {
+			if (response && !response.isSpam) {
 				messages.push(response);
 			}
 		}

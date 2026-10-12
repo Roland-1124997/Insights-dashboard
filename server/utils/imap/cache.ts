@@ -49,6 +49,8 @@ const filterCachedMessages = (messages: any[], filter: string, search: string) =
 	const query = search.trim().toLowerCase();
 
 	return messages.filter((message) => {
+		if (message.isSpam) return false;
+
 		const isSeen = (message.flags ?? []).includes("\\Seen");
 		const matchesFilter = seenFilter ? isSeen : unseenFilter ? !isSeen : true;
 
@@ -66,7 +68,7 @@ export const buildImapMessagesResponse = (allMessages: any[], options: ImapMessa
 	const search = String(options.search ?? "");
 
 	const messages = filterCachedMessages(allMessages, filter, search);
-	const unseen = allMessages.filter((m: any) => !(m.flags ?? []).includes("\\Seen")).length;
+	const unseen = allMessages.filter((m: any) => !m.isSpam && !(m.flags ?? []).includes("\\Seen")).length;
 	const totalMessages = messages.length;
 
 	const { page, total } = makeImapPagination(totalMessages, options.page, options.limit);
