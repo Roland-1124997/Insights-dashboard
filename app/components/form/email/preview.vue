@@ -39,7 +39,7 @@
 		<div class="flex-1 py-2 pt-3 pb-4 mt-4 overflow-y-auto border-t border-gray-200 md:p-4" aria-label="Bericht inhoud">
 			<article class="prose text-gray-800 max-w-none">
 				<div :class="!collapsed ? ' h-[58vh]' : ' h-[66.6vh]'">
-					<iframe :srcdoc="props.message.html" sandbox="" :title="props.message.html" class="w-full h-full"></iframe>
+					<iframe :srcdoc="props.message.html" sandbox="" :title="props.message.html" class="w-full h-full" style="color-scheme: only light"></iframe>
 				</div>
 			</article>
 		</div>
