@@ -7,9 +7,7 @@ import type { FetchMessageObject, FetchQueryObject, FetchOptions } from "imapflo
 const { IMAP_HOST, IMAP_PORT, IMAP_SECURE, IMAP_USER, IMAP_PASS } = useRuntimeConfig();
 
 export const extendHtml = (html: string) => {
-	return (
-		(html += `<head><base target="_blank"></head>`)
-);
+	return (html += `<head><base target="_blank"></head>`);
 };
 
 export const useConnectClient = async () => {

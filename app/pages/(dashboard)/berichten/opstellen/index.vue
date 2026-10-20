@@ -4,17 +4,47 @@
 			<FormBase :appendToBody :schema="schema.notification.frontend" :request v-slot="{ loading, errors }">
 				<div class="grid grid-cols-3 gap-2">
 					<div class="sr-only" aria-hidden>
-						<UtilsInput name="referentie" label="Referentie" icon-name="akar-icons:link-chain" type="text" placeholder="Referentie" :disabled="loading" :hide-label="true" :initial-value="repliedContent" />
+						<UtilsInput
+							name="referentie"
+							label="Referentie"
+							icon-name="akar-icons:link-chain"
+							type="text"
+							placeholder="Referentie"
+							:disabled="loading"
+							:hide-label="true"
+							:initial-value="repliedContent" />
 					</div>
 
 					<div class="col-span-3">
-						<UtilsInput name="email" label="E-mailadres ontvanger" icon-name="akar-icons:envelope" type="email" placeholder="gebruiker@example.nl" :initial-value="email" :required="true" :disabled="loading" :hide-label="true" />
+						<UtilsInput
+							name="email"
+							label="E-mailadres ontvanger"
+							icon-name="akar-icons:envelope"
+							type="email"
+							placeholder="gebruiker@example.nl"
+							:initial-value="email"
+							:required="true"
+							:disabled="loading"
+							:hide-label="true" />
 					</div>
 					<div class="col-span-2">
-						<UtilsInput name="onderwerp" label="Onderwerp van het bericht" icon-name="akar-icons:tag" type="text" placeholder="Onderwerp" :initial-value="onderwerp" :disabled="loading" :required="true" :hide-label="true" />
+						<UtilsInput
+							name="onderwerp"
+							label="Onderwerp van het bericht"
+							icon-name="akar-icons:tag"
+							type="text"
+							placeholder="Onderwerp"
+							:initial-value="onderwerp"
+							:disabled="loading"
+							:required="true"
+							:hide-label="true" />
 					</div>
 
-					<button type="submit" class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg select-none hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400" aria-label="Verstuur bericht" :disabled="loading">
+					<button
+						type="submit"
+						class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg select-none hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+						aria-label="Verstuur bericht"
+						:disabled="loading">
 						<span v-if="!loading">Verstuur</span>
 						<span v-else>verzenden...</span>
 					</button>
@@ -26,7 +56,14 @@
 			<TiptapMenu class="flex items-center p-1 py-1 mt-2 mb-2 overflow-x-auto underline border rounded-lg" :editor="editor" :hidden :editable="true" />
 			<div :class="content != '' ? 'gap-4 p-2' : 'p-3'" class="grid grid-cols-1 mt-3 overflow-auto outline-none appearance-none max-h-[62vh] md:max-h-[67vh] rounded-lg bg-gray-50">
 				<TiptapEditor :class="content != '' ? 'px-2 border-l-2 border-yellow-500 max-w-none bg-yellow-50' : ''" :editor="editor" v-model="content" aria-label="Bericht inhoud" />
-				<iframe v-if="content" ref="previewFrame" :srcdoc="content" sandbox="" title="inhoud mail" class="w-full overflow-scroll h-[65vh] px-2 border-l-2 border-blue-500 text-balance viewer" style="color-scheme: only light"></iframe>
+				<iframe
+					v-if="content"
+					ref="previewFrame"
+					:srcdoc="content"
+					sandbox=""
+					title="inhoud mail"
+					class="w-full overflow-scroll h-[65vh] px-2 border-l-2 border-blue-500 text-balance viewer"
+					style="color-scheme: only light"></iframe>
 			</div>
 		</section>
 	</div>
@@ -122,7 +159,9 @@
 	});
 
 	const successMessage = route.query.reply ? "Je antwoord is succesvol verzonden!" : "Je bericht is succesvol verzonden!";
-	const failureMessage = route.query.reply ? "Er is een fout opgetreden bij het verzenden van je antwoord. Probeer het later opnieuw." : "Er is een fout opgetreden bij het verzenden van je bericht. Probeer het later opnieuw.";
+	const failureMessage = route.query.reply
+		? "Er is een fout opgetreden bij het verzenden van je antwoord. Probeer het later opnieuw."
+		: "Er is een fout opgetreden bij het verzenden van je bericht. Probeer het later opnieuw.";
 
 	const request: requestOptions = {
 		url: "/api/integrations/strato/mail" as FetchUrl,
