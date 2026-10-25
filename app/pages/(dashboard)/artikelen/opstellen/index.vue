@@ -6,7 +6,12 @@
 					<div :class="isSidebarExpanded ? 'md:px-4' : 'md:px-10 md:mr-1'" class="z-10 bg-white rounded-lg md:bg-gray-50 md:border-r">
 						<div class="relative flex flex-col mt-1 outline-none appearance-none md:mt-auto h-[75vh] sm:h-[85vh] md:h-[88vh]">
 							<div class="sticky top-0 z-20 flex items-center gap-2 pb-4 bg-white md:pb-0 md:bg-transparent md:mt-3">
-								<TiptapMenu v-if="!loaded" class="flex items-center p-1 py-1 mb-1 overflow-x-auto underline bg-gray-100 border rounded-lg md:bg-white" :editor="editor" :editable v-model="connectionId" />
+								<TiptapMenu
+									v-if="!loaded"
+									class="flex items-center p-1 py-1 mb-1 overflow-x-auto underline bg-gray-100 border rounded-lg md:bg-white"
+									:editor="editor"
+									:editable
+									v-model="connectionId" />
 
 								<FormBase :appendToBody :request :schema="schema.article.frontend" v-slot="{ loading, errors, meta }">
 									<div v-if="!loaded" class="flex gap-2 -mt-1">
@@ -14,12 +19,16 @@
 											<Icon name="akar-icons:triangle-alert-fill" class="w-4 h-4 text-blue-600" aria-hidden="true" />
 										</p>
 
-										<button @click.prevent="toggleEditable" class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none cursor-pointer select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+										<button
+											@click.prevent="toggleEditable"
+											class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none cursor-pointer select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
 											<icon :name="!editable ? 'akar-icons:edit' : 'akar-icons:eye'" class="w-4 h-4" aria-hidden="true" />
 											<span class="sr-only">{{ !editable ? "Bewerken" : "Voorbeeld" }}</span>
 										</button>
 
-										<button v-if="Object.keys(errors).length < 1" class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+										<button
+											v-if="Object.keys(errors).length < 1"
+											class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
 											<icon name="akar-icons:save" class="w-4 h-4" aria-hidden="true" />
 											<span class="sr-only">{{ editId ? "Bijwerken" : "Aanmaken" }}</span>
 										</button>
@@ -260,7 +269,9 @@
 	};
 
 	const successMessage = editId.value ? "Het artikel is succesvol bijgewerkt." : "Het artikel is succesvol aangemaakt.";
-	const failureMessage = editId.value ? "Er is een fout opgetreden bij het bijwerken van het artikel. Probeer het later opnieuw." : "Er is een fout opgetreden bij het aanmaken van het artikel. Probeer het later opnieuw.";
+	const failureMessage = editId.value
+		? "Er is een fout opgetreden bij het bijwerken van het artikel. Probeer het later opnieuw."
+		: "Er is een fout opgetreden bij het aanmaken van het artikel. Probeer het later opnieuw.";
 
 	const { upload, setFormData } = useHandleFormData(successMessage, failureMessage);
 
