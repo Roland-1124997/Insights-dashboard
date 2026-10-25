@@ -150,8 +150,10 @@ export const usePush = async () => {
 };
 
 const postToWorker = async (type: string, payload: Record<string, unknown> | null = null) => {
-	const registration = await navigator.serviceWorker.getRegistration();
-	if (registration?.active) registration.active.postMessage({ type, payload });
+	try {
+		const registration = await navigator.serviceWorker.getRegistration();
+		if (registration?.active) registration.active.postMessage({ type, payload });
+	} catch {}
 };
 
 const urlBase64ToUint8Array = (base64String: string) => {
