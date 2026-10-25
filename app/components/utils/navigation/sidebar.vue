@@ -114,7 +114,7 @@
 		if (sidebarHoverTimeout) clearTimeout(sidebarHoverTimeout);
 		sidebarHoverTimeout = setTimeout(() => {
 			isSidebarHovered.value = true;
-		}, 3000);
+		}, 2000);
 	};
 
 	const stopSidebarHover = () => {
