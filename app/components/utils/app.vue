@@ -4,7 +4,7 @@
 			<UtilsInstallPrompt v-if="!disablePwaPrompt" />
 		</ClientOnly>
 
-		<div :class="installed ? 'pt-[2.5rem] md:pt-[1rem] xl:pt-0' : ''" class="flex w-full h-full overflow-hidden">
+		<div :class="installed ? 'pt-[3.9rem] md:pt-[1rem] xl:pt-0' : ''" class="flex w-full h-full overflow-hidden">
 			<slot></slot>
 		</div>
 
