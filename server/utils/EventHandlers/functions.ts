@@ -49,8 +49,10 @@ export const defineBaseEventHandler = (
 		}
 
 		if (ignorePath.includes(path) || ignoredMethods.includes(method) || isValid) {
-			await stored.removeItem(token as string);
-			deleteCookie(event, "csrf-token");
+			if (token) {
+				await stored.removeItem(token);
+				deleteCookie(event, "csrf-token");
+			}
 
 			const client = await serverSupabaseClient(event);
 			const server = serverSupabaseServiceRole(event);
