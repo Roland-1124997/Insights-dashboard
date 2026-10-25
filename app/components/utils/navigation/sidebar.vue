@@ -3,11 +3,11 @@
 		:class="[
 			'fixed inset-y-0 left-0 z-[60] w-52 overflow-hidden bg-gray-50 border-r transform transition-transform duration-300 ease-in-out lg:transition-[width] lg:duration-500 lg:ease-in-out lg:translate-x-0 h-full lg:static lg:inset-0',
 			isSidebarExpanded ? 'lg:w-52' : 'lg:w-16',
-			isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full',
+			isMobileMenuOpen ? 'translate-x-0 w-full' : '-translate-x-full',
 			installed ? 'pt-[2.5rem] md:pt-0' : '',
 		]">
 		<div class="flex flex-col h-full select-none" @mouseenter="startSidebarHover" @mouseleave="stopSidebarHover">
-			<div class="flex items-center justify-between h-16 px-4 border-b">
+			<div :class="installed ? ' mt-[1.3rem] sm:mt-0' : ''" class="flex items-center justify-between h-16 px-4 border-b">
 				<div class="flex items-center space-x-3">
 					<div class="flex items-center justify-center flex-shrink-0 w-8 h-8 overflow-hidden bg-blue-600 rounded-lg">
 						<img src="\svgs\icon_512-blue.svg" alt="Insights Logo" draggable="false" class="rounded-lg w-7 h-7" />
@@ -43,7 +43,7 @@
 						<span
 							v-if="route.alert && Number(useAlertCount(route.toolbar?.store)) > 0"
 							:class="isSidebarExpanded ? 'opacity-0' : 'opacity-100'"
-							class="absolute inline-flex items-center justify-center flex-shrink-0 p-1 text-xs font-bold leading-none text-white transition-opacity duration-500 ease-in-out bg-red-600 rounded-full left-7 -top-1 min-h-5 min-w-5 h-fit w-fit">
+							class="absolute items-center justify-center flex-shrink-0 hidden p-1 text-xs font-bold leading-none text-white transition-opacity duration-500 ease-in-out bg-red-600 rounded-full left-7 -top-1 min-h-5 min-w-5 h-fit w-fit lg:inline-flex">
 							{{ useAlertCount(route.toolbar?.store, true) }}
 						</span>
 					</NuxtLink>
@@ -69,7 +69,7 @@
 							<span
 								v-if="route.alert && Number(useAlertCount(route.toolbar?.store)) > 0"
 								:class="isSidebarExpanded ? 'opacity-0' : 'opacity-100'"
-								class="absolute inline-flex items-center justify-center flex-shrink-0 p-1 text-xs font-bold leading-none text-white transition-opacity duration-500 ease-in-out bg-red-600 rounded-full left-7 -top-1 min-h-5 min-w-5 h-fit w-fit">
+								class="absolute items-center justify-center flex-shrink-0 hidden p-1 text-xs font-bold leading-none text-white transition-opacity duration-500 ease-in-out bg-red-600 rounded-full left-7 -top-1 min-h-5 min-w-5 h-fit w-fit lg:inline-flex">
 								{{ useAlertCount(route.toolbar?.store, true) }}
 							</span>
 						</NuxtLink>
