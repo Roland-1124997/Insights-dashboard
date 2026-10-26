@@ -98,7 +98,7 @@ li::marker {
 }
 
 .tiptap img {
-	@apply  object-contain my-4 rounded-lg select-none last:mb-10;
+	@apply object-contain my-4 rounded-lg select-none last:mb-10;
 }
 
 .tiptap.ProseMirror img.ProseMirror-selectednode {
