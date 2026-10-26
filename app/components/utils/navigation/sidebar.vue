@@ -6,7 +6,7 @@
 			isMobileMenuOpen ? 'translate-x-0 w-full' : '-translate-x-full',
 			installed ? 'pt-[2.5rem] md:pt-0' : '',
 		]">
-		<div class="flex flex-col h-full select-none" @mouseenter="startSidebarHover" @mouseleave="stopSidebarHover">
+		<div class="flex flex-col h-full select-none" @touchstart="startSidebarHover(500)" @touchend="stopSidebarHover" @mouseenter="startSidebarHover()" @mouseleave="stopSidebarHover">
 			<div :class="installed ? ' mt-[1.3rem] sm:mt-0' : ''" class="flex items-center justify-between h-16 px-4 border-b">
 				<div class="flex items-center space-x-3">
 					<div class="flex items-center justify-center flex-shrink-0 w-8 h-8 overflow-hidden bg-blue-600 rounded-lg">
@@ -21,7 +21,7 @@
 				</button>
 			</div>
 
-			<nav id="sidebar-menu" aria-label="Hoofdnavigatie" class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+			<nav id="sidebar-menu" aria-label="Hoofdnavigatie" :class="isSidebarExpanded ? 'overflow-y-auto' : 'overflow-y-hidden'" class="flex-1 px-3 py-4 space-y-1 overflow-x-hidden">
 				<ClientOnly>
 					<NuxtLink
 						v-for="(route, to) in routes"
@@ -110,11 +110,11 @@
 		setExpanded(newValue);
 	});
 
-	const startSidebarHover = () => {
+	const startSidebarHover = (delay: number = 2000) => {
 		if (sidebarHoverTimeout) clearTimeout(sidebarHoverTimeout);
 		sidebarHoverTimeout = setTimeout(() => {
 			isSidebarHovered.value = true;
-		}, 2000);
+		}, delay);
 	};
 
 	const stopSidebarHover = () => {
