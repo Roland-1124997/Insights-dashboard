@@ -1,11 +1,14 @@
 <template>
 	<aside class="pl-4 select-none">
-		<nav class="mb-2 hidden md:inline md:w-64 h-[73vh] md:h-[76vh] overflow-y-auto">
-			<h1 class="mb-2 text-lg font-semibold">Inhoudsopgave</h1>
+		<nav class="mb-2 overflow-y-auto xl:inline">
+			<h1 class="hidden mb-2 text-lg font-semibold xl:flex">Inhoudsopgave</h1>
 
-			<ul v-if="Anchors.length > 1" class="flex flex-col space-y-1 overflow-auto">
-				<TiptapTableContent :active-id="activeId" :on-item-click="onItemClick" v-for="node in Anchors" :key="node.id" :node="node" />
-			</ul>
+			<div v-if="Anchors.length > 1" class="h-[42rem] md:h-[40rem] overflow-y-scroll">
+				<ul class="flex flex-col mt-5 space-y-1 overflow-auto xl:mt-0">
+					<TiptapTableContent :active-id="activeId" :on-item-click="onItemClick" v-for="node in Anchors" :key="node.id" :node="node" />
+				</ul>
+			</div>
+
 			<p v-else class="text-gray-500">Geen inhoudsopgave beschikbaar.</p>
 		</nav>
 	</aside>

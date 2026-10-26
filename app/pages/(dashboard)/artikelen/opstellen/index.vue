@@ -2,10 +2,10 @@
 	<div class="">
 		<div class="">
 			<div v-if="editor">
-				<div :class="isSidebarExpanded ? 'lg:grid-cols-[1fr_2fr]' : 'lg:grid-cols-[1.8fr_1.2fr]'" class="grid h-full grid-cols-1">
+				<div :class="isSidebarExpanded ? 'xl:grid-cols-[1fr_2fr]' : 'xl:grid-cols-[1.8fr_1.2fr]'" class="grid h-full grid-cols-1">
 					<div :class="isSidebarExpanded ? 'md:px-4' : 'md:px-10 md:mr-1'" class="z-10 p-2 rounded-lg bg-gray-50 md:p-0 md:border-r">
 						<div class="relative flex flex-col mt-1 outline-none appearance-none md:mt-auto h-[75vh] sm:h-[85vh] md:h-[88vh]">
-							<div class="sticky top-0 z-20 flex items-center justify-end gap-2 pb-4 bg-gray-50 md:pb-0 md:bg-transparent md:mt-3">
+							<div class="sticky top-0 z-20 flex items-center justify-end gap-2 pb-1 bg-gray-50 md:justify-start md:pb-0 md:mt-3">
 								<TiptapMenu
 									v-if="!loaded"
 									class="items-center hidden p-1 py-1 mb-1 overflow-x-auto underline bg-gray-100 border rounded-lg md:flex md:bg-white"
@@ -14,7 +14,7 @@
 									v-model="connectionId" />
 
 								<FormBase :appendToBody :request :schema="schema.article.frontend" v-slot="{ loading, errors, meta }">
-									<div v-if="!loaded" class="flex gap-2 -mt-1">
+									<div v-if="!loaded" class="flex gap-2 -mt-[0.15rem]">
 										<p v-if="Object.keys(errors).length" class="flex items-center w-full gap-1 p-2 text-blue-600 border border-blue-600 rounded-md select-none">
 											<Icon name="akar-icons:triangle-alert-fill" class="w-4 h-4 text-blue-600" aria-hidden="true" />
 											<span class="sr-only">Er zijn {{ Object.keys(errors).length }} fout(en) in het formulier.</span>
@@ -36,7 +36,6 @@
 
 										<template class="flex gap-2 md:hidden">
 											<button
-												v-if="!loading"
 												@click.prevent="editor?.commands.undo()"
 												class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none cursor-pointer select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
 												<icon name="akar-icons:arrow-back" class="w-4 h-4" aria-hidden="true" />
@@ -44,11 +43,17 @@
 											</button>
 
 											<button
-												v-if="!loading"
 												@click.prevent="editor?.commands.redo()"
 												class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none cursor-pointer select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
 												<icon name="akar-icons:arrow-forward" class="w-4 h-4" aria-hidden="true" />
 												<span class="sr-only"> redo </span>
+											</button>
+										</template>
+
+										<template class="flex xl:hidden">
+											<button @click.prevent="toggleTableOfContents" class="flex items-center w-full gap-1 p-2 text-blue-600 border border-blue-600 rounded-md select-none">
+												<icon name="akar-icons:text-align-justified" class="w-4 h-4" aria-hidden="true" />
+												<span class="sr-only"> Inhoudsopgave </span>
 											</button>
 										</template>
 									</div>
@@ -63,7 +68,7 @@
 								</FormBase>
 							</div>
 
-							<div ref="tiptap-container" class="relative flex-1 w-full min-h-0 p-2 overflow-x-hidden overflow-b-auto md:p-10">
+							<div ref="tiptap-container" class="relative flex-1 w-full min-h-0 p-2 overflow-x-hidden overflow-b-auto md:py-10">
 								<FloatingMenu :editor="editor" class="absolute !right-0 !left-auto z-40 flex items-center justify-end max-w-[9.5rem] overflow-x-auto md:hidden">
 									<TiptapMenu
 										:hidden
@@ -85,9 +90,27 @@
 							</div>
 						</div>
 					</div>
-					<div class="overflow-scroll md:h-[88vh]">
-						<TiptapTableList v-if="!loaded" :Anchors="Anchors" v-model="activeId" />
+					<div
+						v-if="!loaded"
+						:class="openTableOfContents ? 'translate-x-0' : 'translate-x-full pointer-events-none'"
+						class="fixed inset-y-0 right-0 z-[71] w-full overflow-y-auto transition-transform duration-300 ease-in-out bg-white shadow-xl md:w-[24rem] xl:relative xl:inset-auto xl:z-auto xl:block xl:w-auto xl:max-w-none xl:translate-x-0 xl:overflow-x-hidden xl:overflow-y-auto xl:bg-transparent xl:shadow-none xl:pointer-events-auto h-full xl:h-[86vh]">
+						<div :class="installed ? ' mt-[4rem] md:mt-[1rem] xl:mt-0' : ''" class="flex items-center justify-between h-16 px-4 border-b xl:hidden">
+							<div class="flex items-center space-x-3">
+								<div class="flex items-center justify-center flex-shrink-0 w-8 h-8 overflow-hidden bg-blue-600 rounded-lg">
+									<img src="\svgs\icon_512-blue.svg" alt="Insights Logo" draggable="false" class="rounded-lg w-7 h-7" />
+								</div>
+								<h1 class="text-xl font-bold transition-opacity duration-300 text-blue-950">Inhoudsopgave</h1>
+							</div>
+
+							<button aria-label="sluit sidebar menu" @click="closeTableOfContents" class="flex items-center justify-center p-2 rounded-lg xl:hidden hover:bg-gray-100">
+								<Icon name="akar-icons:x-small" size="1.6rem" />
+								<span class="sr-only">Sluit menu</span>
+							</button>
+						</div>
+
+						<TiptapTableList :Anchors="Anchors" v-model="activeId" @update:model-value="closeTableOfContents" />
 					</div>
+					<div v-if="openTableOfContents" class="fixed inset-0 select-none z-[70] bg-black/50 xl:hidden" aria-hidden="true" @click="closeTableOfContents"></div>
 				</div>
 			</div>
 		</div>
@@ -127,6 +150,18 @@
 			},
 		],
 	});
+
+	const { installed } = useCheckPwa();
+
+	const openTableOfContents = ref(false);
+
+	const toggleTableOfContents = () => {
+		openTableOfContents.value = !openTableOfContents.value;
+	};
+
+	const closeTableOfContents = () => {
+		openTableOfContents.value = false;
+	};
 
 	const hidden = ["Highlight", "Code Block", "Details", "Metadata", "Redo", "Undo", "Bullet List"];
 

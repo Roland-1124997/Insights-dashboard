@@ -3,7 +3,7 @@
 		<button
 			@click="onItemClick(node)"
 			:data-item-index="node.itemIndex"
-			class="flex items-start gap-1 p-1 px-6 text-sm font-semibold rounded hover:bg-blue-100 hover:text-blue-950"
+			class="flex items-start w-[95%] xl:full gap-1 p-1 px-6 text-sm font-semibold rounded w- hover:bg-blue-100 hover:text-blue-950"
 			:class="[{ 'text-blue-950 bg-blue-100': active, 'text-gray-500': !active }]"
 			:style="paddingStyle">
 			<span>{{ node.level }}.</span>
