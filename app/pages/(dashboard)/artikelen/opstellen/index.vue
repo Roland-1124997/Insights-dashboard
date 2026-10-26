@@ -5,10 +5,10 @@
 				<div :class="isSidebarExpanded ? 'lg:grid-cols-[1fr_2fr]' : 'lg:grid-cols-[1.8fr_1.2fr]'" class="grid h-full grid-cols-1">
 					<div :class="isSidebarExpanded ? 'md:px-4' : 'md:px-10 md:mr-1'" class="z-10 bg-white rounded-lg md:bg-gray-50 md:border-r">
 						<div class="relative flex flex-col mt-1 outline-none appearance-none md:mt-auto h-[75vh] sm:h-[85vh] md:h-[88vh]">
-							<div class="sticky top-0 z-20 flex items-center gap-2 pb-4 bg-white md:pb-0 md:bg-transparent md:mt-3">
+							<div class="sticky top-0 z-20 flex items-center justify-end gap-2 pb-4 bg-white md:pb-0 md:bg-transparent md:mt-3">
 								<TiptapMenu
 									v-if="!loaded"
-									class="flex items-center p-1 py-1 mb-1 overflow-x-auto underline bg-gray-100 border rounded-lg md:bg-white"
+									class="items-center hidden p-1 py-1 mb-1 overflow-x-auto underline bg-gray-100 border rounded-lg md:flex md:bg-white"
 									:editor="editor"
 									:editable
 									v-model="connectionId" />
@@ -17,6 +17,7 @@
 									<div v-if="!loaded" class="flex gap-2 -mt-1">
 										<p v-if="Object.keys(errors).length" class="flex items-center w-full gap-1 p-2 text-blue-600 border border-blue-600 rounded-md select-none">
 											<Icon name="akar-icons:triangle-alert-fill" class="w-4 h-4 text-blue-600" aria-hidden="true" />
+											<span class="sr-only">Er zijn {{ Object.keys(errors).length }} fout(en) in het formulier.</span>
 										</p>
 
 										<button
@@ -32,6 +33,24 @@
 											<icon name="akar-icons:save" class="w-4 h-4" aria-hidden="true" />
 											<span class="sr-only">{{ editId ? "Bijwerken" : "Aanmaken" }}</span>
 										</button>
+
+										<template class="flex gap-2 md:hidden">
+											<button
+												v-if="!loading"
+												@click.prevent="editor?.commands.undo()"
+												class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none cursor-pointer select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+												<icon name="akar-icons:arrow-back" class="w-4 h-4" aria-hidden="true" />
+												<span class="sr-only"> undo </span>
+											</button>
+
+											<button
+												v-if="!loading"
+												@click.prevent="editor?.commands.redo()"
+												class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none cursor-pointer select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+												<icon name="akar-icons:arrow-forward" class="w-4 h-4" aria-hidden="true" />
+												<span class="sr-only"> redo </span>
+											</button>
+										</template>
 									</div>
 
 									<div class="sr-only" aria-hidden>
@@ -44,7 +63,17 @@
 								</FormBase>
 							</div>
 
-							<div ref="tiptap-container" class="relative flex-1 min-h-0 p-2 overflow-x-hidden overflow-y-auto md:p-10">
+							<div ref="tiptap-container" class="relative flex-1 w-full min-h-0 p-2 overflow-x-hidden overflow-b-auto md:p-10">
+								<FloatingMenu :editor="editor" class="absolute !right-0 !left-auto z-40 flex items-center justify-end max-w-[9.5rem] overflow-x-auto md:hidden">
+									<TiptapMenu
+										:hidden
+										v-if="!loaded"
+										class="flex items-center min-w-full p-1 py-1 mb-1 overflow-x-auto underline bg-gray-100 border rounded-lg w-max md:bg-white"
+										:editor="editor"
+										:editable
+										v-model="connectionId" />
+								</FloatingMenu>
+
 								<drag-handle v-if="editor" :editor="editor" :compute-position-config="{ placement: 'left-start', strategy: 'absolute' }">
 									<div class="custom-drag-handle">
 										<icon name="fluent:re-order-dots-20-filled" class="w-4 h-4 text-gray-800" aria-hidden="true" />
@@ -71,6 +100,7 @@
 	import { all, createLowlight } from "lowlight";
 	import { DragHandle } from "@tiptap/extension-drag-handle-vue-3";
 	import { NodeRange } from "@tiptap/extension-node-range";
+	import { FloatingMenu } from "@tiptap/vue-3/menus";
 
 	useSeoMeta({
 		title: "Insights - Artikel Opstellen",
@@ -97,6 +127,8 @@
 			},
 		],
 	});
+
+	const hidden = ["Highlight", "Code Block", "Details", "Metadata", "Redo", "Undo", "Bullet List"];
 
 	const { addToast } = useToast();
 	const { isSidebarExpanded } = useSideBarState();
@@ -233,6 +265,7 @@
 		editable: editable.value,
 		extensions: [
 			...articleExtensions,
+
 			CodeBlockLowlight.configure({
 				lowlight,
 				languageClassPrefix: "language-",
