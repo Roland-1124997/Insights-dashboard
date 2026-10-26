@@ -3,9 +3,9 @@
 		<div class="">
 			<div v-if="editor">
 				<div :class="isSidebarExpanded ? 'lg:grid-cols-[1fr_2fr]' : 'lg:grid-cols-[1.8fr_1.2fr]'" class="grid h-full grid-cols-1">
-					<div :class="isSidebarExpanded ? 'md:px-4' : 'md:px-10 md:mr-1'" class="z-10 bg-white rounded-lg md:bg-gray-50 md:border-r">
+					<div :class="isSidebarExpanded ? 'md:px-4' : 'md:px-10 md:mr-1'" class="z-10 p-2 rounded-lg bg-gray-50 md:p-0 md:border-r">
 						<div class="relative flex flex-col mt-1 outline-none appearance-none md:mt-auto h-[75vh] sm:h-[85vh] md:h-[88vh]">
-							<div class="sticky top-0 z-20 flex items-center justify-end gap-2 pb-4 bg-white md:pb-0 md:bg-transparent md:mt-3">
+							<div class="sticky top-0 z-20 flex items-center justify-end gap-2 pb-4 bg-gray-50 md:pb-0 md:bg-transparent md:mt-3">
 								<TiptapMenu
 									v-if="!loaded"
 									class="items-center hidden p-1 py-1 mb-1 overflow-x-auto underline bg-gray-100 border rounded-lg md:flex md:bg-white"
