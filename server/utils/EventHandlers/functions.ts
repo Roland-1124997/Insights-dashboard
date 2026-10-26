@@ -64,7 +64,11 @@ export const defineBaseEventHandler = (
 
 			const { data: user } = await useSessionExists(event, client);
 
-			return callback(event, { client, user: { ...user, isPassKey: isPasskeyUser } as SupaBaseUser, server });
+			return callback(event, {
+				client,
+				user: user ? ({ ...user, isPassKey: isPasskeyUser } as SupaBaseUser) : null,
+				server,
+			});
 		}
 
 		return useReturnResponse(event, {
