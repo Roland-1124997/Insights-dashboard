@@ -172,7 +172,6 @@ const artcilePlaceholder = Placeholder.configure({
 	},
 });
 
-
 //--------------------------------------------------------------------------------------------
 
 const replaceImageContent = (content: any, srcToFilename: Map<string, string>) => {

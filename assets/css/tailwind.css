@@ -70,7 +70,7 @@ li::marker {
 	height: 0;
 }
 
-.tiptap>*+* {
+.tiptap > * + * {
 	margin-top: 0.5em;
 }
 
@@ -210,27 +210,27 @@ li::marker {
 	@apply font-bold;
 }
 
-.tiptap .details>button {
+.tiptap .details > button {
 	@apply flex items-center justify-center bg-transparent rounded w-5 h-5 overflow-hidden text-xs leading-none mt-[0.1rem] p-0;
 }
 
-.tiptap .details>button:hover {
+.tiptap .details > button:hover {
 	@apply bg-gray-300;
 }
 
-.tiptap .details>button::before {
+.tiptap .details > button::before {
 	content: "▶";
 }
 
-.tiptap .details.is-open>button::before {
+.tiptap .details.is-open > button::before {
 	transform: rotate(90deg);
 }
 
-.tiptap .details>div {
+.tiptap .details > div {
 	@apply flex flex-col w-full gap-1;
 }
 
-.tiptap .details>div>[data-type="detailsContent"]> :last-child {
+.tiptap .details > div > [data-type="detailsContent"] > :last-child {
 	@apply mb-2;
 }
 

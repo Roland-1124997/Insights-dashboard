@@ -6,19 +6,12 @@
 					<div :class="isSidebarExpanded ? 'md:px-4' : 'md:px-10 md:mr-1'" class="z-10 p-2 rounded-lg bg-gray-50 md:p-0 md:border-r">
 						<div class="relative flex flex-col mt-1 outline-none appearance-none md:mt-auto h-[75vh] sm:h-[85vh] md:h-[88vh]">
 							<div class="sticky top-0 z-20 flex items-center justify-end gap-2 pb-1 bg-gray-50 md:justify-start md:pb-0 md:mt-3">
-								<TiptapMenu
-									v-if="!loaded"
-									class="items-center hidden p-1 py-1 mb-1 overflow-x-auto underline bg-white border rounded-lg md:flex"
-									:editor="editor"
-									:editable
-									v-model="connectionId" />
+								<TiptapMenu v-if="!loaded" class="items-center hidden p-1 py-1 mb-1 overflow-x-auto underline bg-white border rounded-lg md:flex" :editor="editor" :editable v-model="connectionId" />
 
 								<template class="inline md:hidden">
 									<TiptapMenuColor v-model="openOptions" :options />
-
 								</template>
 
-								
 								<FormBase :appendToBody :request :schema="schema.article.frontend" v-slot="{ loading, errors, meta }">
 									<div v-if="!loaded" class="flex gap-2 -mt-[0.15rem]">
 										<p v-if="Object.keys(errors).length" class="flex items-center w-full gap-1 p-2 text-blue-600 border border-blue-600 rounded-md select-none">
