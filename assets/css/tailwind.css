@@ -44,6 +44,14 @@ body {
 	@apply text-base text-balance;
 }
 
+.tiptap .ProseMirror-selectednoderange:not(:has(br.ProseMirror-trailingBreak)) {
+	@apply text-white bg-blue-800;
+}
+
+::selection {
+	@apply text-white bg-blue-800;
+}
+
 .bullet_class {
 	@apply pl-5 list-disc list-outside;
 }
@@ -62,9 +70,10 @@ li::marker {
 	height: 0;
 }
 
-.tiptap > * + * {
+.tiptap>*+* {
 	margin-top: 0.5em;
 }
+
 .tiptap h1 {
 	@apply mb-6 text-4xl md:text-[3rem] md:leading-10 font-bold text-black text-balance scroll-m-64;
 }
@@ -201,27 +210,27 @@ li::marker {
 	@apply font-bold;
 }
 
-.tiptap .details > button {
+.tiptap .details>button {
 	@apply flex items-center justify-center bg-transparent rounded w-5 h-5 overflow-hidden text-xs leading-none mt-[0.1rem] p-0;
 }
 
-.tiptap .details > button:hover {
+.tiptap .details>button:hover {
 	@apply bg-gray-300;
 }
 
-.tiptap .details > button::before {
+.tiptap .details>button::before {
 	content: "▶";
 }
 
-.tiptap .details.is-open > button::before {
+.tiptap .details.is-open>button::before {
 	transform: rotate(90deg);
 }
 
-.tiptap .details > div {
+.tiptap .details>div {
 	@apply flex flex-col w-full gap-1;
 }
 
-.tiptap .details > div > [data-type="detailsContent"] > :last-child {
+.tiptap .details>div>[data-type="detailsContent"]> :last-child {
 	@apply mb-2;
 }
 
@@ -304,6 +313,6 @@ input:-webkit-autofill:focus {
 	}
 
 	.custom-drag-handle {
-		@apply flex items-center gap-1 p-1 mr-4 bg-gray-100 rounded cursor-grab;
+		@apply md:flex items-center gap-1 p-1 text-gray-800 hidden rounded bg-gray-200 xl:mr-2 md:mr-1.5 lg:mr-1 cursor-grab;
 	}
 }

@@ -98,8 +98,9 @@ const link = Link.configure({
 });
 
 const highlight = Highlight.configure({
+	multicolor: true,
 	HTMLAttributes: {
-		style: "background-color: #bfdbfe; border-radius: 0.375rem; padding: 0.2rem 0.25rem; text-align: center; font-size: 1rem; color: #1d4ed8;",
+		style: "border-radius: 0.375rem; padding: 0.2rem 0.25rem; text-align: center",
 	},
 });
 
@@ -170,6 +171,7 @@ const artcilePlaceholder = Placeholder.configure({
 		return "Schrijf hier je content...";
 	},
 });
+
 
 //--------------------------------------------------------------------------------------------
 

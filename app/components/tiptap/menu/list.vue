@@ -1,21 +1,51 @@
 <template>
-	<button :disabled="!editable || isBlocked?.()" class="flex items-center justify-between text-black menu-item" :class="{ 'is-active': isActive ? isActive() : null }" @click="action" :title="title">
-		<div class="flex items-end justify-center" v-if="isActive">
-			<div class="flex items-end justify-center" v-if="isActive() && activeIcon">
-				<Icon :name="activeIcon" size="1.2em" />
+	<template v-if="options.length > 1">
+		<button
+			:disabled="!editable || isBlocked?.()"
+			class="flex items-center justify-between text-black menu-item"
+			:class="{ 'is-active': isActive ? isActive() : null }"
+			@click="toggleOptions"
+			:title="title">
+			<div class="flex items-end justify-center" v-if="isActive">
+				<div class="flex items-end justify-center" v-if="isActive() && activeIcon">
+					<Icon :name="activeIcon" size="1.2em" />
+				</div>
+				<div class="flex items-end justify-center" v-else>
+					<Icon :name="icon" size="1.2em" />
+				</div>
 			</div>
 			<div class="flex items-end justify-center" v-else>
 				<Icon :name="icon" size="1.2em" />
 			</div>
-		</div>
-		<div class="flex items-end justify-center" v-else>
-			<Icon :name="icon" size="1.2em" />
-		</div>
-	</button>
+		</button>
+
+		<TiptapMenuColor v-model="openOptions" :options />
+	</template>
+
+	<template v-else>
+		<button
+			:disabled="!editable || isBlocked?.()"
+			class="flex items-center justify-between text-black menu-item"
+			:class="{ 'is-active': isActive ? isActive() : null }"
+			@click="action()"
+			:title="title">
+			<div class="flex items-end justify-center" v-if="isActive">
+				<div class="flex items-end justify-center" v-if="isActive() && activeIcon">
+					<Icon :name="activeIcon" size="1.2em" />
+				</div>
+				<div class="flex items-end justify-center" v-else>
+					<Icon :name="icon" size="1.2em" />
+				</div>
+			</div>
+			<div class="flex items-end justify-center" v-else>
+				<Icon :name="icon" size="1.2em" />
+			</div>
+		</button>
+	</template>
 </template>
 
-<script setup>
-	const probs = defineProps({
+<script setup lang="ts">
+	const props = defineProps({
 		icon: {
 			type: String,
 			required: true,
@@ -51,7 +81,26 @@
 			type: Function,
 			default: null,
 		},
+
+		options: {
+			type: Array as PropType<
+				{
+					type: string;
+					title: string;
+					color: string;
+					action: () => void;
+					isActive?: () => boolean;
+				}[]
+			>,
+			default: () => [],
+		},
 	});
+
+	const openOptions = ref(false);
+
+	const toggleOptions = () => {
+		openOptions.value = !openOptions.value;
+	};
 </script>
 
 <style scoped>

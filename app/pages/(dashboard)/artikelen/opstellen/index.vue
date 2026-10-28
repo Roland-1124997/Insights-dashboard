@@ -8,11 +8,17 @@
 							<div class="sticky top-0 z-20 flex items-center justify-end gap-2 pb-1 bg-gray-50 md:justify-start md:pb-0 md:mt-3">
 								<TiptapMenu
 									v-if="!loaded"
-									class="items-center hidden p-1 py-1 mb-1 overflow-x-auto underline bg-gray-100 border rounded-lg md:flex md:bg-white"
+									class="items-center hidden p-1 py-1 mb-1 overflow-x-auto underline bg-white border rounded-lg md:flex"
 									:editor="editor"
 									:editable
 									v-model="connectionId" />
 
+								<template class="inline md:hidden">
+									<TiptapMenuColor v-model="openOptions" :options />
+
+								</template>
+
+								
 								<FormBase :appendToBody :request :schema="schema.article.frontend" v-slot="{ loading, errors, meta }">
 									<div v-if="!loaded" class="flex gap-2 -mt-[0.15rem]">
 										<p v-if="Object.keys(errors).length" class="flex items-center w-full gap-1 p-2 text-blue-600 border border-blue-600 rounded-md select-none">
@@ -35,16 +41,17 @@
 										</button>
 
 										<template class="flex gap-2 md:hidden">
-											<button
-												@click.prevent="editor?.commands.undo()"
-												class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none cursor-pointer select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+											<button @click.prevent="toggleOptions" class="flex items-center w-full gap-1 p-2 text-blue-600 border border-blue-600 rounded-md select-none">
+												<icon name="fluent:highlight-24-regular" class="w-4 h-4" aria-hidden="true" />
+												<span class="sr-only"> Highlight </span>
+											</button>
+
+											<button @click.prevent="editor?.commands.undo()" class="flex items-center w-full gap-1 p-2 text-blue-600 border border-blue-600 rounded-md select-none">
 												<icon name="akar-icons:arrow-back" class="w-4 h-4" aria-hidden="true" />
 												<span class="sr-only"> undo </span>
 											</button>
 
-											<button
-												@click.prevent="editor?.commands.redo()"
-												class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none cursor-pointer select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+											<button @click.prevent="editor?.commands.redo()" class="flex items-center w-full gap-1 p-2 text-blue-600 border border-blue-600 rounded-md select-none">
 												<icon name="akar-icons:arrow-forward" class="w-4 h-4" aria-hidden="true" />
 												<span class="sr-only"> redo </span>
 											</button>
@@ -68,12 +75,12 @@
 								</FormBase>
 							</div>
 
-							<div ref="tiptap-container" class="relative flex-1 w-full min-h-0 p-2 overflow-x-hidden overflow-b-auto md:py-10">
+							<div ref="tiptap-container" class="relative flex-1 w-full min-h-0 p-2 overflow-x-hidden overflow-y-auto md:pl-10 md:-ml-10 md:py-10">
 								<FloatingMenu :editor="editor" class="absolute !right-0 !left-auto z-40 flex items-center justify-end max-w-[9.5rem] overflow-x-auto md:hidden">
 									<TiptapMenu
 										:hidden
 										v-if="!loaded"
-										class="flex items-center min-w-full p-1 py-1 mb-1 overflow-x-auto underline bg-gray-100 border rounded-lg w-max md:bg-white"
+										class="flex items-center min-w-full p-1 py-1 mb-1 overflow-x-auto underline bg-white border rounded-lg w-max"
 										:editor="editor"
 										:editable
 										v-model="connectionId" />
@@ -81,7 +88,7 @@
 
 								<drag-handle v-if="editor" :editor="editor" :compute-position-config="{ placement: 'left-start', strategy: 'absolute' }">
 									<div class="custom-drag-handle">
-										<icon name="fluent:re-order-dots-20-filled" class="w-4 h-4 text-gray-800" aria-hidden="true" />
+										<icon name="fluent:re-order-dots-20-filled" class="w-4 h-4" aria-hidden="true" />
 										<span class="sr-only">Sleep om te herordenen</span>
 									</div>
 								</drag-handle>
@@ -163,7 +170,7 @@
 		openTableOfContents.value = false;
 	};
 
-	const hidden = ["Highlight", "Code Block", "Details", "Metadata", "Redo", "Undo", "Bullet List"];
+	const hidden = ["Highlights", "Code Block", "Details", "Metadata", "Redo", "Undo", "Bullet List"];
 
 	const { addToast } = useToast();
 	const { isSidebarExpanded } = useSideBarState();
@@ -335,6 +342,60 @@
 			type: "info",
 		});
 	};
+
+	const openOptions = ref(false);
+
+	const toggleOptions = () => {
+		openOptions.value = !openOptions.value;
+	};
+
+	const options = ref([
+		{
+			type: "set",
+			title: "Yellow",
+			color: "#fef3c7",
+			action: () => {
+				editor.value?.chain().focus().toggleHighlight({ color: "#fef3c7" }).run();
+			},
+			isActive: () => editor.value?.isActive("highlight", { color: "#fef3c7" }) || false,
+		},
+		{
+			type: "set",
+			title: "Green",
+			color: "#bbf7d0",
+			action: () => {
+				editor.value?.chain().focus().toggleHighlight({ color: "#bbf7d0" }).run();
+			},
+			isActive: () => editor.value?.isActive("highlight", { color: "#bbf7d0" }) || false,
+		},
+		{
+			type: "set",
+			title: "Blue",
+			color: "#bfdbfe",
+			action: () => {
+				editor.value?.chain().focus().toggleHighlight({ color: "#bfdbfe" }).run();
+			},
+			isActive: () => editor.value?.isActive("highlight", { color: "#bfdbfe" }) || false,
+		},
+		{
+			type: "set",
+			title: "Red",
+			color: "#fecaca",
+			action: () => {
+				editor.value?.chain().focus().toggleHighlight({ color: "#fecaca" }).run();
+			},
+			isActive: () => editor.value?.isActive("highlight", { color: "#fecaca" }) || false,
+		},
+
+		{
+			type: "unset",
+			title: "Remove Highlight",
+			color: "#ffffff",
+			action: () => {
+				editor.value?.chain().focus().unsetHighlight().run();
+			},
+		},
+	]);
 
 	const successMessage = editId.value ? "Het artikel is succesvol bijgewerkt." : "Het artikel is succesvol aangemaakt.";
 	const failureMessage = editId.value

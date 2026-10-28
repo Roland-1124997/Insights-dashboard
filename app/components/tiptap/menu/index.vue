@@ -1,8 +1,8 @@
 <template>
-	<div class="select-none lg:max-w-[48vw] xl:max-w-screen-2xl">
+	<div class="select-none xl:max-w-screen-2xl">
 		<div v-for="(item, index) in list" :key="index">
 			<div class="divider" v-if="item.type === 'divider'" :key="`divider${index}`"></div>
-			<TiptapMenuList v-else :action="item.action ?? (() => {})" :icon="item.icon || ''" :title="item.title || ''" :key="index" v-bind="item" :editable />
+			<TiptapMenuList v-else :action="item.action ?? (() => {})" :icon="item.icon || ''" :title="item.title || ''" :key="index" :options="item?.options || []" v-bind="item" :editable />
 		</div>
 	</div>
 </template>
@@ -259,8 +259,55 @@
 		},
 		{
 			icon: "fluent:highlight-24-regular",
-			title: "Highlight",
-			action: () => editor.chain().focus().toggleHighlight().run(),
+			title: "Highlights",
+			options: [
+				{
+					type: "set",
+					title: "Yellow",
+					color: "#fef3c7",
+					action: () => {
+						editor.chain().focus().toggleHighlight({ color: "#fef3c7" }).run();
+					},
+					isActive: () => editor.isActive("highlight", { color: "#fef3c7" }),
+				},
+				{
+					type: "set",
+					title: "Green",
+					color: "#bbf7d0",
+					action: () => {
+						editor.chain().focus().toggleHighlight({ color: "#bbf7d0" }).run();
+					},
+					isActive: () => editor.isActive("highlight", { color: "#bbf7d0" }),
+				},
+				{
+					type: "set",
+					title: "Blue",
+					color: "#bfdbfe",
+					action: () => {
+						editor.chain().focus().toggleHighlight({ color: "#bfdbfe" }).run();
+					},
+					isActive: () => editor.isActive("highlight", { color: "#bfdbfe" }),
+				},
+				{
+					type: "set",
+					title: "Red",
+					color: "#fecaca",
+					action: () => {
+						editor.chain().focus().toggleHighlight({ color: "#fecaca" }).run();
+					},
+					isActive: () => editor.isActive("highlight", { color: "#fecaca" }),
+				},
+
+				{
+					type: "unset",
+					title: "Remove Highlight",
+					color: "#ffffff",
+					action: () => {
+						editor.chain().focus().unsetHighlight().run();
+					},
+				},
+			],
+
 			isActive: () => editor.isActive("highlight"),
 		},
 		{
