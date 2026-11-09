@@ -32,9 +32,7 @@ export default defineNuxtConfig({
 
 	postcss: {
 		plugins: {
-			
 			"tailwindcss/nesting": false,
-			
 		},
 	},
 
