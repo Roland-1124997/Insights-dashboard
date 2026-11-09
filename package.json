@@ -30,7 +30,6 @@
 		"@octokit/core": "^7.0.6",
 		"@pinia/nuxt": "^1.0.1",
 		"@supabase/supabase-js": "^2.110.7",
-		"@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
 		"@tiptap/extension-code-block-lowlight": "^3.31.3",
 		"@tiptap/extension-collaboration": "^3.31.3",
 		"@tiptap/extension-details": "^3.31.3",
