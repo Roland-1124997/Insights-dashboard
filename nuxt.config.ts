@@ -30,6 +30,14 @@ export default defineNuxtConfig({
 		// },
 	},
 
+	postcss: {
+		plugins: {
+			
+			"tailwindcss/nesting": false,
+			
+		},
+	},
+
 	vite: {
 		build: {
 			// Increase the warning limit for chunk size, as some libraries (like elk.js, vue.pdf) have a large footprint
