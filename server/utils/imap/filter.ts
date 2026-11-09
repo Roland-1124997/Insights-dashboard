@@ -6,8 +6,7 @@ export type SpamAnalysis = {
 };
 
 const SPAM_THRESHOLD = 50;
-const ZERO_WIDTH_CHARACTERS =
-	/(?:\u{00ad}|\u{061c}|\u{115f}|\u{1160}|\u{17b4}|\u{17b5}|\u{180b}|\u{180c}|\u{180d}|\u{180e}|\u{180f}|\u{200b}|\u{200c}|\u{200d}|\u{200e}|\u{200f}|\u{202a}|\u{202b}|\u{202c}|\u{202d}|\u{202e}|\u{2060}|\u{2061}|\u{2062}|\u{2063}|\u{2064}|\u{2066}|\u{2067}|\u{2068}|\u{2069}|\u{206a}|\u{206b}|\u{206c}|\u{206d}|\u{206e}|\u{206f}|\u{3164}|\u{feff})/gu;
+const ZERO_WIDTH_CHARACTERS = /[\u00ad\u061c\u115f\u1160\u17b4\u17b5\u180b-\u180f\u200b-\u200f\u202a-\u202e\u2060-\u2064\u2066-\u206f\u3164\ufeff]/g;
 const DOMAIN_PATTERN = /\b(?:[a-z0-9-]+\.)+[a-z]{2,}\b/gi;
 
 const normalizeText = (value: string) => value.normalize("NFKC").replace(ZERO_WIDTH_CHARACTERS, "").toLowerCase();
