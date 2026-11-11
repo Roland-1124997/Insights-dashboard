@@ -144,7 +144,6 @@ export default defineNuxtConfig({
 		"/auth/": { redirect: "/auth/login" },
 		"/auth/**": { appLayout: "auth" },
 		"/auth/integrations": { redirect: "/auth/" },
-		"/auth/integrations/**": { appLayout: "integration" },
 	},
 
 	app: {
