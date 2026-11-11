@@ -22,6 +22,10 @@
 							<Icon name="akar-icons:arrow-cycle" class="animate-spin" />
 							Bezig met verifiëren…
 						</span>
+
+						<span class="absolute flex items-center justify-center w-full h-full px-2 pointer-events-none">
+							<UtilsScales color="rgb(255,255,255,0.2)" />
+						</span>
 					</button>
 
 					<button
@@ -29,7 +33,7 @@
 						@click="store.logout"
 						class="inline-flex items-center justify-center w-full gap-2 px-4 py-3 mt-3 text-gray-700 transition bg-gray-100 hover:bg-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400">
 						<Icon name="akar-icons:arrow-left" />
-						Terug naar login
+						<span> Terug naar login </span>
 					</button>
 				</div>
 

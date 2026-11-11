@@ -24,6 +24,10 @@
 							<Icon name="akar-icons:arrow-cycle" class="animate-spin" />
 							Bezig met inloggen…
 						</span>
+
+						<span class="absolute flex items-center justify-center w-full h-full px-2 pointer-events-none">
+							<UtilsScales color="rgb(255,255,255,0.2)" />
+						</span>
 					</button>
 
 					<button
