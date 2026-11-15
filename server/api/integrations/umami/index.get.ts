@@ -360,7 +360,7 @@ export default defineSupabaseEventHandler(async (event) => {
 					table: {
 						categories: [
 							{
-								label: "Laand",
+								label: "Land",
 								value: "label",
 								type: "string",
 							},
