@@ -4,7 +4,7 @@
 			<template v-if="!rerendering">
 				<div class="pt-3 overflow-hidden">
 					<div class="">
-						<LazyChartsWorldmap :data="data" :zoom-extent="[2.6, 45]" />
+						<LazyChartsWorldmap :data="data" :zoom-extent="[1, 45]" />
 					</div>
 				</div>
 			</template>
