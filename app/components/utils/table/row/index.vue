@@ -86,6 +86,10 @@
 		},
 	});
 
+	const countryFlagNames: Record<string, string> = {
+		HK: "hong-kong-sar-china",
+	};
+
 	const calculateRange = (len: number) => {
 		if (len == 6) return 2;
 		return 0;
@@ -93,7 +97,10 @@
 
 	const iconName = (name: string, label?: string) => {
 		if (name === "events") return "akar-icons:radio-fill";
-		if (name === "countries" && label) return `twemoji:flag-${useCountryName(label, "en").replaceAll(" ", "-").toLowerCase()}`;
+		if (name === "countries" && label) {
+			const countryFlagName = countryFlagNames[label.toUpperCase()] ?? useCountryName(label, "en").replaceAll(" ", "-").toLowerCase();
+			return `twemoji:flag-${countryFlagName}`;
+		}
 		if (name === "devices") return `akar-icons:${label?.toLowerCase()}-device`;
 		if (name === "tokens") return "ri:key-fill";
 
