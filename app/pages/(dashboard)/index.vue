@@ -74,11 +74,8 @@
 					:data="{
 						values: metrics?.events.table.values || [],
 						categories: metrics?.events.table.categories || [],
-					}"
-				/>
+					}" />
 			</article>
-
-			
 
 			<article class="order-3 w-full col-span-1 p-6 border rounded-lg md:col-span-3 xl:col-span-3">
 				<div class="flex flex-col justify-between w-full md:items-center md:flex-row">
@@ -101,8 +98,7 @@
 						:data="{
 							values: metrics?.cities.table.values || [],
 							categories: metrics?.cities.table.categories || [],
-						}"
-					/>
+						}" />
 				</div>
 			</article>
 		</section>

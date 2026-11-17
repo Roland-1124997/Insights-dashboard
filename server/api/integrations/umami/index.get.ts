@@ -407,7 +407,6 @@ export default defineSupabaseEventHandler(async (event) => {
 						],
 						values: calculateMetrics(cities),
 					},
-
 				},
 			},
 		},

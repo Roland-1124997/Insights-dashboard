@@ -1,8 +1,6 @@
 <template>
 	<div>
-		<h1 class="hidden mb-6 text-2xl font-bold md:flex">
-			Stedelijk overzicht
-		</h1>
+		<h1 class="hidden mb-6 text-2xl font-bold md:flex">Stedelijk overzicht</h1>
 
 		<section class="relative grid grid-cols-2 gap-3 mb-3 md:grid-cols-4">
 			<template v-if="store.metrics?.cities.statistics">

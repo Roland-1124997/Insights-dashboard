@@ -8,7 +8,14 @@
 				</span>
 			</div>
 
-			<button type="button" @click="toggleExpanded" :aria-expanded="expanded" :aria-controls="getDetailsRowId(data.label)" :aria-label="getToggleButtonLabel(data.label)" :class="isSmall ? '' : 'md:hidden'" class="flex items-center justify-center p-1 rounded-sm opacity-70 group-hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+			<button
+				type="button"
+				@click="toggleExpanded"
+				:aria-expanded="expanded"
+				:aria-controls="getDetailsRowId(data.label)"
+				:aria-label="getToggleButtonLabel(data.label)"
+				:class="isSmall ? '' : 'md:hidden'"
+				class="flex items-center justify-center p-1 rounded-sm opacity-70 group-hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
 				<icon :name="expanded ? 'ri:arrow-up-s-fill' : 'ri:arrow-down-s-fill'" aria-hidden="true" class="object-cover w-6 h-6" />
 			</button>
 		</th>
@@ -27,7 +34,11 @@
 				</caption>
 				<thead class="select-none">
 					<tr scope="row">
-						<th v-for="category in categories.slice(1, categories.length - calculateRange(categories.length))" :key="category.value" scope="col" class="py-3 text-[0.65rem] font-medium tracking-wider text-center text-gray-700 uppercase">
+						<th
+							v-for="category in categories.slice(1, categories.length - calculateRange(categories.length))"
+							:key="category.value"
+							scope="col"
+							class="py-3 text-[0.65rem] font-medium tracking-wider text-center text-gray-700 uppercase">
 							{{ category.label }}
 						</th>
 					</tr>
@@ -62,7 +73,7 @@
 			required: true,
 		},
 		categories: {
-			type: Array as PropType<{ label: string; value: TableRowValue, type: string }[]>,
+			type: Array as PropType<{ label: string; value: TableRowValue; type: string }[]>,
 			default: () => [],
 		},
 		decorator: {
