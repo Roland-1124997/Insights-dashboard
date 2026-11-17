@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<ClientOnly v-if="metrics.events.table.values.length >= 1 && data.values.length >= 1">
+		<ClientOnly v-if="metrics && data.values.length >= 1">
 			<template v-if="!rerendering">
 				<div class="md:hidden">
 					<ChartsLine :categories="data.categories" :data="data.values" :height="210" />
