@@ -2,20 +2,13 @@
 	<tr class="transition-all hover:bg-gray-50 group">
 		<th scope="row" class="flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap">
 			<div class="flex items-center gap-3">
-				<icon :name="iconName(name, data.label)" aria-hidden="true" class="object-cover w-6 h-6 mr-2 text-blue-600 rounded-sm opacity-50 group-hover:opacity-100" />
+				<icon :name="iconName(name, data.label, getFallbackLabel(data))" aria-hidden="true" class="object-cover w-6 h-6 mr-2 text-blue-600 rounded-sm opacity-50 group-hover:opacity-100" />
 				<span class="truncate w-fit max-w-40 md:max-w-40 xl:max-w-fit">
-					{{ displayName(name, data.label) }}
+					{{ displayName(name, data.label, data.label) }}
 				</span>
 			</div>
 
-			<button
-				type="button"
-				@click="toggleExpanded"
-				:aria-expanded="expanded"
-				:aria-controls="getDetailsRowId(data.label)"
-				:aria-label="getToggleButtonLabel(data.label)"
-				:class="isSmall ? '' : 'md:hidden'"
-				class="flex items-center justify-center p-1 rounded-sm opacity-70 group-hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+			<button type="button" @click="toggleExpanded" :aria-expanded="expanded" :aria-controls="getDetailsRowId(data.label)" :aria-label="getToggleButtonLabel(data.label)" :class="isSmall ? '' : 'md:hidden'" class="flex items-center justify-center p-1 rounded-sm opacity-70 group-hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
 				<icon :name="expanded ? 'ri:arrow-up-s-fill' : 'ri:arrow-down-s-fill'" aria-hidden="true" class="object-cover w-6 h-6" />
 			</button>
 		</th>
@@ -34,11 +27,7 @@
 				</caption>
 				<thead class="select-none">
 					<tr scope="row">
-						<th
-							v-for="category in categories.slice(1, categories.length - calculateRange(categories.length))"
-							:key="category.value"
-							scope="col"
-							class="py-3 text-[0.65rem] font-medium tracking-wider text-center text-gray-700 uppercase">
+						<th v-for="category in categories.slice(1, categories.length - calculateRange(categories.length))" :key="category.value" scope="col" class="py-3 text-[0.65rem] font-medium tracking-wider text-center text-gray-700 uppercase">
 							{{ category.label }}
 						</th>
 					</tr>
@@ -73,7 +62,7 @@
 			required: true,
 		},
 		categories: {
-			type: Array as PropType<{ label: string; value: TableRowValue }[]>,
+			type: Array as PropType<{ label: string; value: TableRowValue, type: string }[]>,
 			default: () => [],
 		},
 		decorator: {
@@ -91,14 +80,20 @@
 	};
 
 	const calculateRange = (len: number) => {
+		if (len == 7) return 2;
 		if (len == 6) return 2;
+
 		return 0;
 	};
 
-	const iconName = (name: string, label?: string) => {
+	const iconName = (name: string, label?: string, fallback?: string) => {
 		if (name === "events") return "akar-icons:radio-fill";
-		if (name === "countries" && label) {
-			const countryFlagName = countryFlagNames[label.toUpperCase()] ?? useCountryName(label, "en").replaceAll(" ", "-").toLowerCase();
+		if (name === "cities" && label) {
+			let countryFlagName;
+
+			if (label) countryFlagName = countryFlagNames[label.toUpperCase()] ?? useCountryName(label, "en").replaceAll(" ", "-").toLowerCase();
+			if (countryFlagName == "onbekend" && fallback) countryFlagName = countryFlagNames[fallback.toUpperCase()] ?? useCountryName(fallback, "en").replaceAll(" ", "-").toLowerCase();
+
 			return `twemoji:flag-${countryFlagName}`;
 		}
 		if (name === "devices") return `akar-icons:${label?.toLowerCase()}-device`;
@@ -107,10 +102,16 @@
 		return "ri:global-line";
 	};
 
-	const displayName = (name: string, label: string) => {
-		if (name === "countries") return useCountryName(label);
+	const displayName = (name: string, label: string, fallback?: string) => {
+		if (name === "countries") {
+			const countryName = useCountryName(label);
+			if (countryName == "Onbekend") return fallback ?? countryName;
+		}
+
 		return label;
 	};
+
+	const getFallbackLabel = (row: TableMap[TableName]) => ("land" in row ? row.land?.value : undefined);
 
 	const expanded = ref<boolean>(isOpen || false);
 

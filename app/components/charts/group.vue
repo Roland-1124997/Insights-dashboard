@@ -54,13 +54,13 @@
 			const values = Object.fromEntries((entries as [string, { value: number | string }][]).map(([key, value]) => [key, value.value]));
 
 			return {
-				label,
+				label: useCountryName(label) === "Onbekend" ? label : useCountryName(label),
 				...values,
 			};
 		}),
 	);
 
-	const xFormatter = (i: number): string => `${data[i]?.label}`;
+	const xFormatter = (i: number): string => `${localData.value[i]?.label}`;
 	const yFormatter = (tick: number) => tick.toString();
 
 	const hideTooltip = ref(false);

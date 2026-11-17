@@ -176,6 +176,16 @@ export const calculateMetrics = (metrics: AnalyticsResponse[]) => {
 
 		return {
 			label: label.charAt(0).toUpperCase() + label.slice(1),
+
+			...(item.country
+				? {
+						land: {
+							value: item.country,
+							type: "country",
+						},
+					}
+				: undefined),
+
 			weergaven: {
 				value: item.pageviews,
 				type: "number",

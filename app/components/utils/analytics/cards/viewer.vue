@@ -10,10 +10,10 @@
 		isOpen?: boolean;
 		visable: number;
 		data: {
-			values: TableMap["pages"][] | TableMap["countries"][] | TableMap["devices"][] | TableMap["events"][];
+			values: TableMap["pages"][] | TableMap["cities"][] | TableMap["devices"][] | TableMap["events"][];
 			categories: { label: string; value: TableRowValue; type: string }[];
 		};
-		name: "pages" | "countries" | "devices" | "events";
+		name: "pages" | "cities" | "devices" | "events";
 		loading?: boolean;
 	}>();
 

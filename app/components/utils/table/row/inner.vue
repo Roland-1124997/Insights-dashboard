@@ -1,12 +1,10 @@
 <template>
-	<td v-for="category in categories" :key="category.value" class="py-3 text-sm text-center text-gray-700 border-t border-l first:border-l-0 whitespace-nowrap" :class="decorator?.()">
+	<td v-for="category in categories" :key="category.value" class="py-3 text-sm text-gray-700 border-t border-l first:border-l-0 whitespace-nowrap" :class="[decorator?.(), category.type === 'country' ? ' md:pl-8 md:text-left text-center' : ' text-center']">
+		
+		
+		
 		<div v-if="category.value === 'acties'" class="flex items-center justify-center gap-2">
-			<button
-				v-for="action in actions"
-				:key="action.name"
-				@click="action.action(data)"
-				:aria-label="`${action.name} ${data.label}`"
-				:class="['flex items-center justify-center outline-none focus:opacity-100 p-1 text-sm font-medium rounded-sm opacity-70 hover:opacity-100 ', `text-${action.color}`]">
+			<button v-for="action in actions" :key="action.name" @click="action.action(data)" :aria-label="`${action.name} ${data.label}`" :class="['flex items-center justify-center outline-none focus:opacity-100 p-1 text-sm font-medium rounded-sm opacity-70 hover:opacity-100 ', `text-${action.color}`]">
 				<icon :name="action.icon" aria-hidden="true" class="object-cover w-5 h-5" />
 			</button>
 		</div>
@@ -55,7 +53,7 @@
 			required: true,
 		},
 		categories: {
-			type: Array as PropType<{ label: string; value: TableRowValue }[]>,
+			type: Array as PropType<{ label: string; value: TableRowValue, type: string }[]>,
 			default: () => [],
 		},
 		decorator: {
@@ -80,6 +78,7 @@
 		const skipTransform: TableRowValueType[] = ["plain", "relative", "image"];
 
 		if (skipTransform.includes(type)) return value;
+		if (type === "country") return useCountryName(String(value));
 		if (type === "infinity") return "Onbepaald";
 
 		if (type === "date") return useFormatDate(String(value));
@@ -96,6 +95,7 @@
 
 	const isRelativeDate = (category: TableRowValue) => {
 		const { type } = getValues(category);
+
 		return type === "relative";
 	};
 

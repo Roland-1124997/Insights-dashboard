@@ -46,6 +46,7 @@ export type AnalyticsQuery = {
 };
 
 type baseObject = {
+	country?: string;
 	pageviews: number;
 	visitors: number;
 	visits: number;

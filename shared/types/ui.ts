@@ -241,8 +241,10 @@ export type TableRowValueType =
 	| "boolean"
 	| "actions"
 	| "hidden"
-	| "infinity";
-export type TableName = "pages" | "countries" | "devices" | "tokens" | "events";
+	| "infinity"
+	| "country";
+
+export type TableName = "pages" | "cities" | "devices" | "tokens" | "events";
 export type TableRowValue = keyof TableRowAnalytics | keyof TableRowKeys | keyof TableRowEvents | "label" | "acties";
 
 type TableRowDefault = {
@@ -250,6 +252,10 @@ type TableRowDefault = {
 };
 
 type TableRowAnalytics = {
+	land: {
+		value: string;
+		type: TableRowValueType;
+	};
 	weergaven: {
 		value: number;
 		type: TableRowValueType;
@@ -309,7 +315,7 @@ type TableRowEvents = {
 
 export type TableMap = {
 	pages: TableRowAnalytics;
-	countries: TableRowAnalytics;
+	cities: TableRowAnalytics;
 	devices: TableRowAnalytics;
 	events: TableRowEvents;
 	tokens: TableRowKeys;

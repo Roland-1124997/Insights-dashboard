@@ -68,32 +68,41 @@
 					</NuxtLink>
 				</div>
 
-				<UtilsAnalyticsCardsViewer name="events" :visable="6" :data="metrics?.events.table || []" />
+				<UtilsAnalyticsCardsViewer
+					name="events"
+					:visable="6"
+					:data="{
+						values: metrics?.events.table.values || [],
+						categories: metrics?.events.table.categories || [],
+					}"
+				/>
 			</article>
 
-			<article class="order-3 w-full col-span-1 p-6 border rounded-lg md:col-span-2">
-				<h2 class="mb-1 text-xl font-bold">Bezoekers per land</h2>
-				<p class="mb-6 text-sm text-gray-600">Een visuele weergave van waar je bezoekers vandaan komen,</p>
-				<UtilsAnalyticsChartsWorld :rerendering :metrics="metrics || []" :data="metrics?.countries.values || []" />
-			</article>
+			
 
-			<article class="order-3 w-full col-span-1 p-6 border rounded-lg md:col-span-2 xl:col-span-1">
-				<h2 class="mb-1 text-xl font-bold">Top landen</h2>
-				<p class="mb-1 text-sm text-gray-600">De landen waaruit je meeste bezoekers komen,</p>
+			<article class="order-3 w-full col-span-1 p-6 border rounded-lg md:col-span-3 xl:col-span-3">
+				<div class="flex flex-col justify-between w-full md:items-center md:flex-row">
+					<div class="mb-1 md:mb-6">
+						<h2 class="mb-1 text-xl font-bold">Top steden</h2>
+						<p class="mb-1 text-sm text-gray-600">Een overzicht van de steden waar je bezoekers vandaan komen</p>
+					</div>
 
-				<NuxtLink to="/statistieken/landen" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 select-none hover:underline">
-					Meer details
-					<icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" />
-				</NuxtLink>
+					<NuxtLink to="/statistieken/steden" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 select-none hover:underline">
+						Meer details
+						<icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" />
+					</NuxtLink>
+				</div>
 
 				<div class="pt-3">
 					<UtilsAnalyticsCardsViewer
-						name="countries"
-						:visable="3"
+						name="cities"
+						:visable="6"
 						:linked="false"
-						:data="{ values: metrics?.countries.values || [], categories: metrics?.countries.table.categories || [] }"
-						:isSmall="true"
-						:isOpen="true" />
+						:data="{
+							values: metrics?.cities.table.values || [],
+							categories: metrics?.cities.table.categories || [],
+						}"
+					/>
 				</div>
 			</article>
 		</section>

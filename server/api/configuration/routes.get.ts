@@ -20,7 +20,7 @@ const createSearch = (context: string, options?: { local: boolean }) => ({
 	local: !!options?.local,
 });
 
-const schared = ["/", "/statistieken/pagina's", "/statistieken/landen", "/statistieken/apparaten", "/statistieken/evenementen"];
+const schared = ["/", "/statistieken/pagina's", "/statistieken/steden", "/statistieken/apparaten", "/statistieken/evenementen"];
 
 const routes = defineCachedFunction(
 	(subscriptionActive: boolean): Record<string, RouteType> => {
@@ -181,9 +181,9 @@ const routes = defineCachedFunction(
 				related: schared,
 			},
 
-			"/statistieken/landen": {
+			"/statistieken/steden": {
 				hidden: true,
-				label: "Landen",
+				label: "Steden",
 				iconName: "akar-icons:statistic-up",
 				toolbar: {
 					groupWithFilters: true,

@@ -35,6 +35,16 @@ export default defineSupabaseEventHandler(async (event) => {
 
 	const pageName = pages.length >= 1 ? pages.reduce((max, page) => (page.pageviews > max.pageviews ? page : max)).name : "Onbekend";
 
+	const { data: cities, error: citiesError } = await useFetchMetrics(`city:${filter}`, {
+		startAt,
+		endAt,
+		unit: "day",
+		timezone: "Europe/Amsterdam",
+		type: "city",
+	});
+
+	if (citiesError || !cities) return useReturnResponse(event, internalServerError);
+
 	const { data: countries, error: countriesError } = await useFetchMetrics(`country:${filter}`, {
 		startAt,
 		endAt,
@@ -339,7 +349,7 @@ export default defineSupabaseEventHandler(async (event) => {
 					},
 				},
 
-				countries: {
+				cities: {
 					statistics: [
 						{
 							label: "Populairste",
@@ -349,8 +359,8 @@ export default defineSupabaseEventHandler(async (event) => {
 							format: false,
 						},
 						{
-							label: "Totale landen",
-							value: countries.length,
+							label: "Totale steden",
+							value: cities.length,
 							color: "#2563eb",
 							icon: "akar-icons:grid",
 							format: false,
@@ -360,9 +370,14 @@ export default defineSupabaseEventHandler(async (event) => {
 					table: {
 						categories: [
 							{
-								label: "Land",
-								value: "label",
+								label: "Stad",
+								value: "stad",
 								type: "string",
+							},
+							{
+								label: "Land",
+								value: "land",
+								type: "country",
 							},
 							{
 								label: "Weergaven",
@@ -390,9 +405,9 @@ export default defineSupabaseEventHandler(async (event) => {
 								type: "number",
 							},
 						],
+						values: calculateMetrics(cities),
 					},
 
-					values: calculateMetrics(countries),
 				},
 			},
 		},

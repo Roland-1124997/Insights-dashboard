@@ -27,6 +27,7 @@ export default defineTask({
 					cache.removeItem(`nitro:functions:analytics:device:${cacheKey}.json`),
 					cache.removeItem(`nitro:functions:analytics:path:${cacheKey}.json`),
 					cache.removeItem(`nitro:functions:analytics:country:${cacheKey}.json`),
+					cache.removeItem(`nitro:functions:analytics:city:${cacheKey}.json`),
 					cache.removeItem(`nitro:functions:analytics:events:type-1:${cacheKey}.json`),
 					cache.removeItem(`nitro:functions:analytics:events:type-2:${cacheKey}.json`),
 				]);
@@ -53,6 +54,14 @@ export default defineTask({
 						unit: "day",
 						timezone,
 						type: "path",
+					}),
+
+					useFetchMetrics(`city:${value}`, {
+						startAt,
+						endAt,
+						unit: "day",
+						timezone,
+						type: "city",
 					}),
 
 					useFetchMetrics(`country:${value}`, {

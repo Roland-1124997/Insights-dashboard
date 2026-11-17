@@ -30,7 +30,7 @@ const pages = [
 	"/account",
 	"/portfolio",
 	"/statistieken/pagina's",
-	"/statistieken/landen",
+	"/statistieken/steden",
 	"/statistieken/apparaten",
 	"/auth/login",
 	"/auth/verify",
