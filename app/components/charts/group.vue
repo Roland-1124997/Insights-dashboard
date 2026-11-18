@@ -1,11 +1,10 @@
 <template>
 	<ChartsUtilsLegend :categories="categories" v-slot="{ visible, visableAxis, disableToolTip, filterData }">
-		
 		<BarChart
 			:hideTooltip="hideTooltip || disableToolTip"
 			:data="disableToolTip ? [] : filterData(localData)"
 			:height
-			:categories="categories"
+			:categories="visible"
 			:y-axis="visableAxis"
 			:group-padding="0"
 			:bar-padding="0.05"
