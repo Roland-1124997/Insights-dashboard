@@ -3,7 +3,24 @@ const { production } = useRuntimeConfig();
 
 export const useGetCookies = async (event: H3Event) => {
 	const refreshToken = getCookie(event, "refresh-token");
-	const session: any = await serverSupabaseSession(event);
+	let session: any = null;
+
+	try {
+		session = await serverSupabaseSession(event);
+	} catch (error: any) {
+		const message = String(error?.statusMessage || error?.message || "");
+
+		if (
+			message.includes("Refresh Token") ||
+			message.includes("refresh_token") ||
+			message.includes("Auth session missing")
+		) {
+			await useDeleteCookies(event);
+			return null;
+		}
+
+		throw error;
+	}
 
 	const currentSession: Omit<Session, "user"> | null = {
 		refresh_token: refreshToken as string,

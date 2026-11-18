@@ -9,10 +9,13 @@ export default defineEventHandler(async (event) => {
 	if (sessionError) {
 		const canRefresh = Boolean(currentSession?.refresh_token) && [401, 403].includes(Number(sessionError.status));
 
-		if (!canRefresh) return useReturnResponse(event, unauthorizedError);
+		if (!canRefresh || !currentSession) return useReturnResponse(event, unauthorizedError);
 
 		const { data: refreshedData, error: refreshError } = await useRefreshSession(client, currentSession);
-		if (!refreshedData.session || refreshError) return useReturnResponse(event, unauthorizedError);
+		if (!refreshedData.session || refreshError) {
+			await useDeleteCookies(event);
+			return useReturnResponse(event, unauthorizedError);
+		}
 
 		const method = useGetLoginMethod(currentSession?.access_token);
 
