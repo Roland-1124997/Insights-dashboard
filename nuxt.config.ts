@@ -79,7 +79,11 @@ export default defineNuxtConfig({
 
 	runtimeConfig: {
 		logging: {
-			limit: 10,
+			limit: 20,
+			fail2ban: {
+				window: 60 * 1000,
+				duration: 10 * 60 * 1000,
+			},
 			include: ["/api/**", "/**"],
 			exclude: ["/api/status", "/_", "/ping.txt", "/.well-known"],
 		},

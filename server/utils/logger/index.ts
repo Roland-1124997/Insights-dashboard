@@ -71,11 +71,13 @@ const timestamp = () => {
 	);
 };
 
-export const useCreateRequestLogger = (event: H3Event) => {
+export const useCreateRequestLogger = async (event: H3Event) => {
 	const log = createLogger(event);
+	const query = getQuery(event);
 
 	try {
 		log.set({ requestId: event?.context?.requestId || crypto.randomUUID() });
+		if (query && Object.keys(query).length > 0) log.set({ query: JSON.stringify(query) });
 		if (event.context.requestIp) log.set({ ip: event.context.requestIp });
 	} catch (error: any) {
 		log.set({ error: `Failed to set request logger details: ${error}` });
