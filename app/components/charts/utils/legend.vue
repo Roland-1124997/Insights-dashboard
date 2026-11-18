@@ -20,7 +20,7 @@
 			</button>
 		</div>
 
-		<slot :disableToolTip :visible="visibleCategories" :filterData :filterDonut></slot>
+		<slot :disableToolTip :visible="visibleCategories" :filterData :filterDonut :visableAxis></slot>
 	</fieldset>
 </template>
 
@@ -42,7 +42,8 @@
 	};
 
 	const visibleCategories = computed(() => Object.fromEntries(Object.entries(categories).filter(([key]) => !hiddenCategories.value.has(key))));
-
+	const visableAxis = computed(() => Object.keys(visibleCategories.value));
+	
 	const filterData = (data: any[]) => {
 		const entries = [...hiddenCategories.value];
 
