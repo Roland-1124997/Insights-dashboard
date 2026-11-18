@@ -43,7 +43,7 @@
 
 	const visibleCategories = computed(() => Object.fromEntries(Object.entries(categories).filter(([key]) => !hiddenCategories.value.has(key))));
 	const visableAxis = computed(() => Object.keys(visibleCategories.value));
-	
+
 	const filterData = (data: any[]) => {
 		const entries = [...hiddenCategories.value];
 
