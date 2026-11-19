@@ -13,6 +13,7 @@ export default defineNuxtConfig({
 		},
 	},
 
+	extends: [ "github:Roland-1124997/insights-logging#master" ],
 	modules: ["@nuxt/icon", "@nuxtjs/tailwindcss", "@vueuse/nuxt", "@nuxt/image", "@nuxtjs/supabase", "@pinia/nuxt", "@vite-pwa/nuxt", "nuxt-charts", "@vee-validate/nuxt", "@nuxt/fonts"],
 	nitro: {
 		scheduledTasks: {
@@ -79,13 +80,7 @@ export default defineNuxtConfig({
 
 	runtimeConfig: {
 		logging: {
-			limit: 20,
-			fail2ban: {
-				window: 60 * 1000,
-				duration: 10 * 60 * 1000,
-			},
 			include: ["/api/**", "/**"],
-			exclude: ["/api/status", "/_", "/ping.txt", "/.well-known"],
 		},
 
 		security: {
