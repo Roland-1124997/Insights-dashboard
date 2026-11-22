@@ -38,7 +38,7 @@ const chunkConfig: ChunkConfig = {
 		patterns: ["node_modules/@tiptap"],
 	},
 	validation: {
-		patterns: ["node_modules/vee-validate", "node_modules/zod"],
+		patterns: ["node_modules/zod"],
 	},
 	supabase: {
 		patterns: ["node_modules/@supabase"],

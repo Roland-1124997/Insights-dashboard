@@ -1,9 +1,8 @@
-import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 
 const defaultMessage = "Dit veld is verplicht";
 const defaultEmailMessage = "Vul een geldig e-mailadres in";
-const contentField = zod.any({ message: defaultMessage });
+
 const length8Field = "Moet minimaal 8 tekens lang zijn";
 
 const loginFields = {
@@ -12,37 +11,38 @@ const loginFields = {
 };
 
 const notificationField = {
-	content: contentField,
-
+	content: zod.string({ message: defaultMessage }),
 	referentie: zod.string().optional(),
-
 	email: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).email({ message: defaultEmailMessage }),
-
 	onderwerp: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }),
 };
 
 const articleField = {
-	content: contentField,
-
+	content: zod.string({ message: defaultMessage }),
 	topics: zod.array(zod.string()).min(1, { message: defaultMessage }),
-
 	anchors: zod
 		.array(
 			zod.object({
 				id: zod.string(),
 				itemIndex: zod.number(),
 				level: zod.number(),
+				isActive: zod.boolean(),
 				textContent: zod.string(),
 			}),
 		)
 		.optional(),
 
 	description: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }),
-
 	title: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }),
-
-	words: zod.number({ invalid_type_error: defaultMessage }).min(1, { message: defaultMessage }),
-	connected_with_id: zod.preprocess((value) => (value === "" ? null : value), zod.number({ invalid_type_error: defaultMessage }).nullable().optional()),
+	words: zod.number({ error: defaultMessage }).min(1, { message: defaultMessage }),
+	connected_with_id: zod.preprocess(
+		(value) => {
+			if (value === "" || value === null || value === undefined) return null;
+			if (typeof value === "string" && value.trim() !== "") return Number(value);
+			return value;
+		},
+		zod.number({ error: defaultMessage }).nullable().optional(),
+	),
 };
 
 const mulfiFactorField = {
@@ -59,7 +59,6 @@ const navigatorField = {
 
 const fileMetaField = {
 	title: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).max(100, { message: "Mag niet langer zijn dan 100 tekens" }),
-
 	alt: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).max(250, { message: "Mag niet langer zijn dan 250 tekens" }),
 };
 
@@ -113,67 +112,114 @@ const topicField = {
 
 export const schema = {
 	login: {
-		backend: zod.object(loginFields),
-		frontend: toTypedSchema(zod.object(loginFields)),
+		state: {
+			email: "",
+			password: "",
+		},
+		rules: zod.object(loginFields),
 	},
 
 	notification: {
-		backend: zod.object(notificationField),
-		frontend: toTypedSchema(zod.object(notificationField)),
+		state: {
+			content: "",
+			referentie: "",
+			email: "",
+			onderwerp: "",
+		},
+		rules: zod.object(notificationField),
 	},
 
 	article: {
-		backend: zod.object(articleField),
-		frontend: toTypedSchema(zod.object(articleField)),
+		state: {
+			content: "",
+			topics: [],
+			anchors: [],
+			description: "",
+			title: "",
+			words: 0,
+			connected_with_id: null,
+		},
+
+		rules: zod.object(articleField),
 	},
 
 	totp: {
-		backend: zod.object(mulfiFactorField),
-		frontend: toTypedSchema(zod.object(mulfiFactorField)),
+		state: {
+			code: "",
+		},
+
+		rules: zod.object(mulfiFactorField),
 		optional: {
-			frontend: toTypedSchema(
-				zod.object({
-					code: optionalString,
-				}),
-			),
+			state: {
+				code: "",
+			},
+			rules: zod.object({
+				code: optionalString,
+			}),
 		},
 	},
 
 	navigator: {
-		backend: zod.object(navigatorField),
-		frontend: toTypedSchema(zod.object(navigatorField)),
+		state: {
+			ip: "",
+			screen: "",
+			language: "",
+		},
+		rules: zod.object(navigatorField),
 	},
 
 	fileMeta: {
-		backend: zod.object(fileMetaField),
-		frontend: toTypedSchema(zod.object(fileMetaField)),
+		state: {
+			title: "",
+			alt: "",
+		},
+		rules: zod.object(fileMetaField),
 	},
 
 	subscription: {
-		backend: zod.object(subscriptionField),
-		frontend: toTypedSchema(zod.object(subscriptionField)),
+		state: {
+			endpoint: "",
+			keys: {
+				p256dh: "",
+				auth: "",
+			},
+		},
+		rules: zod.object(subscriptionField),
 	},
 
 	profile: {
-		backend: zod.object(profileField),
-		frontend: toTypedSchema(zod.object(profileField)),
+		state: {
+			title: "",
+			locatie: "",
+			subtitle: "",
+		},
+		rules: zod.object(profileField),
 	},
 
 	token: {
-		backend: zod.object(tokenField),
-		frontend: toTypedSchema(zod.object(tokenField)),
+		state: {
+			name: "",
+			expires_at: "",
+		},
+		rules: zod.object(tokenField),
 	},
 
 	installation: {
-		backend: zod.object(githubInstallationField),
-		frontend: toTypedSchema(zod.object(githubInstallationField)),
+		state: {
+			installation_id: "",
+			code: "",
+		},
+		rules: zod.object(githubInstallationField),
 	},
 
 	topics: {
-		backend: zod.object(topicField),
-		frontend: toTypedSchema(zod.object(topicField)),
+		state: {
+			topics: [],
+		},
+		rules: zod.object(topicField),
 	},
 };
 
-export type SchemaType = (typeof schema)[keyof typeof schema]["frontend"];
-export type BackendSchemaType = (typeof schema)[keyof typeof schema]["backend"];
+export type SchemaType = (typeof schema)[keyof typeof schema];
+
+// export type BackendSchemaType = (typeof schema)[keyof typeof schema]["backend"];

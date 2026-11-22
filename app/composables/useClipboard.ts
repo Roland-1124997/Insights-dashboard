@@ -3,13 +3,14 @@ export const useClipboard = async () => {
 	const error = ref(false);
 	const message = ref();
 
-	const paste = async () => {
+	const paste = async (): Promise<string | undefined> => {
 		try {
 			const text = await navigator.clipboard.readText();
 
 			if (text) {
 				data.value = text;
 				error.value = false;
+				return text;
 			} else {
 				error.value = true;
 				message.value = "Klembord is leeg. Kopieer eerst de gewenste link.";
@@ -18,6 +19,8 @@ export const useClipboard = async () => {
 			error.value = true;
 			message.value = "Automatisch plakken wordt niet ondersteund op jouw apparaat. Klik op het veld en kies 'Plakken'.";
 		}
+
+		return undefined;
 	};
 
 	return {

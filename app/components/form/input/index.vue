@@ -13,7 +13,7 @@
 				</div>
 			</div>
 
-			<Form :validation-schema="schema.topics.frontend" @submit="props.onConfirm" class="flex w-full gap-2">
+			<FormBase direction="vertical" :schema="schema.topics" @submit="props.onConfirm" v-slot="{ loading }" class="flex items-center w-full gap-2">
 				<UtilsInputChip name="topics" :initial-value="topics" placeholder="Bijv. marketing, content, analytics" @emitter="increment" />
 
 				<button
@@ -23,14 +23,14 @@
 					<icon name="akar-icons:plus" size="1.8em" aria-hidden="true" />
 					<span class="sr-only"> Voeg toe </span>
 				</button>
-			</Form>
+			</FormBase>
 
 			<div class="p-4 mt-4 space-y-3 rounded-lg bg-gray-50">
 				<div class="flex items-center justify-between">
 					<span class="text-sm font-medium text-gray-700"> Snelle acties </span>
 					<div class="p-1 px-3 text-sm bg-gray-200 rounded-xl">Optioneel</div>
 				</div>
-				<button @click="paste" class="flex items-center justify-start w-full gap-2 pl-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 h-9">
+				<button @click="handlePaste" class="flex items-center justify-start w-full gap-2 pl-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 h-9">
 					<icon name="akar-icons:copy" size="1.2em"></icon>
 					<span class="text-sm font-medium"> Plak uit klembord </span>
 				</button>
@@ -52,18 +52,17 @@
 	const topics = ref<string[]>(props.topics);
 	const counter = ref<number>(topics.value.length);
 
-	const { data, error, message, paste } = await useClipboard();
+	const { error, message, paste } = await useClipboard();
 
-	watch(
-		() => data.value,
-		(newValue) => {
-			if (newValue) {
-				const pastedTopics = newValue.split(",").map((topic: string) => topic.trim());
-				topics.value = [...new Set([...topics.value, ...pastedTopics])];
-				counter.value = topics.value.length;
-			}
-		},
-	);
+	const handlePaste = async () => {
+		const newValue = await paste();
+
+		if (newValue) {
+			const pastedTopics = newValue.split(",").map((topic: string) => topic.trim());
+			topics.value = [...new Set([...topics.value, ...pastedTopics])];
+			counter.value = topics.value.length;
+		}
+	};
 
 	const increment = (value: number) => {
 		counter.value = value;

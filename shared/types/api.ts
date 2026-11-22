@@ -1,6 +1,5 @@
 import type { ZodIssue } from "zod";
 import type { AuthError } from "@supabase/auth-js";
-import type { FormActions } from "vee-validate";
 
 export type FetchUrl = Parameters<typeof $fetch>[0];
 
@@ -47,10 +46,15 @@ export type ApiError = {
 	error: ErrorResponse;
 };
 
+export type RegleFormActions = {
+	setErrors: (errors: Record<string, string>) => void;
+	resetForm: () => void;
+};
+
 export type requestOptions<T = unknown> = {
 	url: FetchUrl;
 	method: SendOptions["method"];
 	successMessage?: string;
 	onsuccess?: (response: ApiResponse<T>) => Promise<void> | void;
-	onfailure?: (error: ApiError["error"], actions: FormActions<any>) => void;
+	onfailure?: (error: ApiError["error"], actions: RegleFormActions) => void;
 };

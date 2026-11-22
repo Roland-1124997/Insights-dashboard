@@ -30,7 +30,7 @@
 
 					<div class="sr-only" aria-hidden>
 						<ClientOnly>
-							<FormBase :schema="schema.profile.frontend" :request v-slot="{ loading }">
+							<FormBase :schema="schema.profile" :request v-slot="{ loading }">
 								<UtilsInput name="title" label="Titel" type="text" :required="true" :disabled="loading" :initial-value="updateded.title" />
 								<UtilsInput name="locatie" label="locatie" type="text" :required="true" :disabled="loading" :initial-value="updateded.locatie" />
 								<UtilsInput name="subtitle" label="Subtitel" type="text" :required="true" :disabled="loading" :initial-value="updateded.subtitle" />

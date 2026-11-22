@@ -75,7 +75,7 @@ const useFetchRepositories = async (token: string, per_page: number = 100): Prom
 
 			data.repositories = sorted;
 
-			result = data;
+			result = data as Repositories;
 		})
 		.catch((err) => {
 			error = err;

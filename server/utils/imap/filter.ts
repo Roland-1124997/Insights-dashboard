@@ -6,10 +6,17 @@ export type SpamAnalysis = {
 };
 
 const SPAM_THRESHOLD = 50;
-const ZERO_WIDTH_CHARACTERS = /[\u00ad\u061c\u115f\u1160\u17b4\u17b5\u180b-\u180f\u200b-\u200f\u202a-\u202e\u2060-\u2064\u2066-\u206f\u3164\ufeff]/g;
+const ZERO_WIDTH_CHARACTERS =
+	/(?:\u00ad|\u061c|\u115f|\u1160|\u17b4|\u17b5|\u180b|\u180c|\u180d|\u180e|\u180f|\u200b|\u200c|\u200d|\u200e|\u200f|\u202a|\u202b|\u202c|\u202d|\u202e|\u2060|\u2061|\u2062|\u2063|\u2064|\u2066|\u2067|\u2068|\u2069|\u206a|\u206b|\u206c|\u206d|\u206e|\u206f|\u3164|\ufeff)/gu;
+
 const DOMAIN_PATTERN = /\b(?:[a-z0-9-]+\.)+[a-z]{2,}\b/gi;
 
 const normalizeText = (value: string) => value.normalize("NFKC").replace(ZERO_WIDTH_CHARACTERS, "").toLowerCase();
+
+const hasZeroWidthCharacter = (value: string) => {
+	ZERO_WIDTH_CHARACTERS.lastIndex = 0;
+	return ZERO_WIDTH_CHARACTERS.test(value);
+};
 
 const getHeaderValue = (value: unknown): string => {
 	if (typeof value === "string") return value;
@@ -52,7 +59,7 @@ const getAdress = (mail: ParsedMail) => {
 	const address = mail.from?.value?.[0]?.address ?? "";
 	const name = mail.from?.value?.[0]?.name ?? "";
 
-	const hasZeroWidth = name && ZERO_WIDTH_CHARACTERS.test(name);
+	const hasZeroWidth = hasZeroWidthCharacter(name);
 
 	return {
 		address,

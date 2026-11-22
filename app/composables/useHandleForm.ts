@@ -1,11 +1,14 @@
-import type { FormActions } from "vee-validate";
-
 const { addToast } = useToast();
 
-export const useHandleForm = (request: requestOptions, callback?: Function) => {
+export const useHandleForm = (request: requestOptions, callback?: Function, regle?: any) => {
 	const loading = ref(false);
 
-	const handleSubmit = async (values: Record<string, unknown>, actions: FormActions<{}>) => {
+	const actions: RegleFormActions = {
+		setErrors: (errors) => regle?.$setExternalErrors?.(errors),
+		resetForm: () => regle?.$reset?.({ toOriginalState: true }),
+	};
+
+	const handleSubmit = async (values: Record<string, unknown>) => {
 		loading.value = true;
 
 		const { data, error } = await useApiHandler<ApiResponse<unknown>>(request.url).Send({
@@ -23,7 +26,7 @@ export const useHandleForm = (request: requestOptions, callback?: Function) => {
 	return { loading, handleSubmit };
 };
 
-const errorHandler = async (error: ErrorResponse, request: requestOptions, actions: FormActions<{}>) => {
+const errorHandler = async (error: ErrorResponse, request: requestOptions, actions: RegleFormActions) => {
 	if (request.onfailure) request.onfailure(error, actions);
 	else {
 		const details = error.details as Record<string, string>;

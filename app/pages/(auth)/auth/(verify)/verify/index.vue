@@ -6,7 +6,7 @@
 				<p class="text-sm text-gray-600 md:text-base">Voer de 6-cijferige code in vanuit je authenticator app om toegang te krijgen tot je account.</p>
 			</div>
 
-			<FormBase :schema="schema.totp.frontend" :request v-slot="{ loading, errors }" class="mt-10">
+			<FormBase :schema="schema.totp" :request v-slot="{ loading, errors }" class="mt-10">
 				<UtilsInputTopt />
 
 				<div class="fixed bottom-0 left-0 w-full px-6 pt-6 pb-10 bg-white border-t md:relative md:px-0 md:bg-transparent md:border-0 md:py-0">

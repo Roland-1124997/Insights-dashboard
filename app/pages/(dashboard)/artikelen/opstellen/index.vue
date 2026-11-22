@@ -12,11 +12,11 @@
 									<TiptapMenuColor v-model="openOptions" :options />
 								</template>
 
-								<FormBase :appendToBody :request :schema="schema.article.frontend" v-slot="{ loading, errors, meta }">
+								<FormBase :appendToBody :request :schema="schema.article" v-slot="{ loading, errors, meta }">
 									<div v-if="!loaded" class="flex gap-2 -mt-[0.15rem]">
-										<p v-if="Object.keys(errors).length" class="flex items-center w-full gap-1 p-2 text-blue-600 border border-blue-600 rounded-md select-none">
+										<p v-if="!meta.valid" class="flex items-center w-full gap-1 p-2 text-blue-600 border border-blue-600 rounded-md select-none">
 											<Icon name="akar-icons:triangle-alert-fill" class="w-4 h-4 text-blue-600" aria-hidden="true" />
-											<span class="sr-only">Er zijn {{ Object.keys(errors).length }} fout(en) in het formulier.</span>
+											<span class="sr-only">Er zijn fouten in het formulier.</span>
 										</p>
 
 										<button
@@ -27,7 +27,7 @@
 										</button>
 
 										<button
-											v-if="Object.keys(errors).length < 1"
+											v-if="meta.valid"
 											class="flex items-center justify-center w-full gap-2 p-2 text-white bg-blue-600 border-blue-500 rounded-md outline-none select-none hover:bg-blue-700 hover:text-white focus:text-white focus:border-blue-600 hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
 											<icon name="akar-icons:save" class="w-4 h-4" aria-hidden="true" />
 											<span class="sr-only">{{ editId ? "Bijwerken" : "Aanmaken" }}</span>
