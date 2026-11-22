@@ -2,7 +2,7 @@ export default defineAuthEventHandler(async (event, { client, server }) => {
 	await new Promise((resolve) => setTimeout(resolve, 1000));
 
 	const request = await readBody(event);
-	const { error: zodError } = await schema.login.backend.safeParseAsync(request);
+	const { error: zodError } = await schema.login.rules.safeParseAsync(request);
 
 	if (zodError)
 		return useReturnResponse(event, {

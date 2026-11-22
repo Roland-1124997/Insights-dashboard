@@ -1,7 +1,7 @@
 <template>
 	<div class="relative bg-white">
 		<ClientOnly>
-			<FormBase :appendToBody :schema="schema.notification.frontend" :request v-slot="{ loading, errors }">
+			<FormBase :appendToBody :schema="schema.notification" :request v-slot="{ loading, errors }">
 				<div class="grid grid-cols-3 gap-2">
 					<div class="sr-only" aria-hidden>
 						<UtilsInput

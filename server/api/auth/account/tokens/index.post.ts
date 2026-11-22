@@ -1,6 +1,6 @@
 export default defineMultiFactorVerificationEventHandler(async (event, { server, user }) => {
 	const request = await readBody(event);
-	const { error: zodError } = await schema.token.backend.safeParseAsync(request);
+	const { error: zodError } = await schema.token.rules.safeParseAsync(request);
 
 	if (zodError)
 		return useReturnResponse(event, {

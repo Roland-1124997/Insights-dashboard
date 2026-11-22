@@ -3,7 +3,7 @@ import jsdom from "jsdom";
 
 export default defineSupabaseEventHandler(async (event) => {
 	const request = await readBody(event);
-	const { error: zodError } = await schema.notification.backend.safeParseAsync(request);
+	const { error: zodError } = await schema.notification.rules.safeParseAsync(request);
 
 	let html = generateHTML(request.content, extensions);
 

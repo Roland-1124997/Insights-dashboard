@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full h-full">
-		<Form @submit="(values) => props.onVerify(props, values)" :validationSchema="schema.token.frontend" v-slot="slotProps" class="flex flex-col max-h-[64vh] space-y-4">
+		<FormBase :schema="schema.token" @submit="(values) => props.onVerify(props, values)" v-slot="{ loading }" class="flex flex-col max-h-[64vh] space-y-4">
 			<UtilsInput name="name" label="Sleutel naam" placeholder="Naam van de sleutel" required />
 			<UtilsInput name="expires_at" type="date" label="Vervaldatum" icon-name="akar-icons:alarm" />
 
@@ -10,7 +10,7 @@
 				<icon name="akar-icons:save" class="w-5 h-5" aria-hidden="true" />
 				<span>Verifiëren</span>
 			</button>
-		</Form>
+		</FormBase>
 	</div>
 </template>
 

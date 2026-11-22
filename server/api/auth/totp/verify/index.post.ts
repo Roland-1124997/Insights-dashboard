@@ -9,7 +9,7 @@ export default defineAuthEventHandler(async (event, { user, client }) => {
 	if (userError) return useReturnResponse(event, unauthorizedError);
 
 	const request = await readBody(event);
-	const { error: zodError } = await schema.totp.backend.safeParseAsync(request);
+	const { error: zodError } = await schema.totp.rules.safeParseAsync(request);
 
 	if (zodError)
 		return useReturnResponse(event, {

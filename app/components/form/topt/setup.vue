@@ -24,7 +24,7 @@
 					<h2 class="mb-1 text-sm font-semibold text-gray-700">Verifieer je authenticatie-app</h2>
 					<p class="mb-3 text-xs text-gray-600">Voer de 6-cijferige code in die je authenticator-app genereert om de installatie te voltooien.</p>
 
-					<FormBase :schema="schema.totp.frontend" :request v-slot="{ loading, errors }">
+					<FormBase :schema="schema.totp" :request v-slot="{ loading, errors }">
 						<div class="mt-6">
 							<UtilsInputTopt />
 						</div>

@@ -6,7 +6,7 @@
 				<p class="text-sm text-gray-600 md:text-base">Vul hieronder je e-mailadres en wachtwoord in om toegang te krijgen tot je account.</p>
 			</div>
 
-			<FormBase :appendToBody="appendToBody" :schema="schema.login.frontend" :request v-slot="{ loading }" class="mt-10">
+			<FormBase :appendToBody="appendToBody" :schema="schema.login" :request v-slot="{ loading }" class="mt-10">
 				<UtilsInput name="email" label="E-mailadres" icon-name="akar-icons:envelope" type="email" placeholder="you@company.com" :required="true" :disabled="loading" />
 
 				<UtilsInput name="password" label="Wachtwoord" icon-name="akar-icons:lock-on" type="password" placeholder="••••••••" :disabled="loading" :required="true" />

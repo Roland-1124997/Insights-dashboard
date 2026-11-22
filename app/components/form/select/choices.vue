@@ -63,7 +63,7 @@
 	props.request.destructive = props.request.destructive ?? true;
 
 	const validationSchema = computed(() => {
-		return verified.value && props.request.secure ? schema.totp.frontend : schema.totp.optional.frontend;
+		return verified.value && props.request.secure ? schema.totp : schema.totp.optional;
 	}) as any;
 
 	const request: requestOptions = {
