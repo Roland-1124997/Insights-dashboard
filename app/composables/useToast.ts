@@ -21,7 +21,7 @@ export const useToast = () => {
 		});
 	};
 
-	const addToast = ({ message, type = "success", duration = 3000, discard: toastDiscard, save: toastSave, broadcast = true }: Toast): void => {
+	const addToast = ({ message, type, duration = 3000, discard: toastDiscard, save: toastSave, broadcast = true }: Toast): void => {
 		const id = Date.now();
 
 		const discard = !toastDiscard

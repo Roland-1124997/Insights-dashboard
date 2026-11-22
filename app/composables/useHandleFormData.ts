@@ -4,7 +4,7 @@ export const useHandleFormData = (successMessage: string, failureMessage: string
 	let formData: FormData | undefined = undefined;
 	const Request = useApiHandler<ApiResponse<FileData>>("/api/storage");
 
-	const setFormData = (data: FormData | undefined = undefined) => (formData = data);
+	const setFormData = (data: FormData | undefined) => (formData = data);
 
 	const upload = async (articleId: number | undefined) => {
 		if (formData && articleId) {
