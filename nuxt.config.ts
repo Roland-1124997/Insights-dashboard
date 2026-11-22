@@ -13,7 +13,7 @@ export default defineNuxtConfig({
 		},
 	},
 
-	extends: ["github:Roland-1124997/insights-logging#master"],
+	extends: ["github:Roland-1124997/insights-logging#release"],
 	modules: ["@nuxt/icon", "@nuxtjs/tailwindcss", "@vueuse/nuxt", "@nuxt/image", "@nuxtjs/supabase", "@pinia/nuxt", "@vite-pwa/nuxt", "nuxt-charts", "@regle/nuxt", "@nuxt/fonts"],
 	nitro: {
 		scheduledTasks: {
