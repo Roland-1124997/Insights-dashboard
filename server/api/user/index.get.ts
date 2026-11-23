@@ -13,7 +13,6 @@ export default defineEventHandler(async (event) => {
 
 		const { data: refreshedData, error: refreshError } = await useRefreshSession(client, currentSession);
 		if (!refreshedData.session || refreshError) {
-			await useDeleteCookies(event);
 			return useReturnResponse(event, unauthorizedError);
 		}
 

@@ -11,7 +11,6 @@ export const useGetCookies = async (event: H3Event) => {
 		const message = String(error?.statusMessage || error?.message || "");
 
 		if (message.includes("Refresh Token") || message.includes("refresh_token") || message.includes("Auth session missing")) {
-			await useDeleteCookies(event);
 			return null;
 		}
 

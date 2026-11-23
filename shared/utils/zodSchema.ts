@@ -11,14 +11,14 @@ const loginFields = {
 };
 
 const notificationField = {
-	content: zod.string({ message: defaultMessage }),
+	content: zod.any(),
 	referentie: zod.string().optional(),
 	email: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }).email({ message: defaultEmailMessage }),
 	onderwerp: zod.string({ message: defaultMessage }).nonempty({ message: defaultMessage }),
 };
 
 const articleField = {
-	content: zod.string({ message: defaultMessage }),
+	content: zod.any(),
 	topics: zod.array(zod.string()).min(1, { message: defaultMessage }),
 	anchors: zod
 		.array(
@@ -121,7 +121,7 @@ export const schema = {
 
 	notification: {
 		state: {
-			content: "",
+			content: {},
 			referentie: "",
 			email: "",
 			onderwerp: "",
@@ -131,7 +131,7 @@ export const schema = {
 
 	article: {
 		state: {
-			content: "",
+			content: {},
 			topics: [],
 			anchors: [],
 			description: "",
