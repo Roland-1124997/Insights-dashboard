@@ -1,6 +1,6 @@
 <template>
 	<ClientOnly>
-		<VitePwaManifest />
+		<NuxtPwaManifest />
 	</ClientOnly>
 	<NuxtRouteAnnouncer />
 	<NuxtLayout>

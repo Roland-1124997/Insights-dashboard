@@ -76,6 +76,11 @@ export default defineNuxtConfig({
 
 	runtimeConfig: {
 		logging: {
+			limit: 30,
+			fail2ban: {
+				window: 60 * 100,
+				duration: 15 * 60 * 1000,
+			},
 			include: ["/api/**", "/**"],
 		},
 
@@ -153,7 +158,8 @@ export default defineNuxtConfig({
 	},
 
 	pwa: {
-		strategies: "injectManifest",
+		swType: 'module',
+		strategies: "buildSW",
 		registerType: "autoUpdate",
 		manifest: {
 			name: "Insights",
@@ -214,11 +220,17 @@ export default defineNuxtConfig({
 				client_mode: ["navigate-existing", "auto"],
 			},
 		},
-		injectManifest: {
+
+		maximumFileSizeToCacheInBytes: 10 * 1024 * 1024 * 2, // 20 MB
+
+		buildSW: {
+			swSrc: "public/sw.js",
 			globPatterns: ["**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}"],
 			globIgnores: ["icons/**", "screenshots/**", "splash_screens/**", "apple-touch-icon*"],
-			maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10 MB
+			sourcemap: true,
+			manifest: true,
 		},
+
 		devOptions: {
 			enabled: true,
 			type: "module",

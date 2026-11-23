@@ -1,8 +1,9 @@
-import { clientsClaim } from "workbox-core";
-import { precacheAndRoute, cleanupOutdatedCaches } from "workbox-precaching";
-import { registerRoute } from "workbox-routing";
-import { StaleWhileRevalidate, NetworkFirst, CacheFirst } from "workbox-strategies";
-import { CacheableResponsePlugin } from "workbox-cacheable-response";
+
+import { clientsClaim } from '@vite-pwa/workbox-swkit/core'
+import { cleanupOutdatedCaches, precacheAndRoute } from '@vite-pwa/workbox-swkit/precaching'
+import { registerRoute } from '@vite-pwa/workbox-swkit/routing'
+import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from '@vite-pwa/workbox-swkit/strategies'
+import { CacheableResponsePlugin } from '@vite-pwa/workbox-swkit/cacheable-response'
 
 self.skipWaiting();
 clientsClaim();
@@ -32,6 +33,7 @@ const pages = [
 	"/statistieken/pagina's",
 	"/statistieken/steden",
 	"/statistieken/apparaten",
+	"/statistieken/evenementen",
 	"/auth/login",
 	"/auth/verify",
 ];
@@ -40,7 +42,15 @@ const routes = ["/api/integrations/umami", "/api/auth/account/sessions", "/api/a
 
 const images = ["/github.jpg"];
 
-const isExactPageRoute = (pathname) => pages.some((page) => page === pathname);
+const isExactPageRoute = (pathname) => pages.some((page) => page === pathname)
+
+const ignoreSearchCacheKeyPlugin = {
+	cacheKeyWillBeUsed: async ({ request }) => {
+		const url = new URL(request.url);
+		url.search = "";
+		return url.href;
+	},
+};
 
 const getSubscriptionStatus = async () => {
 	await fetch("/api/user");
@@ -92,6 +102,7 @@ registerRoute(
 	new NetworkFirst({
 		cacheName: PAGE_CACHE_NAME,
 		plugins: [
+			ignoreSearchCacheKeyPlugin,
 			new CacheableResponsePlugin({
 				statuses: [200],
 			}),
