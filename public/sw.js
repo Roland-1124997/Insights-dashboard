@@ -1,9 +1,8 @@
-
-import { clientsClaim } from '@vite-pwa/workbox-swkit/core'
-import { cleanupOutdatedCaches, precacheAndRoute } from '@vite-pwa/workbox-swkit/precaching'
-import { registerRoute } from '@vite-pwa/workbox-swkit/routing'
-import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from '@vite-pwa/workbox-swkit/strategies'
-import { CacheableResponsePlugin } from '@vite-pwa/workbox-swkit/cacheable-response'
+import { clientsClaim } from "@vite-pwa/workbox-swkit/core";
+import { cleanupOutdatedCaches, precacheAndRoute } from "@vite-pwa/workbox-swkit/precaching";
+import { registerRoute } from "@vite-pwa/workbox-swkit/routing";
+import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from "@vite-pwa/workbox-swkit/strategies";
+import { CacheableResponsePlugin } from "@vite-pwa/workbox-swkit/cacheable-response";
 
 self.skipWaiting();
 clientsClaim();
@@ -42,7 +41,7 @@ const routes = ["/api/integrations/umami", "/api/auth/account/sessions", "/api/a
 
 const images = ["/github.jpg"];
 
-const isExactPageRoute = (pathname) => pages.some((page) => page === pathname)
+const isExactPageRoute = (pathname) => pages.some((page) => page === pathname);
 
 const ignoreSearchCacheKeyPlugin = {
 	cacheKeyWillBeUsed: async ({ request }) => {

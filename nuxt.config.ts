@@ -158,7 +158,7 @@ export default defineNuxtConfig({
 	},
 
 	pwa: {
-		swType: 'module',
+		swType: "module",
 		strategies: "buildSW",
 		registerType: "autoUpdate",
 		manifest: {
